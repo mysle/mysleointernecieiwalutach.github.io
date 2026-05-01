@@ -3,7 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MultiTool - Waluty & SpeedTest</title>
+    <title>MultiTool Pro – Waluty & Test Internetu</title>
+    <meta name="description" content="Darmowy przelicznik walut online na żywo oraz zaawansowany test prędkości internetu. Sprawdź kursy, mierz prędkość pobierania, wysyłania i ping.">
+    
+    <!-- Google Analytics (zamień na swój identyfikator) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
+    <!-- Google AdSense Auto ads (zamień na swój identyfikator) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+        crossorigin="anonymous"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -38,7 +53,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated background particles */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -72,7 +86,6 @@
             100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Navigation */
         .navbar {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(20px);
@@ -137,7 +150,6 @@
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
 
-        /* Main Container */
         .container {
             max-width: 1400px;
             margin: 2rem auto;
@@ -158,7 +170,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Glass Card */
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(20px);
@@ -168,7 +179,6 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        /* Currency Section */
         .currency-header {
             text-align: center;
             margin-bottom: 2rem;
@@ -363,7 +373,7 @@
         .rate-change.up { color: var(--success); }
         .rate-change.down { color: var(--danger); }
 
-        /* Speed Test Section */
+        /* Speed Test */
         .speed-header {
             text-align: center;
             margin-bottom: 2rem;
@@ -562,7 +572,6 @@
             position: relative;
         }
 
-        /* Loading & Error States */
         .loading {
             display: inline-flex;
             align-items: center;
@@ -595,28 +604,23 @@
             gap: 0.75rem;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .converter-grid {
                 grid-template-columns: 1fr;
             }
-            
             .swap-btn {
                 transform: rotate(90deg);
                 margin: 0 auto;
             }
-            
             .gauge-wrapper {
                 width: 250px;
                 height: 250px;
             }
-            
             .gauge-value {
                 font-size: 2.5rem;
             }
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -630,7 +634,6 @@
             border-radius: 4px;
         }
 
-        /* Connection status */
         .status-bar {
             position: fixed;
             bottom: 2rem;
@@ -663,12 +666,10 @@
     </style>
 </head>
 <body>
-    <!-- Background Animation -->
     <div class="bg-animation">
         <span></span><span></span><span></span><span></span><span></span>
     </div>
 
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
@@ -676,35 +677,34 @@
                 MultiTool Pro
             </div>
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('currency')">
+                <button class="tab-btn active" onclick="switchTab('currency', event)">
                     <i class="fas fa-coins"></i>
                     Waluty
                 </button>
-                <button class="tab-btn" onclick="switchTab('speed')">
+                <button class="tab-btn" onclick="switchTab('speed', event)">
                     <i class="fas fa-tachometer-alt"></i>
-                    Speed Test
+                    Test szybkości
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="container">
-        <!-- Currency Converter Tab -->
+        <!-- Waluty -->
         <div id="currency-tab" class="tab-content active">
             <div class="glass-card">
                 <div class="currency-header">
                     <h1>Przelicznik Walut</h1>
-                    <p>Aktualne kursy walut w czasie rzeczywistym</p>
+                    <p>Aktualne kursy z rynku forex – dane odświeżane co minutę</p>
                     <div class="last-update" id="lastUpdate">
                         <i class="fas fa-sync-alt fa-spin"></i>
-                        Ładowanie danych...
+                        Ładowanie kursów...
                     </div>
                 </div>
 
                 <div class="converter-grid">
                     <div class="currency-box">
-                        <div class="currency-label">Kwota</div>
+                        <div class="currency-label">Przewalutuj z</div>
                         <div class="currency-input-group">
                             <select class="currency-select" id="fromCurrency" onchange="convert()">
                                 <option value="PLN">PLN</option>
@@ -715,10 +715,9 @@
                                 <option value="JPY">JPY</option>
                                 <option value="CAD">CAD</option>
                                 <option value="AUD">AUD</option>
-                                <option value="CZK">CZK</option>
-                                <option value="HUF">HUF</option>
                             </select>
-                            <input type="number" class="amount-input" id="amount" value="100" min="0" step="0.01" oninput="convert()">
+                            <input type="number" class="amount-input" id="amount" value="100" min="0" step="0.01"
+                                   oninput="this.value = Math.max(0, this.value); convert();">
                         </div>
                     </div>
 
@@ -727,7 +726,7 @@
                     </button>
 
                     <div class="currency-box">
-                        <div class="currency-label">Wynik</div>
+                        <div class="currency-label">Na</div>
                         <div class="currency-input-group">
                             <select class="currency-select" id="toCurrency" onchange="convert()">
                                 <option value="PLN" selected>PLN</option>
@@ -738,8 +737,6 @@
                                 <option value="JPY">JPY</option>
                                 <option value="CAD">CAD</option>
                                 <option value="AUD">AUD</option>
-                                <option value="CZK">CZK</option>
-                                <option value="HUF">HUF</option>
                             </select>
                             <input type="text" class="amount-input" id="result" readonly placeholder="0.00">
                         </div>
@@ -749,33 +746,27 @@
                 <div class="rate-info">
                     <div class="rate-value" id="rateDisplay">1 USD = 4.00 PLN</div>
                     <div style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.875rem;">
-                        Kurs średni bez prowizji
+                        Kurs orientacyjny – bez spreadu
                     </div>
                 </div>
 
                 <div class="popular-rates">
-                    <h3 class="section-title">
-                        <i class="fas fa-chart-line"></i>
-                        Popularne kursy
-                    </h3>
+                    <h3 class="section-title"><i class="fas fa-chart-line"></i> Popularne pary walutowe</h3>
                     <div class="rates-grid" id="popularRates">
                         <div class="rate-card">
-                            <div class="loading">
-                                <div class="spinner"></div>
-                                Ładowanie...
-                            </div>
+                            <div class="loading"><div class="spinner"></div> Ładowanie...</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Speed Test Tab -->
+        <!-- Test prędkości -->
         <div id="speed-tab" class="tab-content">
             <div class="glass-card">
                 <div class="speed-header">
                     <h1>Test Prędkości Internetu</h1>
-                    <p>Sprawdź prędkość pobierania i wysyłania za pomocą zaawansowanego algorytmu</p>
+                    <p>Zaawansowany pomiar download, upload, ping i jitter w czasie rzeczywistym</p>
                 </div>
 
                 <div class="speed-gauge-container">
@@ -794,7 +785,7 @@
                         <div class="gauge-center">
                             <div class="gauge-value" id="gaugeValue">0.0</div>
                             <div class="gauge-unit">Mbps</div>
-                            <div class="gauge-label" id="gaugeLabel">Gotowy</div>
+                            <div class="gauge-label" id="gaugeLabel">Gotowy do testu</div>
                         </div>
                     </div>
                 </div>
@@ -802,7 +793,7 @@
                 <div class="test-controls">
                     <button class="start-btn" id="startBtn" onclick="startSpeedTest()">
                         <i class="fas fa-play"></i>
-                        Rozpocznij Test
+                        Rozpocznij test
                     </button>
                 </div>
 
@@ -841,25 +832,25 @@
                         <div class="metric-icon"><i class="fas fa-download"></i></div>
                         <div class="metric-title">Pobieranie</div>
                         <div class="metric-value" id="dlResult">--</div>
-                        <div class="metric-sub">Megabitów na sekundę</div>
+                        <div class="metric-sub">Mb/s</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-icon"><i class="fas fa-upload"></i></div>
                         <div class="metric-title">Wysyłanie</div>
                         <div class="metric-value" id="ulResult">--</div>
-                        <div class="metric-sub">Megabitów na sekundę</div>
+                        <div class="metric-sub">Mb/s</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-icon"><i class="fas fa-stopwatch"></i></div>
                         <div class="metric-title">Ping</div>
                         <div class="metric-value" id="pingResult">--</div>
-                        <div class="metric-sub">Milisekundy</div>
+                        <div class="metric-sub">ms</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-icon"><i class="fas fa-network-wired"></i></div>
-                        <div class="metric-title">Jitter</div>
+                        <div class="metric-title">Jitter (stabilność)</div>
                         <div class="metric-value" id="jitterResult">--</div>
-                        <div class="metric-sub">Stabilność połączenia</div>
+                        <div class="metric-sub">ms</div>
                     </div>
                 </div>
 
@@ -870,95 +861,88 @@
         </div>
     </div>
 
-    <!-- Status Bar -->
     <div class="status-bar">
         <div class="status-dot"></div>
-        <span>Połączenie aktywne</span>
+        <span id="connectionStatus">Połączenie aktywne</span>
     </div>
 
     <script>
-        // ============ TAB SWITCHING ============
-        function switchTab(tab) {
+        // ============ ZAKŁADKI ============
+        function switchTab(tab, event) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
             document.getElementById(tab + '-tab').classList.add('active');
-            event.target.closest('.tab-btn').classList.add('active');
+            event.currentTarget.classList.add('active');
         }
 
-        // ============ CURRENCY CONVERTER ============
+        // ============ PRZELICZNIK WALUT ============
         let exchangeRates = {};
-        let currencies = ['USD', 'EUR', 'GBP', 'PLN', 'CHF', 'JPY', 'CAD', 'AUD', 'CZK', 'HUF'];
+        let lastSuccessfulRates = null;
 
         async function fetchRates() {
             try {
                 const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+                if (!response.ok) throw new Error('Błąd sieci');
                 const data = await response.json();
                 exchangeRates = data.rates;
-                
-                // Add PLN if missing (fallback)
-                if (!exchangeRates.PLN) exchangeRates.PLN = 4.0;
-                
-                document.getElementById('lastUpdate').innerHTML = 
+                lastSuccessfulRates = { ...exchangeRates };
+                document.getElementById('lastUpdate').innerHTML =
                     '<i class="fas fa-check-circle"></i> Zaktualizowano: ' + new Date().toLocaleTimeString('pl-PL');
-                
-                convert();
-                updatePopularRates();
+                document.getElementById('connectionStatus').innerHTML = 'Połączenie aktywne – dane na żywo';
             } catch (error) {
-                document.getElementById('lastUpdate').innerHTML = 
-                    '<i class="fas fa-exclamation-triangle"></i> Błąd ładowania - używam danych lokalnych';
-                // Fallback rates
-                exchangeRates = {
-                    USD: 1, EUR: 0.92, GBP: 0.79, PLN: 4.0, 
-                    CHF: 0.88, JPY: 150, CAD: 1.35, AUD: 1.52,
-                    CZK: 23.5, HUF: 360
-                };
-                convert();
-                updatePopularRates();
+                if (lastSuccessfulRates) {
+                    exchangeRates = { ...lastSuccessfulRates };
+                } else {
+                    // Fallback tylko przy pierwszym uruchomieniu
+                    exchangeRates = {
+                        USD: 1, EUR: 0.92, GBP: 0.79, PLN: 4.0,
+                        CHF: 0.88, JPY: 150, CAD: 1.35, AUD: 1.52
+                    };
+                }
+                document.getElementById('lastUpdate').innerHTML =
+                    '<i class="fas fa-exclamation-triangle"></i> Nie można pobrać nowych danych – używam ostatnich kursów';
+                document.getElementById('connectionStatus').innerHTML = 'Dane offline – mogą być nieaktualne';
             }
+            convert();
+            updatePopularRates();
         }
 
         function convert() {
             const amount = parseFloat(document.getElementById('amount').value) || 0;
             const from = document.getElementById('fromCurrency').value;
             const to = document.getElementById('toCurrency').value;
-            
-            if (!exchangeRates[from] || !exchangeRates[to]) return;
-            
+
+            if (!exchangeRates[from] || !exchangeRates[to]) {
+                document.getElementById('result').value = '...';
+                return;
+            }
+
             const rate = exchangeRates[to] / exchangeRates[from];
-            const result = (amount * rate).toFixed(2);
-            
-            document.getElementById('result').value = result;
-            document.getElementById('rateDisplay').textContent = 
+            document.getElementById('result').value = (amount * rate).toFixed(2);
+            document.getElementById('rateDisplay').textContent =
                 `1 ${from} = ${rate.toFixed(4)} ${to}`;
         }
 
         function swapCurrencies() {
             const from = document.getElementById('fromCurrency');
             const to = document.getElementById('toCurrency');
-            const temp = from.value;
-            from.value = to.value;
-            to.value = temp;
+            [from.value, to.value] = [to.value, from.value];
             convert();
         }
 
         function updatePopularRates() {
-            const base = 'PLN';
             const pairs = [
-                ['USD', 'EUR'], ['EUR', 'GBP'], ['USD', 'GBP'], 
-                ['CHF', 'PLN'], ['EUR', 'USD'], ['GBP', 'PLN']
+                ['USD', 'PLN'], ['EUR', 'PLN'], ['GBP', 'PLN'],
+                ['CHF', 'PLN'], ['EUR', 'USD'], ['USD', 'GBP']
             ];
-            
             const container = document.getElementById('popularRates');
             container.innerHTML = '';
-            
+
             pairs.forEach(([from, to]) => {
                 if (!exchangeRates[from] || !exchangeRates[to]) return;
-                
                 const rate = exchangeRates[to] / exchangeRates[from];
-                const change = (Math.random() * 2 - 1).toFixed(2);
+                const change = (Math.random() * 1.6 - 0.8).toFixed(2); // symulacja zmiany
                 const isUp = change > 0;
-                
                 const card = document.createElement('div');
                 card.className = 'rate-card';
                 card.innerHTML = `
@@ -970,211 +954,174 @@
                         </div>
                     </div>
                     <div class="rate-change ${isUp ? 'up' : 'down'}">
-                        <i class="fas fa-caret-${isUp ? 'up' : 'down'}"></i>
-                        ${Math.abs(change)}%
+                        <i class="fas fa-caret-${isUp ? 'up' : 'down'}"></i> ${Math.abs(change)}%
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // ============ SPEED TEST ============
+        // ============ TEST PRĘDKOŚCI INTERNETU ============
         let speedChart = null;
         let isTesting = false;
 
         function updateGauge(value, max, label) {
             const circle = document.getElementById('gaugeProgress');
-            const circumference = 2 * Math.PI * 120;
-            const offset = circumference - (Math.min(value, max) / max) * circumference;
+            const circumference = 2 * Math.PI * 120; // ≈ 754
+            const offset = circumference - Math.min(value, max) / max * circumference;
             circle.style.strokeDashoffset = offset;
-            
             document.getElementById('gaugeValue').textContent = value.toFixed(1);
             document.getElementById('gaugeLabel').textContent = label;
         }
 
         async function measurePing() {
-            const pings = [];
-            const iterations = 10;
-            
-            for (let i = 0; i < iterations; i++) {
+            const measurements = [];
+            const url = 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png';
+
+            for (let i = 0; i < 10; i++) {
                 const start = performance.now();
-                try {
-                    await fetch('https://www.google.com/favicon.ico', { 
-                        mode: 'no-cors',
-                        cache: 'no-store'
-                    });
-                } catch (e) {}
+                await new Promise((resolve) => {
+                    const img = new Image();
+                    img.src = url + '?cache=' + Date.now();
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                });
                 const end = performance.now();
-                pings.push(end - start);
-                updateGauge(i + 1, iterations, 'Testowanie ping...');
-                await new Promise(r => setTimeout(r, 100));
+                measurements.push(end - start);
+                updateGauge(i + 1, 10, 'Mierzenie pingu...');
             }
-            
-            const avg = pings.reduce((a, b) => a + b, 0) / pings.length;
-            const jitter = Math.sqrt(pings.map(p => Math.pow(p - avg, 2)).reduce((a, b) => a + b, 0) / pings.length);
-            
+
+            const avg = measurements.reduce((a, b) => a + b, 0) / measurements.length;
+            const jitter = Math.sqrt(
+                measurements.map(p => (p - avg) ** 2).reduce((a, b) => a + b, 0) / measurements.length
+            );
             return { ping: avg, jitter: jitter };
         }
 
         async function measureDownload() {
-            const sizes = [1, 2, 5, 10, 25]; // MB
+            const sizesMB = [1, 2, 5, 10, 25]; // MB
             const speeds = [];
-            let totalLoaded = 0;
-            
-            for (let i = 0; i < sizes.length; i++) {
-                const size = sizes[i] * 1024 * 1024;
+
+            for (let i = 0; i < sizesMB.length; i++) {
+                const bytes = sizesMB[i] * 1024 * 1024;
+                const url = `https://speed.cloudflare.com/__down?bytes=${bytes}`;
                 const start = performance.now();
-                
                 try {
-                    // Using a reliable test file
-                    const response = await fetch(`https://speed.hetzner.de/${sizes[i]}MB.bin`, {
-                        cache: 'no-store'
-                    });
-                    
+                    const response = await fetch(url, { cache: 'no-store' });
                     const reader = response.body.getReader();
                     let loaded = 0;
-                    
                     while (true) {
                         const { done, value } = await reader.read();
                         if (done) break;
                         loaded += value.length;
-                        
-                        const progress = ((i + loaded/size) / sizes.length) * 100;
+                        const progress = ((i + loaded / bytes) / sizesMB.length) * 100;
                         document.getElementById('dlProgress').style.width = progress + '%';
                         document.getElementById('dlProgressText').textContent = Math.round(progress) + '%';
                     }
-                    
                     const end = performance.now();
                     const duration = (end - start) / 1000;
-                    const bits = loaded * 8;
-                    const mbps = (bits / duration) / 1000000;
-                    
+                    const mbps = (loaded * 8) / duration / 1e6;
                     speeds.push(mbps);
-                    totalLoaded += loaded;
-                    
-                    const currentSpeed = speeds.reduce((a, b) => a + b, 0) / speeds.length;
-                    updateGauge(currentSpeed, 1000, 'Pobieranie...');
-                    
+                    const currentAvg = speeds.reduce((a, b) => a + b, 0) / speeds.length;
+                    updateGauge(currentAvg, 1000, 'Pobieranie...');
                 } catch (e) {
-                    console.warn('Download test error:', e);
+                    console.warn('Błąd pobierania dla', sizesMB[i], 'MB:', e);
                 }
             }
-            
-            return speeds.length > 0 ? speeds.reduce((a, b) => a + b, 0) / speeds.length : 0;
+            return speeds.length ? speeds.reduce((a, b) => a + b, 0) / speeds.length : 0;
         }
 
         async function measureUpload() {
-            const sizes = [1, 2, 5]; // MB
+            const sizesMB = [1, 2, 5]; // MB
             const speeds = [];
-            
-            for (let i = 0; i < sizes.length; i++) {
-                const size = sizes[i] * 1024 * 1024;
-                const data = new Uint8Array(size);
-                crypto.getRandomValues(data);
-                
+            for (let i = 0; i < sizesMB.length; i++) {
+                const bytes = sizesMB[i] * 1024 * 1024;
+                const data = new Uint8Array(bytes).fill(0); // szybsze generowanie
                 const start = performance.now();
-                
                 try {
                     await fetch('https://httpbin.org/post', {
                         method: 'POST',
                         body: data,
                         headers: { 'Content-Type': 'application/octet-stream' }
                     });
-                    
                     const end = performance.now();
                     const duration = (end - start) / 1000;
-                    const bits = size * 8;
-                    const mbps = (bits / duration) / 1000000;
-                    
+                    const mbps = (bytes * 8) / duration / 1e6;
                     speeds.push(mbps);
-                    
-                    const progress = ((i + 1) / sizes.length) * 100;
+                    const progress = ((i + 1) / sizesMB.length) * 100;
                     document.getElementById('ulProgress').style.width = progress + '%';
                     document.getElementById('ulProgressText').textContent = Math.round(progress) + '%';
-                    
-                    const currentSpeed = speeds.reduce((a, b) => a + b, 0) / speeds.length;
-                    updateGauge(currentSpeed, 500, 'Wysyłanie...');
-                    
+                    const currentAvg = speeds.reduce((a, b) => a + b, 0) / speeds.length;
+                    updateGauge(currentAvg, 500, 'Wysyłanie...');
                 } catch (e) {
-                    console.warn('Upload test error:', e);
+                    console.warn('Błąd wysyłania dla', sizesMB[i], 'MB:', e);
                 }
             }
-            
-            return speeds.length > 0 ? speeds.reduce((a, b) => a + b, 0) / speeds.length : 0;
+            return speeds.length ? speeds.reduce((a, b) => a + b, 0) / speeds.length : 0;
         }
 
         async function startSpeedTest() {
             if (isTesting) return;
             isTesting = true;
-            
+
             const btn = document.getElementById('startBtn');
             btn.classList.add('running');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testowanie...';
-            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Trwa test...';
+
             document.getElementById('progressSection').style.display = 'block';
             document.getElementById('resultsGrid').style.display = 'none';
             document.getElementById('chartContainer').style.display = 'none';
-            
+
             // Reset
             updateGauge(0, 100, 'Inicjalizacja...');
             document.getElementById('dlProgress').style.width = '0%';
             document.getElementById('ulProgress').style.width = '0%';
             document.getElementById('pingProgress').style.width = '0%';
-            
+
             const results = {};
-            
-            // Ping Test
-            updateGauge(0, 100, 'Testowanie ping...');
+
+            // Ping & Jitter
             const pingData = await measurePing();
             results.ping = pingData.ping.toFixed(1);
             results.jitter = pingData.jitter.toFixed(1);
-            
             document.getElementById('pingText').textContent = results.ping + ' ms';
             document.getElementById('pingProgress').style.width = '100%';
             updateGauge(pingData.ping, 200, 'Ping zakończony');
-            await new Promise(r => setTimeout(r, 500));
-            
-            // Download Test
-            updateGauge(0, 1000, 'Testowanie pobierania...');
+
+            // Download
             results.download = await measureDownload();
-            
-            // Upload Test
-            updateGauge(0, 500, 'Testowanie wysyłania...');
+
+            // Upload
             results.upload = await measureUpload();
-            
-            // Final results
-            updateGauge(results.download, 1000, 'Test zakończony');
-            
-            document.getElementById('dlResult').textContent = results.download.toFixed(2) + ' Mbps';
-            document.getElementById('ulResult').textContent = results.upload.toFixed(2) + ' Mbps';
+
+            // Wyświetl wyniki
+            updateGauge(results.download, 1000, 'Test ukończony');
+            document.getElementById('dlResult').textContent = results.download.toFixed(2);
+            document.getElementById('ulResult').textContent = results.upload.toFixed(2);
             document.getElementById('pingResult').textContent = results.ping + ' ms';
             document.getElementById('jitterResult').textContent = results.jitter + ' ms';
-            
             document.getElementById('resultsGrid').style.display = 'grid';
-            
-            // Chart
+
             showChart(results);
-            
-            // Reset button
+
             btn.classList.remove('running');
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-redo"></i> Powtórz Test';
+            btn.innerHTML = '<i class="fas fa-redo"></i> Powtórz test';
             isTesting = false;
         }
 
         function showChart(results) {
             document.getElementById('chartContainer').style.display = 'block';
             const ctx = document.getElementById('speedChart').getContext('2d');
-            
             if (speedChart) speedChart.destroy();
-            
+
             speedChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Pobieranie', 'Wysyłanie', 'Ping (x10)', 'Jitter (x10)'],
+                    labels: ['Pobieranie (↓)', 'Wysyłanie (↑)', 'Ping (÷10)', 'Jitter (÷10)'],
                     datasets: [{
-                        label: 'Wyniki testu',
+                        label: 'Wyniki',
                         data: [
                             results.download,
                             results.upload,
@@ -1206,16 +1153,11 @@
                             backgroundColor: 'rgba(15, 23, 42, 0.9)',
                             titleColor: '#fff',
                             bodyColor: '#fff',
-                            borderColor: 'rgba(99, 102, 241, 0.5)',
-                            borderWidth: 1,
                             callbacks: {
-                                label: function(context) {
-                                    const label = context.label;
-                                    const value = context.raw;
-                                    if (label.includes('Ping') || label.includes('Jitter')) {
-                                        return (value * 10).toFixed(1) + ' ms';
-                                    }
-                                    return value.toFixed(2) + ' Mbps';
+                                label: (ctx) => {
+                                    const val = ctx.raw;
+                                    if (ctx.dataIndex >= 2) return (val * 10).toFixed(1) + ' ms';
+                                    return val.toFixed(2) + ' Mbps';
                                 }
                             }
                         }
@@ -1223,7 +1165,7 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
                             ticks: { color: '#94a3b8' }
                         },
                         x: {
@@ -1235,14 +1177,12 @@
             });
         }
 
-        // Initialize
+        // Inicjalizacja
         fetchRates();
-        setInterval(fetchRates, 60000); // Refresh every minute
-        
-        // Prevent negative numbers
-        document.getElementById('amount').addEventListener('keydown', function(e) {
-            if (e.key === '-' || e.key === 'e') e.preventDefault();
-        });
+        setInterval(fetchRates, 60000); // odświeżanie co minutę
+
+        // Blokada liczby ujemnych
+        document.getElementById('amount').addEventListener('wheel', (e) => e.preventDefault());
     </script>
 </body>
 </html>
