@@ -119,7 +119,6 @@
             flex: 1; background: transparent; border: none; color: var(--text); font-size: 2rem; font-weight: 700; outline: none; width: 100%;
         }
 
-        /* SUWAK */
         .slider-container { margin-top: 1.5rem; }
         input[type=range] {
             -webkit-appearance: none; width: 100%; background: transparent; margin: 1rem 0; padding: 0;
@@ -390,13 +389,14 @@
         }
 
         // ---- WALUTY ----
-        let exchangeRates = {};
-        let previousRates = {};               // kursy z poprzedniego udanego pobrania
+        let exchangeRates = {};               // zawsze względem USD (z API)
+        let previousRates = {};               // archiwalne kursy (też względem USD)
         let lastSuccessfulRates = null;
         let showFullPrecision = false;
         let isFetching = false;
-        let statsReady = false;               // czy mamy dane do porównania
-        let lastBaseCurrency = 'USD';         // dynamiczna baza dla statystyk
+        let statsReady = false;
+        let lastBaseCurrency = 'USD';
+        let baseChangeTimer = null;
 
         function populateCurrencyLists() {
             const currencies = Object.keys(exchangeRates).sort();
@@ -416,12 +416,21 @@
         }
 
         function onBaseCurrencyChange() {
-            const newBase = document.getElementById('fromCurrencyInput').value.toUpperCase();
-            if (newBase !== lastBaseCurrency) {
-                lastBaseCurrency = newBase;
-                updateMarketStats();
-            }
-            convert();
+            clearTimeout(baseChangeTimer);
+            baseChangeTimer = setTimeout(() => {
+                const newBase = document.getElementById('fromCurrencyInput').value.toUpperCase();
+                if (newBase !== lastBaseCurrency && exchangeRates[newBase]) {
+                    // Archiwizujemy obecne kursy jako poprzednie przy zmianie bazy
+                    if (Object.keys(exchangeRates).length > 0 && statsReady) {
+                        previousRates = { ...exchangeRates };
+                    }
+                    lastBaseCurrency = newBase;
+                    convert();
+                    updateMarketStats();
+                } else {
+                    convert();
+                }
+            }, 150);
         }
 
         async function fetchRates() {
@@ -434,19 +443,18 @@
                 const data = await res.json();
                 const newRates = data.rates;
 
-                // Zachowujemy stare kursy jako previousRates dopiero po udanym pobraniu
                 if (oldRates) {
                     previousRates = oldRates;
                     statsReady = true;
                     document.getElementById('statsNote').textContent = 'Porównanie z poprzednim pobraniem kursów';
                 } else {
-                    // Pierwsze uruchomienie – generujemy orientacyjne dane historyczne
+                    // Pierwsze uruchomienie
                     previousRates = { ...newRates };
                     for (let key in previousRates) {
                         previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015));
                     }
                     statsReady = true;
-                    document.getElementById('statsNote').textContent = 'Porównanie orientacyjne (dane historyczne pojawią się przy kolejnej aktualizacji)';
+                    document.getElementById('statsNote').textContent = 'Porównanie orientacyjne (dane historyczne przy kolejnej aktualizacji)';
                 }
 
                 exchangeRates = newRates;
@@ -463,10 +471,8 @@
                 if (lastSuccessfulRates) {
                     exchangeRates = { ...lastSuccessfulRates };
                 } else {
-                    // Fallback – używamy sztywnych kursów
                     exchangeRates = { USD:1, EUR:0.92, GBP:0.79, PLN:4.0, CHF:0.88, JPY:150, CAD:1.35, AUD:1.52 };
                     populateCurrencyLists();
-                    // Jeśli nie mamy jeszcze previousRates, generujemy je z fallbacku
                     if (!statsReady) {
                         previousRates = { ...exchangeRates };
                         for (let key in previousRates) {
@@ -477,9 +483,9 @@
                     }
                 }
                 document.getElementById('lastUpdate').innerHTML =
-                    '<i class="fas fa-exclamation-triangle"></i> Nie udało się pobrać nowych kursów – pokazuję ostatnie dane';
-                document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem – dane mogą być nieaktualne';
-                updateMarketStats();   // odświeżamy statystyki nawet przy błędzie
+                    '<i class="fas fa-exclamation-triangle"></i> Nie udało się pobrać nowych kursów';
+                document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem';
+                updateMarketStats();
             } finally {
                 isFetching = false;
             }
@@ -499,7 +505,16 @@
 
                 const statsContainer = document.getElementById('allStats');
                 const topMoversContainer = document.getElementById('topMovers');
-                const baseRate = exchangeRates[baseCurrency];
+                const currentBaseRate = exchangeRates[baseCurrency]; // względem USD
+
+                // Jeśli nie ma danych do porównania, wyświetl pustą informację
+                if (!statsReady || Object.keys(previousRates).length === 0) {
+                    topMoversContainer.innerHTML = '<p>Zbieranie danych do porównania...</p>';
+                    statsContainer.innerHTML = '';
+                    return;
+                }
+
+                const previousBaseRate = previousRates[baseCurrency] || currentBaseRate;
 
                 const currencyEntries = Object.keys(exchangeRates)
                     .filter(c => c !== baseCurrency)
@@ -509,14 +524,15 @@
                 const allStatsData = [];
 
                 currencyEntries.forEach(currency => {
-                    const rate = exchangeRates[currency];
-                    if (rate <= 0) return;
+                    const currentRate = exchangeRates[currency]; // wobec USD
+                    if (!currentRate || currentRate <= 0) return;
 
-                    const valueInBase = baseRate / rate;
+                    // Wartość 1 jednostki waluty w bazowej: baseRate / rate
+                    const valueInBase = currentBaseRate / currentRate;
                     let changePercent = 0;
 
-                    if (statsReady && previousRates[currency] && previousRates[baseCurrency]) {
-                        const oldValueInBase = previousRates[baseCurrency] / previousRates[currency];
+                    if (previousRates[currency]) {
+                        const oldValueInBase = previousBaseRate / previousRates[currency];
                         if (oldValueInBase > 0) {
                             changePercent = ((valueInBase - oldValueInBase) / oldValueInBase) * 100;
                         }
@@ -590,6 +606,7 @@
                 document.getElementById('result').value = '...';
                 return;
             }
+            // Kursy są wobec USD, więc przeliczamy: (1/USD_from) * USD_to = USD_to / USD_from
             const rate = exchangeRates[to] / exchangeRates[from];
             document.getElementById('result').value = getPrecisionValue(amount, rate);
             document.getElementById('rateDisplay').textContent = `1 ${from} = ${rate.toFixed(4)} ${to}`;
