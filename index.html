@@ -6,6 +6,7 @@
     <title>MultiTool Pro – Waluty, Konwerter, Kalkulatory, IP & Test Internetu</title>
     <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP i korzystaj z kalkulatorów finansowych – wszystko za darmo online.">
 
+    <!-- Google Analytics (podmień na swój identyfikator) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -14,6 +15,7 @@
         gtag('config', 'G-XXXXXXXXXX');
     </script>
 
+    <!-- Google AdSense (podmień na swój identyfikator) -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
         crossorigin="anonymous"></script>
 
@@ -32,6 +34,7 @@
             --text-muted: #94a3b8;
             --success: #10b981;
             --danger: #ef4444;
+            --warning: #f59e0b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -98,11 +101,16 @@
         .modern-input, .modern-select {
             width: 100%; padding: 0.8rem 1rem; border-radius: 0.75rem; border: 1px solid var(--glass-border);
             background: rgba(0,0,0,0.4); color: var(--text); font-size: 1rem; outline: none;
+            transition: border 0.2s, background 0.2s;
         }
         .modern-select {
-            cursor: pointer; appearance: none;
+            cursor: pointer;
+            appearance: none;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2394a3b8" viewBox="0 0 16 16"><path d="M4.646 5.646a.5.5 0 0 1 .708 0L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/></svg>');
-            background-repeat: no-repeat; background-position: right 1rem center; background-size: 16px; padding-right: 2.5rem;
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px;
+            padding-right: 2.5rem;
         }
         .modern-select option { background: #1e293b !important; color: #f1f5f9 !important; }
 
@@ -113,6 +121,8 @@
         }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99,102,241,0.5); }
         .btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
+        .btn-outline { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--glass-border); }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); }
         .result-big { font-size: 2rem; font-weight: 800; color: var(--primary); }
         .table-wrapper { overflow-x: auto; margin-top: 1rem; }
         table { width: 100%; border-collapse: collapse; }
@@ -159,17 +169,23 @@
         .result-row { display: flex; gap: 1rem; flex-wrap: wrap; }
         .result-item { flex: 1; min-width: 150px; }
 
-        /* IP lookup styles */
-        .ip-big { font-size: 3rem; font-weight: 800; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-        .info-item { background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 0.75rem; padding: 1rem; }
-        .info-item .info-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.3rem; }
-        .info-item .info-value { font-size: 1.1rem; font-weight: 600; }
-        .map-frame { width: 100%; height: 300px; border: 1px solid var(--glass-border); border-radius: 1rem; margin-top: 1rem; }
+        /* IP styles */
+        .ip-big { font-size: 3rem; font-weight: 800; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; word-break: break-all; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        .info-item { background: rgba(15,23,42,0.5); border: 1px solid var(--glass-border); border-radius: 0.75rem; padding: 1rem; }
+        .info-item .label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .info-item .value { font-size: 1.1rem; font-weight: 600; margin-top: 0.25rem; }
+        .map-container { width: 100%; height: 300px; border-radius: 1rem; overflow: hidden; border: 1px solid var(--glass-border); margin-top: 1rem; }
+        .map-container iframe { width: 100%; height: 100%; border: none; }
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 2rem; font-size: 0.8rem; font-weight: 600; }
+        .badge-success { background: rgba(16,185,129,0.2); color: var(--success); }
+        .badge-danger { background: rgba(239,68,68,0.2); color: var(--danger); }
+        .badge-warning { background: rgba(245,158,11,0.2); color: var(--warning); }
 
         @media (max-width: 768px) {
             .tabs { gap: 0.2rem; }
             .tab-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+            .ip-big { font-size: 2rem; }
         }
     </style>
 </head>
@@ -236,8 +252,8 @@
                 </div>
 
                 <div style="display: flex; gap: 1rem; align-items: center; justify-content: center; margin: 1rem 0;">
-                    <button class="btn" onclick="copyResult()" style="background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--glass-border);"><i class="fas fa-copy"></i> Kopiuj wynik</button>
-                    <button class="btn" onclick="togglePrecision()" id="precisionBtn" style="background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--glass-border);"><i class="fas fa-search-plus"></i> Więcej miejsc po przecinku</button>
+                    <button class="btn btn-outline" onclick="copyResult()"><i class="fas fa-copy"></i> Kopiuj wynik</button>
+                    <button class="btn btn-outline" onclick="togglePrecision()" id="precisionBtn"><i class="fas fa-search-plus"></i> Więcej miejsc po przecinku</button>
                 </div>
 
                 <div style="text-align: center; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem; margin-top: 1rem;">
@@ -302,6 +318,7 @@
                     <button class="sub-tab-btn" onclick="switchSubTab('tax', event)">💸 Podatki</button>
                 </div>
 
+                <!-- Kredyt -->
                 <div id="sub-credit" class="sub-content">
                     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
                         <span style="color: var(--text-muted); font-size: 0.8rem; padding-top: 0.5rem;">Szybka kwota:</span>
@@ -323,10 +340,11 @@
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 0.5rem;">
-                        <button class="btn btn-sm" onclick="clearCredit()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
+                        <button class="btn btn-sm btn-outline" onclick="clearCredit()"><i class="fas fa-undo"></i> Wyczyść</button>
                     </div>
                 </div>
 
+                <!-- Lokata -->
                 <div id="sub-deposit" class="sub-content" style="display: none;">
                     <div class="input-group"><label>Kwota początkowa (PLN)</label><input type="number" id="depAmount" class="modern-input" value="10000" oninput="calcDeposit()"></div>
                     <div class="input-group"><label>Oprocentowanie roczne (%)</label><input type="number" id="depRate" class="modern-input" value="5" step="0.01" oninput="calcDeposit()"></div>
@@ -339,10 +357,11 @@
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 0.5rem;">
-                        <button class="btn btn-sm" onclick="clearDeposit()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
+                        <button class="btn btn-sm btn-outline" onclick="clearDeposit()"><i class="fas fa-undo"></i> Wyczyść</button>
                     </div>
                 </div>
 
+                <!-- Inflacja -->
                 <div id="sub-inflation" class="sub-content" style="display: none;">
                     <div class="input-group"><label>Kwota dziś (PLN)</label><input type="number" id="infAmount" class="modern-input" value="1000" oninput="calcInflation()"></div>
                     <div class="input-group"><label>Roczna inflacja (%)</label><input type="number" id="infRate" class="modern-input" value="5" step="0.1" oninput="calcInflation()"></div>
@@ -354,19 +373,21 @@
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 0.5rem;">
-                        <button class="btn btn-sm" onclick="clearInflation()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
+                        <button class="btn btn-sm btn-outline" onclick="clearInflation()"><i class="fas fa-undo"></i> Wyczyść</button>
                     </div>
                 </div>
 
+                <!-- Procenty -->
                 <div id="sub-percent" class="sub-content" style="display: none;">
                     <div class="input-group"><label>Procent z liczby</label><div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;"><input type="number" id="percX" class="modern-input" placeholder="X" oninput="calcPercent()" style="width: 100px;"> <span>% z</span> <input type="number" id="percY" class="modern-input" placeholder="Y" oninput="calcPercent()" style="width: 150px;"> <span>=</span> <span id="percResult" class="result-big" style="font-size: 1.5rem;"></span></div></div>
                     <div class="input-group"><label>Wzrost o procent</label><div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;"><input type="number" id="percBase" class="modern-input" placeholder="Kwota" oninput="calcPercent2()" style="width: 150px;"> <span>+</span> <input type="number" id="percPct" class="modern-input" placeholder="%" oninput="calcPercent2()" style="width: 100px;"> <span>% =</span> <span id="percUpResult" class="result-big" style="font-size: 1.5rem;"></span></div></div>
                     <div class="input-group"><label>Różnica procentowa</label><div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;"><span>A:</span> <input type="number" id="diffA" class="modern-input" placeholder="A" oninput="calcDiff()" style="width: 120px;"> <span>B:</span> <input type="number" id="diffB" class="modern-input" placeholder="B" oninput="calcDiff()" style="width: 120px;"> <span>=</span> <span id="diffResult" style="font-weight: 700; font-size: 1.2rem;"></span></div></div>
                     <div style="text-align: center; margin-top: 0.5rem;">
-                        <button class="btn btn-sm" onclick="clearPercent()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
+                        <button class="btn btn-sm btn-outline" onclick="clearPercent()"><i class="fas fa-undo"></i> Wyczyść</button>
                     </div>
                 </div>
 
+                <!-- Podatki -->
                 <div id="sub-tax" class="sub-content" style="display: none;">
                     <div class="input-group"><label>Kwota brutto (PLN)</label><input type="number" id="taxBrutto" class="modern-input" value="123" oninput="calcTax()"></div>
                     <div class="input-group"><label>Stawka VAT (%)</label><input type="number" id="taxVat" class="modern-input" value="23" oninput="calcTax()"></div>
@@ -377,46 +398,91 @@
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 0.5rem;">
-                        <button class="btn btn-sm" onclick="clearTax()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
+                        <button class="btn btn-sm btn-outline" onclick="clearTax()"><i class="fas fa-undo"></i> Wyczyść</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ============ ZAKŁADKA IP LOOKUP ============ -->
+        <!-- ============ ZAKŁADKA IP ============ -->
         <div id="ip-tab" class="tab-content">
             <div class="glass-card">
-                <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🌐 Sprawdź swój adres IP</h2>
-                <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Wszystko o Twoim połączeniu – lokalizacja, dostawca, urządzenie i więcej.</p>
-
-                <div style="text-align: center; margin-bottom: 2rem;" id="ipMainSection">
-                    <div class="label" style="color: var(--text-muted);">Twój adres IP:</div>
-                    <div class="ip-big" id="ipAddress">Ładowanie...</div>
-                    <button class="btn btn-sm" onclick="copyIP()" style="margin-top: 1rem;"><i class="fas fa-copy"></i> Kopiuj IP</button>
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="font-size: 2.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🌐 Sprawdzanie IP</h1>
+                    <p style="color: var(--text-muted);">Wszystko o Twoim połączeniu w jednym miejscu</p>
                 </div>
 
-                <div class="info-grid" id="ipBasicInfo"></div>
+                <!-- SEKCJA GŁÓWNA IP -->
+                <div style="text-align: center; margin-bottom: 2rem;" id="ipMainSection">
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">Twój adres IP:</div>
+                    <div class="ip-big" id="ipAddress">Ładowanie...</div>
+                    <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-sm" onclick="copyIP()"><i class="fas fa-copy"></i> Kopiuj IP</button>
+                        <button class="btn btn-sm btn-outline" onclick="fetchIPData()"><i class="fas fa-sync-alt"></i> Odśwież</button>
+                    </div>
+                </div>
 
-                <h3 class="section-title" style="margin-top: 2rem;"><i class="fas fa-server"></i> Szczegóły sieci</h3>
-                <div class="info-grid" id="ipNetworkInfo"></div>
+                <!-- ŁADOWANIE -->
+                <div id="ipLoading" style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                    <p style="color: var(--text-muted); margin-top: 1rem;">Pobieranie danych z API...</p>
+                </div>
 
-                <h3 class="section-title" style="margin-top: 2rem;"><i class="fas fa-map-marker-alt"></i> Mapa lokalizacji</h3>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">⚠️ Lokalizacja jest przybliżona (na podstawie adresu IP).</div>
-                <iframe id="ipMap" class="map-frame" src="" style="display: none;"></iframe>
-                <div id="mapFallback" style="text-align: center; padding: 2rem; color: var(--text-muted);">Mapa niedostępna – brak współrzędnych.</div>
+                <!-- DANE IP -->
+                <div id="ipData" style="display: none;">
 
-                <h3 class="section-title" style="margin-top: 2rem;"><i class="fas fa-laptop"></i> Twoje urządzenie</h3>
-                <div class="info-grid" id="ipDeviceInfo"></div>
+                    <!-- Podstawowe informacje -->
+                    <h3 class="section-title"><i class="fas fa-info-circle"></i> Podstawowe informacje</h3>
+                    <div class="info-grid">
+                        <div class="info-item"><div class="label">Typ IP</div><div class="value" id="ipType">--</div></div>
+                        <div class="info-item"><div class="label">Dostawca (ISP)</div><div class="value" id="ipIsp">--</div></div>
+                        <div class="info-item"><div class="label">Kraj</div><div class="value" id="ipCountry">--</div></div>
+                        <div class="info-item"><div class="label">Region</div><div class="value" id="ipRegion">--</div></div>
+                        <div class="info-item"><div class="label">Miasto</div><div class="value" id="ipCity">--</div></div>
+                        <div class="info-item"><div class="label">Kod pocztowy</div><div class="value" id="ipPostal">--</div></div>
+                        <div class="info-item"><div class="label">Strefa czasowa</div><div class="value" id="ipTimezone">--</div></div>
+                        <div class="info-item"><div class="label">Szer./Dług.</div><div class="value" id="ipCoords">--</div></div>
+                    </div>
 
-                <h3 class="section-title" style="margin-top: 2rem;"><i class="fas fa-wifi"></i> Połączenie</h3>
-                <div class="info-grid" id="ipConnInfo"></div>
+                    <!-- Szczegóły sieci -->
+                    <h3 class="section-title" style="margin-top: 1.5rem;"><i class="fas fa-network-wired"></i> Szczegóły sieci</h3>
+                    <div class="info-grid">
+                        <div class="info-item"><div class="label">ASN</div><div class="value" id="ipAsn">--</div></div>
+                        <div class="info-item"><div class="label">Organizacja</div><div class="value" id="ipOrg">--</div></div>
+                        <div class="info-item"><div class="label">Host / Reverse DNS</div><div class="value" id="ipHost">--</div></div>
+                    </div>
 
-                <h3 class="section-title" style="margin-top: 2rem;"><i class="fas fa-shield-alt"></i> Bezpieczeństwo / DNS</h3>
-                <div class="info-grid" id="ipSecurityInfo"></div>
+                    <!-- Bezpieczeństwo -->
+                    <h3 class="section-title" style="margin-top: 1.5rem;"><i class="fas fa-shield-alt"></i> Bezpieczeństwo</h3>
+                    <div class="info-grid">
+                        <div class="info-item"><div class="label">VPN / Proxy</div><div class="value" id="ipVpn">--</div></div>
+                        <div class="info-item"><div class="label">Hosting / Data Center</div><div class="value" id="ipHosting">--</div></div>
+                        <div class="info-item"><div class="label">IP podejrzane</div><div class="value" id="ipSuspicious">--</div></div>
+                    </div>
 
-                <div style="text-align: center; margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button class="btn" onclick="fetchIPData()"><i class="fas fa-sync-alt"></i> Odśwież</button>
-                    <button class="btn" onclick="shareIP()" style="background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--glass-border);"><i class="fas fa-share-alt"></i> Udostępnij</button>
+                    <!-- Mapa -->
+                    <h3 class="section-title" style="margin-top: 1.5rem;"><i class="fas fa-map-marker-alt"></i> Geolokalizacja (przybliżona)</h3>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.5rem;">⚠️ Lokalizacja na podstawie IP – nie jest dokładna!</p>
+                    <div class="map-container" id="mapContainer">
+                        <iframe id="mapFrame" src="" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+
+                    <!-- Urządzenie -->
+                    <h3 class="section-title" style="margin-top: 1.5rem;"><i class="fas fa-laptop"></i> Twoje urządzenie</h3>
+                    <div class="info-grid" id="deviceInfo">
+                        <div class="info-item"><div class="label">Przeglądarka</div><div class="value" id="devBrowser">--</div></div>
+                        <div class="info-item"><div class="label">System</div><div class="value" id="devOS">--</div></div>
+                        <div class="info-item"><div class="label">Urządzenie</div><div class="value" id="devDevice">--</div></div>
+                        <div class="info-item"><div class="label">Język</div><div class="value" id="devLang">--</div></div>
+                        <div class="info-item"><div class="label">Online</div><div class="value"><span class="badge badge-success">Online</span></div></div>
+                    </div>
+                </div>
+
+                <!-- Błąd -->
+                <div id="ipError" style="display: none; text-align: center; padding: 2rem; color: var(--danger);">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
+                    <p style="margin-top: 1rem;">Nie udało się pobrać danych. Spróbuj ponownie później.</p>
+                    <button class="btn btn-sm btn-outline" onclick="fetchIPData()" style="margin-top: 1rem;"><i class="fas fa-redo"></i> Spróbuj ponownie</button>
                 </div>
             </div>
         </div>
@@ -465,7 +531,7 @@
         </div>
     </div>
 
-    <div class="status-bar"><div class="status-dot"></div><span id="connectionStatus">Połączenie aktywne</span></div>
+    <div class="status-bar"><div class="status-dot"></div><span>Połączenie aktywne</span></div>
 
     <script>
         // ======================== ZAKŁADKI GŁÓWNE ========================
@@ -512,9 +578,7 @@
                     lastBaseCurrency = newBase;
                     convert();
                     updateMarketStats();
-                } else {
-                    convert();
-                }
+                } else { convert(); }
             }, 150);
         }
 
@@ -526,18 +590,13 @@
                 if (!res.ok) throw new Error('Błąd sieci');
                 const data = await res.json();
                 const newRates = data.rates;
-
                 if (!statsReady) {
                     previousRates = { ...newRates };
-                    for (let key in previousRates) {
-                        previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015));
-                    }
+                    for (let key in previousRates) { previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015)); }
                     statsReady = true;
                 }
-
                 exchangeRates = newRates;
                 lastSuccessfulRates = { ...exchangeRates };
-
                 populateCurrencyLists();
                 updateMarketStats();
             } catch (e) {
@@ -549,16 +608,12 @@
                     populateCurrencyLists();
                     if (!statsReady) {
                         previousRates = { ...exchangeRates };
-                        for (let key in previousRates) {
-                            previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015));
-                        }
+                        for (let key in previousRates) { previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015)); }
                         statsReady = true;
                     }
                 }
                 updateMarketStats();
-            } finally {
-                isFetching = false;
-            }
+            } finally { isFetching = false; }
             convert();
         }
 
@@ -570,205 +625,86 @@
                     document.getElementById('allStats').innerHTML = '';
                     return;
                 }
-
                 document.getElementById('statsBaseCurrency').textContent = baseCurrency;
                 const statsContainer = document.getElementById('allStats');
                 const topMoversContainer = document.getElementById('topMovers');
                 const currentBaseRate = exchangeRates[baseCurrency];
-
                 if (!statsReady || Object.keys(previousRates).length === 0) {
                     topMoversContainer.innerHTML = '<p>Zbieranie danych historycznych...</p>';
                     statsContainer.innerHTML = '';
                     return;
                 }
-
                 const previousBaseRate = previousRates[baseCurrency] || currentBaseRate;
-
-                const currencyEntries = Object.keys(exchangeRates)
-                    .filter(c => c !== baseCurrency)
-                    .sort();
-
+                const currencyEntries = Object.keys(exchangeRates).filter(c => c !== baseCurrency).sort();
                 const changes = [];
                 const allStatsData = [];
-
                 currencyEntries.forEach(currency => {
                     const currentRate = exchangeRates[currency];
                     if (!currentRate || currentRate <= 0) return;
-
                     const valueInBase = currentBaseRate / currentRate;
                     let changePercent = 0;
-
                     if (previousRates[currency]) {
                         const oldValueInBase = (previousRates[baseCurrency] || previousBaseRate) / previousRates[currency];
-                        if (oldValueInBase > 0) {
-                            changePercent = ((valueInBase - oldValueInBase) / oldValueInBase) * 100;
-                        }
+                        if (oldValueInBase > 0) changePercent = ((valueInBase - oldValueInBase) / oldValueInBase) * 100;
                     }
-
                     changes.push({ currency, valueInBase, changePercent });
                     allStatsData.push({ currency, valueInBase, changePercent });
                 });
-
                 changes.sort((a, b) => b.changePercent - a.changePercent);
                 const topGainers = changes.slice(0, 5);
                 const topLosers = changes.slice(-5).reverse();
-
-                const gainersHTML = topGainers.length > 0 ? topGainers.map(c => `
-                    <div class="mover-item">
-                        <span><strong>${c.currency}</strong> ${c.valueInBase.toFixed(4)} ${baseCurrency}</span>
-                        <span class="stat-positive">+${c.changePercent.toFixed(2)}% <i class="fas fa-arrow-up"></i></span>
-                    </div>
-                `).join('') : '<p>Brak danych</p>';
-
-                const losersHTML = topLosers.length > 0 ? topLosers.map(c => `
-                    <div class="mover-item">
-                        <span><strong>${c.currency}</strong> ${c.valueInBase.toFixed(4)} ${baseCurrency}</span>
-                        <span class="stat-negative">${c.changePercent.toFixed(2)}% <i class="fas fa-arrow-down"></i></span>
-                    </div>
-                `).join('') : '<p>Brak danych</p>';
-
                 topMoversContainer.innerHTML = `
-                    <div class="mover-group">
-                        <h4 style="margin-bottom: 0.5rem; color: var(--success);">🔥 Top 5 Wzrosty</h4>
-                        ${gainersHTML}
-                    </div>
-                    <div class="mover-group">
-                        <h4 style="margin-bottom: 0.5rem; color: var(--danger);">📉 Top 5 Spadki</h4>
-                        ${losersHTML}
-                    </div>
-                `;
-
+                    <div class="mover-group"><h4 style="margin-bottom: 0.5rem; color: var(--success);">🔥 Top 5 Wzrosty</h4>${topGainers.map(c => `<div class="mover-item"><span><strong>${c.currency}</strong> ${c.valueInBase.toFixed(4)} ${baseCurrency}</span><span class="stat-positive">+${c.changePercent.toFixed(2)}% <i class="fas fa-arrow-up"></i></span></div>`).join('') || '<p>Brak danych</p>'}</div>
+                    <div class="mover-group"><h4 style="margin-bottom: 0.5rem; color: var(--danger);">📉 Top 5 Spadki</h4>${topLosers.map(c => `<div class="mover-item"><span><strong>${c.currency}</strong> ${c.valueInBase.toFixed(4)} ${baseCurrency}</span><span class="stat-negative">${c.changePercent.toFixed(2)}% <i class="fas fa-arrow-down"></i></span></div>`).join('') || '<p>Brak danych</p>'}</div>`;
                 statsContainer.innerHTML = allStatsData.map(c => {
                     const absChange = Math.abs(c.changePercent);
                     const changeClass = c.changePercent > 0.01 ? 'stat-positive' : c.changePercent < -0.01 ? 'stat-negative' : '';
                     const icon = c.changePercent > 0.01 ? 'fa-arrow-up' : c.changePercent < -0.01 ? 'fa-arrow-down' : 'fa-minus';
                     const changeText = absChange < 0.01 ? '~0%' : `${c.changePercent.toFixed(2)}% <i class="fas ${icon}"></i>`;
-                    return `
-                        <div class="stats-card">
-                            <div>
-                                <strong>${c.currency}</strong>
-                                <div style="font-size: 0.9rem; color: var(--text-muted);">1 ${c.currency} = ${c.valueInBase.toFixed(4)} ${baseCurrency}</div>
-                            </div>
-                            <div class="${changeClass}">${changeText}</div>
-                        </div>
-                    `;
+                    return `<div class="stats-card"><div><strong>${c.currency}</strong><div style="font-size: 0.9rem; color: var(--text-muted);">1 ${c.currency} = ${c.valueInBase.toFixed(4)} ${baseCurrency}</div></div><div class="${changeClass}">${changeText}</div></div>`;
                 }).join('');
-            } catch (e) {
-                console.error('Błąd aktualizacji statystyk:', e);
-                document.getElementById('topMovers').innerHTML = '<p>Wystąpił błąd przy generowaniu statystyk.</p>';
-                document.getElementById('allStats').innerHTML = '';
-            }
+            } catch (e) { console.error('Błąd aktualizacji statystyk:', e); }
         }
 
-        function getPrecisionValue(amount, rate) {
-            const precise = amount * rate;
-            return showFullPrecision ? precise.toFixed(6) : precise.toFixed(2);
-        }
-
+        function getPrecisionValue(amount, rate) { const precise = amount * rate; return showFullPrecision ? precise.toFixed(6) : precise.toFixed(2); }
         function convert() {
             const amount = parseFloat(document.getElementById('amount').value) || 0;
             const from = document.getElementById('fromCurrencyInput').value.toUpperCase();
             const to = document.getElementById('toCurrencyInput').value.toUpperCase();
-            if (!exchangeRates[from] || !exchangeRates[to]) {
-                document.getElementById('result').value = '...';
-                return;
-            }
+            if (!exchangeRates[from] || !exchangeRates[to]) { document.getElementById('result').value = '...'; return; }
             const rate = exchangeRates[to] / exchangeRates[from];
             document.getElementById('result').value = getPrecisionValue(amount, rate);
             document.getElementById('rateDisplay').textContent = `1 ${from} = ${rate.toFixed(4)} ${to}`;
         }
-
-        function setAmount(val) {
-            document.getElementById('amount').value = val;
-            document.getElementById('amountSlider').value = val;
-            updateSliderRange(val);
-            convert();
-        }
-
-        function updateSliderFromAmount() {
-            const val = parseFloat(document.getElementById('amount').value) || 0;
-            const slider = document.getElementById('amountSlider');
-            slider.value = val;
-            updateSliderRange(val);
-        }
-
-        function updateAmountFromSlider() {
-            const val = parseFloat(document.getElementById('amountSlider').value) || 0;
-            document.getElementById('amount').value = val;
-        }
-
-        function updateSliderRange(val) {
-            const slider = document.getElementById('amountSlider');
-            if (val > slider.max) {
-                slider.max = val * 2;
-            }
-        }
-
-        function swapCurrencies() {
-            const from = document.getElementById('fromCurrencyInput');
-            const to = document.getElementById('toCurrencyInput');
-            [from.value, to.value] = [to.value, from.value];
-            onBaseCurrencyChange();
-        }
-
+        function setAmount(val) { document.getElementById('amount').value = val; document.getElementById('amountSlider').value = val; updateSliderRange(val); convert(); }
+        function updateSliderFromAmount() { const val = parseFloat(document.getElementById('amount').value) || 0; document.getElementById('amountSlider').value = val; updateSliderRange(val); }
+        function updateAmountFromSlider() { const val = parseFloat(document.getElementById('amountSlider').value) || 0; document.getElementById('amount').value = val; }
+        function updateSliderRange(val) { const slider = document.getElementById('amountSlider'); if (val > slider.max) slider.max = val * 2; }
+        function swapCurrencies() { const from = document.getElementById('fromCurrencyInput'); const to = document.getElementById('toCurrencyInput'); [from.value, to.value] = [to.value, from.value]; onBaseCurrencyChange(); }
         function copyResult() {
             const result = document.getElementById('result').value;
             navigator.clipboard.writeText(result).then(() => {
                 const btn = document.querySelector('#currency-tab .btn .fa-copy')?.parentElement;
-                if (btn) {
-                    btn.innerHTML = '<i class="fas fa-check"></i> Skopiowano!';
-                    setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Kopiuj wynik'; }, 1500);
-                }
-            }).catch(() => {
-                alert('Nie udało się skopiować. Spróbuj ręcznie.');
-            });
+                if (btn) { btn.innerHTML = '<i class="fas fa-check"></i> Skopiowano!'; setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Kopiuj wynik'; }, 1500); }
+            }).catch(() => { alert('Nie udało się skopiować. Spróbuj ręcznie.'); });
         }
-
-        function togglePrecision() {
-            showFullPrecision = !showFullPrecision;
-            const btn = document.getElementById('precisionBtn');
-            btn.innerHTML = showFullPrecision
-                ? '<i class="fas fa-search-minus"></i> Mniej miejsc po przecinku'
-                : '<i class="fas fa-search-plus"></i> Więcej miejsc po przecinku';
-            convert();
-        }
+        function togglePrecision() { showFullPrecision = !showFullPrecision; const btn = document.getElementById('precisionBtn'); btn.innerHTML = showFullPrecision ? '<i class="fas fa-search-minus"></i> Mniej miejsc po przecinku' : '<i class="fas fa-search-plus"></i> Więcej miejsc po przecinku'; convert(); }
 
         // ======================== MODUŁ KONWERTERA ========================
-        const unitNames = {
-            mm: 'milimetr', cm: 'centymetr', dm: 'decymetr', m: 'metr', km: 'kilometr',
-            in: 'cal', ft: 'stopa', yd: 'jard', mi: 'mila', nmi: 'mila morska',
-            mg: 'miligram', g: 'gram', kg: 'kilogram', t: 'tona',
-            oz: 'uncja', lb: 'funt', st: 'kamień',
-            bit: 'bit', byte: 'bajt', KB: 'kilobajt', MB: 'megabajt', GB: 'gigabajt', TB: 'terabajt', PB: 'petabajt',
-            KiB: 'kibibajt', MiB: 'mebibajt', GiB: 'gibibajt', TiB: 'tebibajt', PiB: 'pebibajt',
-            ms: 'milisekunda', s: 'sekunda', min: 'minuta', h: 'godzina', d: 'dzień',
-            week: 'tydzień', month: 'miesiąc', year: 'rok',
-            'm/s': 'metr na sekundę', 'km/h': 'kilometr na godzinę', mph: 'mila na godzinę', knot: 'węzeł',
-            J: 'dżul', kJ: 'kilodżul', kcal: 'kilokaloria', Wh: 'watogodzina', kWh: 'kilowatogodzina',
-            W: 'wat', kW: 'kilowat', MW: 'megawat', HP: 'koń mechaniczny',
-            Pa: 'paskal', hPa: 'hektopaskal', bar: 'bar', atm: 'atmosfera', mmHg: 'milimetr słupa rtęci',
-            ml: 'mililitr', l: 'litr', 'm³': 'metr sześcienny', gal: 'galon', pint: 'pinta', cup: 'szklanka',
-            '°C': 'stopień Celsjusza', '°F': 'stopień Fahrenheita', 'K': 'kelwin'
-        };
-
+        const unitNames = { mm:'milimetr', cm:'centymetr', dm:'decymetr', m:'metr', km:'kilometr', in:'cal', ft:'stopa', yd:'jard', mi:'mila', nmi:'mila morska', mg:'miligram', g:'gram', kg:'kilogram', t:'tona', oz:'uncja', lb:'funt', st:'kamień', bit:'bit', byte:'bajt', KB:'kilobajt', MB:'megabajt', GB:'gigabajt', TB:'terabajt', PB:'petabajt', KiB:'kibibajt', MiB:'mebibajt', GiB:'gibibajt', TiB:'tebibajt', PiB:'pebibajt', ms:'milisekunda', s:'sekunda', min:'minuta', h:'godzina', d:'dzień', week:'tydzień', month:'miesiąc', year:'rok', 'm/s':'metr na sekundę', 'km/h':'kilometr na godzinę', mph:'mila na godzinę', knot:'węzeł', J:'dżul', kJ:'kilodżul', kcal:'kilokaloria', Wh:'watogodzina', kWh:'kilowatogodzina', W:'wat', kW:'kilowat', MW:'megawat', HP:'koń mechaniczny', Pa:'paskal', hPa:'hektopaskal', bar:'bar', atm:'atmosfera', mmHg:'milimetr słupa rtęci', ml:'mililitr', l:'litr', 'm³':'metr sześcienny', gal:'galon', pint:'pinta', cup:'szklanka', '°C':'stopień Celsjusza', '°F':'stopień Fahrenheita', 'K':'kelwin' };
         const unitCategories = {
-            length: { base: 'm', units: { mm:0.001, cm:0.01, dm:0.1, m:1, km:1000, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344, nmi:1852 } },
-            weight: { base: 'kg', units: { mg:1e-6, g:0.001, kg:1, t:1000, oz:0.0283495, lb:0.453592, st:6.35029 } },
-            temperature: { base: '°C', units: {} },
-            data: { base: 'byte', units: { bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 } },
-            time: { base: 's', units: { ms:0.001, s:1, min:60, h:3600, d:86400, week:604800, month:2629800, year:31557600 } },
-            speed: { base: 'm/s', units: { 'm/s':1, 'km/h':0.277778, mph:0.44704, knot:0.514444 } },
-            energy: { base: 'J', units: { J:1, kJ:1000, kcal:4184, Wh:3600, kWh:3.6e6 } },
-            power: { base: 'W', units: { W:1, kW:1000, MW:1e6, HP:745.7 } },
-            pressure: { base: 'Pa', units: { Pa:1, hPa:100, bar:1e5, atm:101325, mmHg:133.322 } },
-            volume: { base: 'l', units: { ml:0.001, l:1, 'm³':1000, gal:3.78541, pint:0.473176, cup:0.236588 } }
+            length:{ base:'m', units:{ mm:0.001, cm:0.01, dm:0.1, m:1, km:1000, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344, nmi:1852 } },
+            weight:{ base:'kg', units:{ mg:1e-6, g:0.001, kg:1, t:1000, oz:0.0283495, lb:0.453592, st:6.35029 } },
+            temperature:{ base:'°C', units:{} },
+            data:{ base:'byte', units:{ bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 } },
+            time:{ base:'s', units:{ ms:0.001, s:1, min:60, h:3600, d:86400, week:604800, month:2629800, year:31557600 } },
+            speed:{ base:'m/s', units:{ 'm/s':1, 'km/h':0.277778, mph:0.44704, knot:0.514444 } },
+            energy:{ base:'J', units:{ J:1, kJ:1000, kcal:4184, Wh:3600, kWh:3.6e6 } },
+            power:{ base:'W', units:{ W:1, kW:1000, MW:1e6, HP:745.7 } },
+            pressure:{ base:'Pa', units:{ Pa:1, hPa:100, bar:1e5, atm:101325, mmHg:133.322 } },
+            volume:{ base:'l', units:{ ml:0.001, l:1, 'm³':1000, gal:3.78541, pint:0.473176, cup:0.236588 } }
         };
-
-        function formatUnit(unit) {
-            const name = unitNames[unit] || '';
-            return name ? `${unit} (${name})` : unit;
-        }
-
+        function formatUnit(unit) { const name = unitNames[unit] || ''; return name ? `${unit} (${name})` : unit; }
         function updateConverter() {
             const cat = document.getElementById('convCategory').value;
             const select = document.getElementById('convFrom');
@@ -783,43 +719,32 @@
             }
             convertUnits();
         }
-
         function convertUnits() {
             const cat = document.getElementById('convCategory').value;
             const val = parseFloat(document.getElementById('convValue').value) || 0;
             const from = document.getElementById('convFrom').value;
             const tbody = document.querySelector('#convTable tbody');
             tbody.innerHTML = '';
-
             if (cat === 'temperature') {
                 let celsius;
                 if (from === '°C') celsius = val;
                 else if (from === '°F') celsius = (val - 32) * 5/9;
                 else if (from === 'K') celsius = val - 273.15;
                 const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 };
-                Object.entries(results).forEach(([unit, value]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></tr>`;
-                });
+                Object.entries(results).forEach(([unit, value]) => { tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></tr>`; });
                 return;
             }
-
             if (cat === 'data') {
                 const mode = document.querySelector('input[name="dataMode"]:checked').value;
-                const activeUnits = mode === '1000' ? 
-                    { bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15 } :
-                    { bit:0.125, byte:1, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 };
+                const activeUnits = mode === '1000' ? { bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15 } : { bit:0.125, byte:1, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 };
                 const factor = activeUnits[from] || 1;
                 const baseVal = val * factor;
-                Object.entries(activeUnits).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
-                });
+                Object.entries(activeUnits).forEach(([unit, factor]) => { tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`; });
             } else {
                 const units = unitCategories[cat].units;
                 const factor = units[from] || 1;
                 const baseVal = val * factor;
-                Object.entries(units).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
-                });
+                Object.entries(units).forEach(([unit, factor]) => { tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`; });
             }
         }
 
@@ -830,431 +755,134 @@
             document.getElementById('sub-' + sub).style.display = 'block';
             event.currentTarget.classList.add('active');
         }
-
         function setCreditAmount(val) { document.getElementById('crAmount').value = val; calcCredit(); }
-        function clearCredit() {
-            document.getElementById('crAmount').value = 100000;
-            document.getElementById('crRate').value = 7;
-            document.getElementById('crYears').value = 25;
-            document.getElementById('crType').value = 'equal';
-            calcCredit();
-        }
-        function clearDeposit() {
-            document.getElementById('depAmount').value = 10000;
-            document.getElementById('depRate').value = 5;
-            document.getElementById('depYears').value = 5;
-            document.getElementById('depCap').value = 'monthly';
-            calcDeposit();
-        }
-        function clearInflation() {
-            document.getElementById('infAmount').value = 1000;
-            document.getElementById('infRate').value = 5;
-            document.getElementById('infYears').value = 10;
-            calcInflation();
-        }
-        function clearPercent() {
-            document.getElementById('percX').value = '';
-            document.getElementById('percY').value = '';
-            document.getElementById('percBase').value = '';
-            document.getElementById('percPct').value = '';
-            document.getElementById('diffA').value = '';
-            document.getElementById('diffB').value = '';
-            document.getElementById('percResult').textContent = '';
-            document.getElementById('percUpResult').textContent = '';
-            document.getElementById('diffResult').textContent = '';
-        }
-        function clearTax() {
-            document.getElementById('taxBrutto').value = 123;
-            document.getElementById('taxVat').value = 23;
-            calcTax();
-        }
-
+        function clearCredit() { document.getElementById('crAmount').value = 100000; document.getElementById('crRate').value = 7; document.getElementById('crYears').value = 25; document.getElementById('crType').value = 'equal'; calcCredit(); }
+        function clearDeposit() { document.getElementById('depAmount').value = 10000; document.getElementById('depRate').value = 5; document.getElementById('depYears').value = 5; document.getElementById('depCap').value = 'monthly'; calcDeposit(); }
+        function clearInflation() { document.getElementById('infAmount').value = 1000; document.getElementById('infRate').value = 5; document.getElementById('infYears').value = 10; calcInflation(); }
+        function clearPercent() { ['percX','percY','percBase','percPct','diffA','diffB'].forEach(id => document.getElementById(id).value = ''); document.getElementById('percResult').textContent = ''; document.getElementById('percUpResult').textContent = ''; document.getElementById('diffResult').textContent = ''; }
+        function clearTax() { document.getElementById('taxBrutto').value = 123; document.getElementById('taxVat').value = 23; calcTax(); }
         function calcCredit() {
             const amount = parseFloat(document.getElementById('crAmount').value) || 0;
             const rate = (parseFloat(document.getElementById('crRate').value) || 0) / 100 / 12;
             const months = (parseFloat(document.getElementById('crYears').value) || 0) * 12;
             const type = document.getElementById('crType').value;
             let installment = 0, total = 0, interest = 0;
-            if (months <= 0 || amount <= 0) {
-                document.getElementById('crInstallment').textContent = '0.00';
-                document.getElementById('crTotal').textContent = '0.00';
-                document.getElementById('crInterest').textContent = '0.00';
-                return;
-            }
-            if (type === 'equal' && rate > 0) {
-                installment = amount * rate * Math.pow(1+rate, months) / (Math.pow(1+rate, months) - 1);
-                total = installment * months;
-                interest = total - amount;
-            } else if (type === 'equal' && rate === 0) {
-                installment = amount / months;
-                total = amount;
-                interest = 0;
-            } else if (type === 'decreasing') {
-                const capitalPart = amount / months;
-                total = 0;
-                for (let i = 0; i < months; i++) {
-                    total += capitalPart + (amount - (capitalPart * i)) * rate;
-                }
-                installment = capitalPart + amount * rate;
-                interest = total - amount;
-            }
+            if (months <= 0 || amount <= 0) { document.getElementById('crInstallment').textContent = '0.00'; document.getElementById('crTotal').textContent = '0.00'; document.getElementById('crInterest').textContent = '0.00'; return; }
+            if (type === 'equal' && rate > 0) { installment = amount * rate * Math.pow(1+rate, months) / (Math.pow(1+rate, months) - 1); total = installment * months; interest = total - amount; }
+            else if (type === 'equal' && rate === 0) { installment = amount / months; total = amount; interest = 0; }
+            else if (type === 'decreasing') { const capitalPart = amount / months; total = 0; for (let i = 0; i < months; i++) total += capitalPart + (amount - (capitalPart * i)) * rate; installment = capitalPart + amount * rate; interest = total - amount; }
             document.getElementById('crInstallment').textContent = installment.toFixed(2);
             document.getElementById('crTotal').textContent = total.toFixed(2);
             document.getElementById('crInterest').textContent = interest.toFixed(2);
         }
+        function calcDeposit() { const amount = parseFloat(document.getElementById('depAmount').value) || 0; const rate = (parseFloat(document.getElementById('depRate').value) || 0) / 100; const years = parseFloat(document.getElementById('depYears').value) || 0; const cap = document.getElementById('depCap').value; let final; if (cap === 'monthly') final = amount * Math.pow(1 + rate/12, years * 12); else final = amount * Math.pow(1 + rate, years); document.getElementById('depFinal').textContent = final.toFixed(2); document.getElementById('depProfit').textContent = (final - amount).toFixed(2); }
+        function calcInflation() { const amount = parseFloat(document.getElementById('infAmount').value) || 0; const rate = (parseFloat(document.getElementById('infRate').value) || 0) / 100; const years = parseFloat(document.getElementById('infYears').value) || 0; const realValue = amount / Math.pow(1 + rate, years); const loss = (1 - 1 / Math.pow(1 + rate, years)) * 100; document.getElementById('infValue').textContent = realValue.toFixed(2); document.getElementById('infLoss').textContent = loss.toFixed(2); }
+        function calcPercent() { const x = parseFloat(document.getElementById('percX').value) || 0; const y = parseFloat(document.getElementById('percY').value) || 0; document.getElementById('percResult').textContent = (x / 100 * y).toFixed(2); }
+        function calcPercent2() { const base = parseFloat(document.getElementById('percBase').value) || 0; const pct = parseFloat(document.getElementById('percPct').value) || 0; document.getElementById('percUpResult').textContent = (base * (1 + pct/100)).toFixed(2); }
+        function calcDiff() { const a = parseFloat(document.getElementById('diffA').value) || 0; const b = parseFloat(document.getElementById('diffB').value) || 0; if (b === 0) { document.getElementById('diffResult').textContent = '—'; return; } document.getElementById('diffResult').textContent = ((a - b) / b * 100).toFixed(2) + '%'; }
+        function calcTax() { const brutto = parseFloat(document.getElementById('taxBrutto').value) || 0; const vat = (parseFloat(document.getElementById('taxVat').value) || 0) / 100; const netto = brutto / (1 + vat); document.getElementById('taxNetto').textContent = netto.toFixed(2); document.getElementById('taxVatVal').textContent = (brutto - netto).toFixed(2); }
 
-        function calcDeposit() {
-            const amount = parseFloat(document.getElementById('depAmount').value) || 0;
-            const rate = (parseFloat(document.getElementById('depRate').value) || 0) / 100;
-            const years = parseFloat(document.getElementById('depYears').value) || 0;
-            const cap = document.getElementById('depCap').value;
-            let final;
-            if (cap === 'monthly') final = amount * Math.pow(1 + rate/12, years * 12);
-            else final = amount * Math.pow(1 + rate, years);
-            document.getElementById('depFinal').textContent = final.toFixed(2);
-            document.getElementById('depProfit').textContent = (final - amount).toFixed(2);
-        }
-
-        function calcInflation() {
-            const amount = parseFloat(document.getElementById('infAmount').value) || 0;
-            const rate = (parseFloat(document.getElementById('infRate').value) || 0) / 100;
-            const years = parseFloat(document.getElementById('infYears').value) || 0;
-            const realValue = amount / Math.pow(1 + rate, years);
-            const loss = (1 - 1 / Math.pow(1 + rate, years)) * 100;
-            document.getElementById('infValue').textContent = realValue.toFixed(2);
-            document.getElementById('infLoss').textContent = loss.toFixed(2);
-        }
-
-        function calcPercent() {
-            const x = parseFloat(document.getElementById('percX').value) || 0;
-            const y = parseFloat(document.getElementById('percY').value) || 0;
-            document.getElementById('percResult').textContent = (x / 100 * y).toFixed(2);
-        }
-        function calcPercent2() {
-            const base = parseFloat(document.getElementById('percBase').value) || 0;
-            const pct = parseFloat(document.getElementById('percPct').value) || 0;
-            document.getElementById('percUpResult').textContent = (base * (1 + pct/100)).toFixed(2);
-        }
-        function calcDiff() {
-            const a = parseFloat(document.getElementById('diffA').value) || 0;
-            const b = parseFloat(document.getElementById('diffB').value) || 0;
-            if (b === 0) { document.getElementById('diffResult').textContent = '—'; return; }
-            document.getElementById('diffResult').textContent = ((a - b) / b * 100).toFixed(2) + '%';
-        }
-
-        function calcTax() {
-            const brutto = parseFloat(document.getElementById('taxBrutto').value) || 0;
-            const vat = (parseFloat(document.getElementById('taxVat').value) || 0) / 100;
-            const netto = brutto / (1 + vat);
-            document.getElementById('taxNetto').textContent = netto.toFixed(2);
-            document.getElementById('taxVatVal').textContent = (brutto - netto).toFixed(2);
-        }
-
-        // ======================== MODUŁ IP LOOKUP ========================
+        // ======================== MODUŁ IP ========================
         let currentIPData = null;
-
         async function fetchIPData() {
-            const ipEl = document.getElementById('ipAddress');
-            ipEl.textContent = 'Ładowanie...';
-
+            document.getElementById('ipLoading').style.display = 'block';
+            document.getElementById('ipData').style.display = 'none';
+            document.getElementById('ipError').style.display = 'none';
             try {
                 const res = await fetch('https://ipapi.co/json/');
-                if (!res.ok) throw new Error('Błąd API');
+                if (!res.ok) throw new Error('API error');
                 const data = await res.json();
                 currentIPData = data;
-
-                // IP
-                ipEl.textContent = data.ip || '---';
-
-                // Podstawowe info
-                document.getElementById('ipBasicInfo').innerHTML = buildInfoGrid([
-                    ['Typ IP', data.ip?.includes(':') ? 'IPv6' : 'IPv4'],
-                    ['Dostawca (ISP)', data.org || '---'],
-                    ['Kraj', data.country_name || '---'],
-                    ['Region', data.region || '---'],
-                    ['Miasto', data.city || '---'],
-                    ['Kod pocztowy', data.postal || '---'],
-                    ['Strefa czasowa', data.timezone || '---'],
-                    ['Kontynent', data.continent_code || '---']
-                ]);
-
-                // Sieć
-                document.getElementById('ipNetworkInfo').innerHTML = buildInfoGrid([
-                    ['ASN', data.asn || '---'],
-                    ['Organizacja', data.org || '---'],
-                    ['Host', data.hostname || '---'],
-                    ['Typ sieci', data.network || '---']
-                ]);
-
-                // Mapa
-                const mapFrame = document.getElementById('ipMap');
-                const mapFallback = document.getElementById('mapFallback');
+                document.getElementById('ipLoading').style.display = 'none';
+                document.getElementById('ipData').style.display = 'block';
+                document.getElementById('ipAddress').textContent = data.ip || '--';
+                document.getElementById('ipType').textContent = (data.ip || '').includes(':') ? 'IPv6' : 'IPv4';
+                document.getElementById('ipIsp').textContent = data.org || data.isp || '--';
+                document.getElementById('ipCountry').textContent = (data.country_name || '--') + ' (' + (data.country || '--') + ')';
+                document.getElementById('ipRegion').textContent = data.region || '--';
+                document.getElementById('ipCity').textContent = data.city || '--';
+                document.getElementById('ipPostal').textContent = data.postal || '--';
+                document.getElementById('ipTimezone').textContent = data.timezone || '--';
+                document.getElementById('ipCoords').textContent = (data.latitude && data.longitude) ? data.latitude + ', ' + data.longitude : '--';
+                document.getElementById('ipAsn').textContent = data.asn || '--';
+                document.getElementById('ipOrg').textContent = data.org || '--';
+                document.getElementById('ipHost').textContent = data.hostname || '--';
+                const isProxy = data.proxy || data.hosting;
+                document.getElementById('ipVpn').innerHTML = isProxy ? '<span class="badge badge-danger">TAK</span>' : '<span class="badge badge-success">NIE</span>';
+                document.getElementById('ipHosting').innerHTML = data.hosting ? '<span class="badge badge-danger">TAK</span>' : '<span class="badge badge-success">NIE</span>';
+                document.getElementById('ipSuspicious').innerHTML = (data.proxy || data.hosting) ? '<span class="badge badge-warning">Możliwe</span>' : '<span class="badge badge-success">NIE</span>';
                 if (data.latitude && data.longitude) {
-                    mapFrame.style.display = 'block';
-                    mapFallback.style.display = 'none';
-                    mapFrame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${data.longitude-0.05},${data.latitude-0.05},${data.longitude+0.05},${data.latitude+0.05}&layer=mapnik&marker=${data.latitude},${data.longitude}`;
-                } else {
-                    mapFrame.style.display = 'none';
-                    mapFallback.style.display = 'block';
+                    document.getElementById('mapFrame').src = `https://www.openstreetmap.org/export/embed.html?bbox=${data.longitude-0.1},${data.latitude-0.1},${data.longitude+0.1},${data.latitude+0.1}&layer=mapnik&marker=${data.latitude},${data.longitude}`;
                 }
-
-                // Bezpieczeństwo
-                document.getElementById('ipSecurityInfo').innerHTML = buildInfoGrid([
-                    ['Reverse DNS', data.hostname || '---'],
-                    ['VPN / Proxy', data.proxy ? 'TAK' : 'NIE'],
-                    ['Hosting / Data Center', data.hosting ? 'TAK' : 'NIE'],
-                    ['Prywatność', 'Dane publiczne (brak VPN)']
-                ]);
-
+                setDeviceInfo();
             } catch (e) {
-                ipEl.textContent = 'Nie udało się pobrać';
-                document.getElementById('ipBasicInfo').innerHTML = '<p style="color: var(--danger);">Błąd ładowania danych. Spróbuj odświeżyć.</p>';
-                console.warn(e);
+                console.warn('Błąd pobierania IP:', e);
+                document.getElementById('ipLoading').style.display = 'none';
+                document.getElementById('ipError').style.display = 'block';
+                document.getElementById('ipAddress').textContent = 'Błąd ładowania';
             }
-
-            // Urządzenie (zawsze dostępne)
+        }
+        function setDeviceInfo() {
             const ua = navigator.userAgent;
-            let browser = 'Nieznana';
-            if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
-            else if (ua.includes('Firefox')) browser = 'Firefox';
+            let browser = 'Nieznana', os = 'Nieznany', device = 'Desktop';
+            if (ua.includes('Firefox')) browser = 'Firefox';
             else if (ua.includes('Edg')) browser = 'Edge';
-            else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
-
-            let os = 'Nieznany';
+            else if (ua.includes('Chrome')) browser = 'Chrome';
+            else if (ua.includes('Safari')) browser = 'Safari';
+            const match = ua.match(/(Chrome|Firefox|Edg|Safari)\/([0-9.]+)/);
+            if (match) browser = match[1] + ' ' + match[2].split('.')[0];
             if (ua.includes('Windows')) os = 'Windows';
-            else if (ua.includes('Mac OS')) os = 'macOS';
+            else if (ua.includes('Mac')) os = 'macOS';
             else if (ua.includes('Linux')) os = 'Linux';
-            else if (ua.includes('Android')) os = 'Android';
-            else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
-
-            const device = window.innerWidth <= 768 ? 'Mobile' : 'Desktop';
-            const language = navigator.language || '---';
-            const screenRes = `${window.screen.width}x${window.screen.height}`;
-
-            document.getElementById('ipDeviceInfo').innerHTML = buildInfoGrid([
-                ['Przeglądarka', browser],
-                ['System operacyjny', os],
-                ['Urządzenie', device],
-                ['Język', language],
-                ['Rozdzielczość', screenRes],
-                ['Cookies', navigator.cookieEnabled ? 'Włączone' : 'Wyłączone']
-            ]);
-
-            // Połączenie
-            const online = navigator.onLine ? 'Online' : 'Offline';
-            const conn = navigator.connection || {};
-            const connType = conn.effectiveType || '---';
-            const downlink = conn.downlink ? conn.downlink + ' Mb/s' : '---';
-
-            document.getElementById('ipConnInfo').innerHTML = buildInfoGrid([
-                ['Status', online],
-                ['Typ połączenia', connType.toUpperCase()],
-                ['Szacowana szybkość', downlink],
-                ['Online/Offline', online]
-            ]);
+            else if (ua.includes('Android')) { os = 'Android'; device = 'Telefon'; }
+            else if (ua.includes('iPhone') || ua.includes('iPad')) { os = 'iOS'; device = ua.includes('iPad') ? 'Tablet' : 'Telefon'; }
+            if (ua.includes('Mobile')) device = 'Telefon';
+            document.getElementById('devBrowser').textContent = browser;
+            document.getElementById('devOS').textContent = os;
+            document.getElementById('devDevice').textContent = device;
+            document.getElementById('devLang').textContent = navigator.language || '--';
         }
-
-        function buildInfoGrid(items) {
-            return items.map(([label, value]) => `
-                <div class="info-item">
-                    <div class="info-label">${label}</div>
-                    <div class="info-value">${value}</div>
-                </div>
-            `).join('');
-        }
-
         function copyIP() {
             const ip = document.getElementById('ipAddress').textContent;
+            if (!ip || ip === 'Ładowanie...' || ip === 'Błąd ładowania') return;
             navigator.clipboard.writeText(ip).then(() => {
-                alert('Adres IP skopiowany!');
+                const btn = document.querySelector('#ip-tab .btn .fa-copy')?.parentElement;
+                if (btn) { btn.innerHTML = '<i class="fas fa-check"></i> Skopiowano!'; setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Kopiuj IP'; }, 1500); }
             });
-        }
-
-        function shareIP() {
-            const ip = document.getElementById('ipAddress').textContent;
-            if (navigator.share) {
-                navigator.share({ title: 'Mój adres IP', text: `Mój adres IP to: ${ip}` });
-            } else {
-                prompt('Skopiuj adres IP:', ip);
-            }
         }
 
         // ======================== MODUŁ SPEED TESTU ========================
         let speedChart = null;
         let isTesting = false;
-
-        function updateGauge(value, max, label) {
-            const circle = document.getElementById('gaugeProgress');
-            const circumference = 2 * Math.PI * 120;
-            const offset = circumference - (Math.min(value, max) / max) * circumference;
-            circle.style.strokeDashoffset = offset;
-            document.getElementById('gaugeValue').textContent = value.toFixed(1);
-            document.getElementById('gaugeLabel').textContent = label;
-        }
-
-        async function measurePing() {
-            const measurements = [];
-            const url = 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png';
-            for (let i = 0; i < 10; i++) {
-                const start = performance.now();
-                await new Promise(resolve => {
-                    const img = new Image();
-                    img.src = url + '?cache=' + Date.now();
-                    img.onload = resolve;
-                    img.onerror = resolve;
-                });
-                const end = performance.now();
-                measurements.push(end - start);
-                updateGauge(i + 1, 10, 'Mierzenie pingu...');
-            }
-            const avg = measurements.reduce((a,b) => a+b, 0) / measurements.length;
-            const jitter = Math.sqrt(measurements.map(p => (p-avg)**2).reduce((a,b) => a+b, 0) / measurements.length);
-            return { ping: avg, jitter };
-        }
-
-        async function measureDownload() {
-            const parallelDownloads = 4;
-            const sizePerDownload = 5 * 1024 * 1024;
-            const totalExpectedSize = parallelDownloads * sizePerDownload;
-            let totalLoaded = 0;
-            const start = performance.now();
-            const promises = [];
-
-            const updateProgress = (loadedInChunk) => {
-                totalLoaded += loadedInChunk;
-                const progress = Math.min(100, (totalLoaded / totalExpectedSize) * 100);
-                document.getElementById('dlProgress').style.width = progress + '%';
-                document.getElementById('dlProgressText').textContent = Math.round(progress) + '%';
-            };
-
-            for (let i = 0; i < parallelDownloads; i++) {
-                promises.push((async () => {
-                    try {
-                        const controller = new AbortController();
-                        const timeout = setTimeout(() => controller.abort(), 15000);
-                        const response = await fetch(`https://speed.cloudflare.com/__down?bytes=${sizePerDownload}`, {
-                            cache: 'no-store', signal: controller.signal
-                        });
-                        clearTimeout(timeout);
-                        if (!response.ok) throw new Error('Status: ' + response.status);
-                        const reader = response.body.getReader();
-                        while (true) {
-                            const { done, value } = await reader.read();
-                            if (done) break;
-                            updateProgress(value.length);
-                        }
-                    } catch (e) { console.warn('Błąd pobierania:', e.message); }
-                })());
-            }
-
-            await Promise.all(promises);
-            const end = performance.now();
-            const duration = (end - start) / 1000;
-            if (duration === 0 || totalLoaded === 0) return 0;
-            const mbps = (totalLoaded * 8) / duration / 1e6;
-            updateGauge(mbps, 1000, 'Pobieranie zakończone');
-            return mbps;
-        }
-
-        async function measureUpload() {
-            const parallelUploads = 2;
-            const sizePerUpload = 2 * 1024 * 1024;
-            let totalSent = 0;
-            const start = performance.now();
-            const promises = [];
-
-            const updateProgress = (sentInChunk) => {
-                totalSent += sentInChunk;
-                const progress = Math.min(100, (totalSent / (sizePerUpload * parallelUploads)) * 100);
-                document.getElementById('ulProgress').style.width = progress + '%';
-                document.getElementById('ulProgressText').textContent = Math.round(progress) + '%';
-            };
-
-            for (let i = 0; i < parallelUploads; i++) {
-                promises.push((async () => {
-                    try {
-                        const data = new Uint8Array(sizePerUpload).fill(0);
-                        const controller = new AbortController();
-                        const timeout = setTimeout(() => controller.abort(), 15000);
-                        const res = await fetch('https://httpbin.org/post', {
-                            method: 'POST', body: data,
-                            headers: { 'Content-Type': 'application/octet-stream' },
-                            signal: controller.signal
-                        });
-                        clearTimeout(timeout);
-                        if (res.ok) { updateProgress(sizePerUpload); } else { throw new Error('Upload failed'); }
-                    } catch (e) { console.warn('Błąd wysyłania:', e.message); updateProgress(sizePerUpload); }
-                })());
-            }
-
-            await Promise.all(promises);
-            const end = performance.now();
-            const duration = (end - start) / 1000;
-            if (duration === 0 || totalSent === 0) return 0;
-            const mbps = (totalSent * 8) / duration / 1e6;
-            updateGauge(mbps, 500, 'Wysyłanie zakończone');
-            return mbps;
-        }
-
+        function updateGauge(value, max, label) { const circle = document.getElementById('gaugeProgress'); const circumference = 2 * Math.PI * 120; const offset = circumference - (Math.min(value, max) / max) * circumference; circle.style.strokeDashoffset = offset; document.getElementById('gaugeValue').textContent = value.toFixed(1); document.getElementById('gaugeLabel').textContent = label; }
+        async function measurePing() { const measurements = []; const url = 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'; for (let i = 0; i < 10; i++) { const start = performance.now(); await new Promise(resolve => { const img = new Image(); img.src = url + '?cache=' + Date.now(); img.onload = resolve; img.onerror = resolve; }); const end = performance.now(); measurements.push(end - start); updateGauge(i + 1, 10, 'Mierzenie pingu...'); } const avg = measurements.reduce((a,b) => a+b, 0) / measurements.length; const jitter = Math.sqrt(measurements.map(p => (p-avg)**2).reduce((a,b) => a+b, 0) / measurements.length); return { ping: avg, jitter }; }
+        async function measureDownload() { const parallelDownloads = 4; const sizePerDownload = 5 * 1024 * 1024; const totalExpectedSize = parallelDownloads * sizePerDownload; let totalLoaded = 0; const start = performance.now(); const promises = []; const updateProgress = (loadedInChunk) => { totalLoaded += loadedInChunk; const progress = Math.min(100, (totalLoaded / totalExpectedSize) * 100); document.getElementById('dlProgress').style.width = progress + '%'; document.getElementById('dlProgressText').textContent = Math.round(progress) + '%'; }; for (let i = 0; i < parallelDownloads; i++) { promises.push((async () => { try { const controller = new AbortController(); const timeout = setTimeout(() => controller.abort(), 15000); const response = await fetch(`https://speed.cloudflare.com/__down?bytes=${sizePerDownload}`, { cache: 'no-store', signal: controller.signal }); clearTimeout(timeout); if (!response.ok) throw new Error('Status: ' + response.status); const reader = response.body.getReader(); while (true) { const { done, value } = await reader.read(); if (done) break; updateProgress(value.length); } } catch (e) { console.warn('Błąd pobierania:', e.message); } })()); } await Promise.all(promises); const end = performance.now(); const duration = (end - start) / 1000; if (duration === 0 || totalLoaded === 0) return 0; const mbps = (totalLoaded * 8) / duration / 1e6; updateGauge(mbps, 1000, 'Pobieranie zakończone'); return mbps; }
+        async function measureUpload() { const parallelUploads = 2; const sizePerUpload = 2 * 1024 * 1024; let totalSent = 0; const start = performance.now(); const promises = []; const updateProgress = (sentInChunk) => { totalSent += sentInChunk; const progress = Math.min(100, (totalSent / (sizePerUpload * parallelUploads)) * 100); document.getElementById('ulProgress').style.width = progress + '%'; document.getElementById('ulProgressText').textContent = Math.round(progress) + '%'; }; for (let i = 0; i < parallelUploads; i++) { promises.push((async () => { try { const data = new Uint8Array(sizePerUpload).fill(0); const controller = new AbortController(); const timeout = setTimeout(() => controller.abort(), 15000); const res = await fetch('https://httpbin.org/post', { method: 'POST', body: data, headers: { 'Content-Type': 'application/octet-stream' }, signal: controller.signal }); clearTimeout(timeout); if (res.ok) { updateProgress(sizePerUpload); } else { throw new Error('Upload failed'); } } catch (e) { console.warn('Błąd wysyłania:', e.message); updateProgress(sizePerUpload); } })()); } await Promise.all(promises); const end = performance.now(); const duration = (end - start) / 1000; if (duration === 0 || totalSent === 0) return 0; const mbps = (totalSent * 8) / duration / 1e6; updateGauge(mbps, 500, 'Wysyłanie zakończone'); return mbps; }
         async function startSpeedTest() {
             if (isTesting) return;
             isTesting = true;
             const btn = document.getElementById('startBtn');
-            btn.classList.add('running'); btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testowanie...';
+            btn.classList.add('running'); btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testowanie...';
             document.getElementById('progressSection').style.display = 'block';
             document.getElementById('resultsGrid').style.display = 'none';
             document.getElementById('chartContainer').style.display = 'none';
             updateGauge(0, 100, 'Inicjalizacja...');
-            document.getElementById('dlProgress').style.width = '0%';
-            document.getElementById('ulProgress').style.width = '0%';
-            document.getElementById('pingProgress').style.width = '0%';
-
+            document.getElementById('dlProgress').style.width = '0%'; document.getElementById('ulProgress').style.width = '0%'; document.getElementById('pingProgress').style.width = '0%';
             const results = {};
-            try {
-                const pingData = await measurePing();
-                results.ping = pingData.ping.toFixed(1);
-                results.jitter = pingData.jitter.toFixed(1);
-                document.getElementById('pingText').textContent = results.ping + ' ms';
-                document.getElementById('pingProgress').style.width = '100%';
-                updateGauge(pingData.ping, 200, 'Ping zakończony');
-            } catch (e) { results.ping = '--'; results.jitter = '--'; }
-
+            try { const pingData = await measurePing(); results.ping = pingData.ping.toFixed(1); results.jitter = pingData.jitter.toFixed(1); document.getElementById('pingText').textContent = results.ping + ' ms'; document.getElementById('pingProgress').style.width = '100%'; updateGauge(pingData.ping, 200, 'Ping zakończony'); } catch (e) { results.ping = '--'; results.jitter = '--'; }
             try { results.download = await measureDownload(); } catch (e) { results.download = 0; }
             try { results.upload = await measureUpload(); } catch (e) { results.upload = 0; }
-
             updateGauge(results.download || 0, 1000, 'Test ukończony!');
             document.getElementById('dlResult').textContent = (results.download || 0).toFixed(2);
             document.getElementById('ulResult').textContent = (results.upload || 0).toFixed(2);
             document.getElementById('pingResult').textContent = (results.ping || '--') + ' ms';
             document.getElementById('jitterResult').textContent = (results.jitter || '--') + ' ms';
             document.getElementById('resultsGrid').style.display = 'grid';
-
-            if (results.download || results.upload) { showChart(results); }
-
-            btn.classList.remove('running'); btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-redo"></i> Powtórz test';
+            if (results.download || results.upload) showChart(results);
+            btn.classList.remove('running'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-redo"></i> Powtórz test';
             isTesting = false;
         }
-
-        function showChart(results) {
-            document.getElementById('chartContainer').style.display = 'block';
-            const ctx = document.getElementById('speedChart').getContext('2d');
-            if (speedChart) speedChart.destroy();
-            speedChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Pobieranie', 'Wysyłanie', 'Ping (÷10)', 'Stabilność (÷10)'],
-                    datasets: [{
-                        data: [results.download||0, results.upload||0, (parseFloat(results.ping)||0)/10, (parseFloat(results.jitter)||0)/10],
-                        backgroundColor: ['rgba(99,102,241,0.8)','rgba(139,92,246,0.8)','rgba(16,185,129,0.8)','rgba(245,158,11,0.8)'],
-                        borderColor: ['rgba(99,102,241,1)','rgba(139,92,246,1)','rgba(16,185,129,1)','rgba(245,158,11,1)'],
-                        borderWidth: 2, borderRadius: 8
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-            });
-        }
+        function showChart(results) { document.getElementById('chartContainer').style.display = 'block'; const ctx = document.getElementById('speedChart').getContext('2d'); if (speedChart) speedChart.destroy(); speedChart = new Chart(ctx, { type: 'bar', data: { labels: ['Pobieranie', 'Wysyłanie', 'Ping (÷10)', 'Stabilność (÷10)'], datasets: [{ data: [results.download||0, results.upload||0, (parseFloat(results.ping)||0)/10, (parseFloat(results.jitter)||0)/10], backgroundColor: ['rgba(99,102,241,0.8)','rgba(139,92,246,0.8)','rgba(16,185,129,0.8)','rgba(245,158,11,0.8)'], borderColor: ['rgba(99,102,241,1)','rgba(139,92,246,1)','rgba(16,185,129,1)','rgba(245,158,11,1)'], borderWidth: 2, borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } }); }
 
         // ======================== INICJALIZACJA ========================
         fetchRates();
