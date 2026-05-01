@@ -119,21 +119,55 @@
             flex: 1; background: transparent; border: none; color: var(--text); font-size: 2rem; font-weight: 700; outline: none; width: 100%;
         }
 
-        .slider-container { margin-top: 1rem; }
+        /* 🎚️ POWIĘKSZONY, PIĘKNY SUWAK */
+        .slider-container { margin-top: 1.5rem; }
         input[type=range] {
-            -webkit-appearance: none; width: 100%; background: transparent; margin: 0.5rem 0;
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            margin: 1rem 0;
+            padding: 0; /* ważne dla Firefox */
         }
         input[type=range]:focus { outline: none; }
+        /* Tor suwaka */
         input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 12px; cursor: pointer;
-            background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px; border: 1px solid var(--glass-border);
+            width: 100%;
+            height: 20px;
+            cursor: pointer;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
         }
+        /* Uchwyt suwaka */
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 28px; width: 28px; border-radius: 50%; background: white;
-            cursor: pointer; margin-top: -9px; box-shadow: 0 0 15px rgba(99, 102, 241, 0.8);
-            border: 2px solid var(--primary); transition: 0.1s;
+            -webkit-appearance: none;
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -11px; /* Wyśrodkowanie względem toru */
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.9), 0 4px 10px rgba(0,0,0,0.3);
+            border: 3px solid #6366f1;
+            transition: 0.15s ease;
         }
-        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 1), 0 4px 15px rgba(0,0,0,0.4);
+        }
+        /* Styl dla Firefox */
+        input[type=range]::-moz-range-track {
+            width: 100%; height: 20px; cursor: pointer;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-moz-range-thumb {
+            height: 40px; width: 40px; border-radius: 50%; background: white;
+            cursor: pointer; border: 3px solid #6366f1;
+            box-shadow: 0 0 20px rgba(99,102,241,0.9), 0 4px 10px rgba(0,0,0,0.3);
+        }
 
         .swap-btn {
             width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -142,7 +176,7 @@
         }
         .swap-btn:hover { transform: rotate(180deg) scale(1.1); }
 
-        .quick-amounts { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
+        .quick-amounts { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
         .quick-btn {
             background: rgba(99,102,241,0.15); border: 1px solid var(--glass-border);
             color: var(--text); padding: 0.5rem 0.8rem; border-radius: 2rem; cursor: pointer;
@@ -160,6 +194,8 @@
         .action-btn.secondary { background: rgba(255,255,255,0.05); color: var(--text); box-shadow: none; border: 1px solid var(--glass-border); }
         .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99,102,241,0.5); }
         .action-btn.secondary:hover { background: rgba(255,255,255,0.1); }
+
+        .auto-refresh-note { text-align: center; margin-top: 0.75rem; color: var(--text-muted); font-size: 0.8rem; }
 
         .rate-info { text-align: center; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem; margin-top: 1rem; border: 1px solid rgba(99,102,241,0.2); }
         .rate-value { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
@@ -197,10 +233,7 @@
         .start-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(99,102,241,0.6); }
         .start-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .metric-card {
-            background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem;
-            padding: 1.5rem; text-align: center; transition: 0.3s;
-        }
+        .metric-card { background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem; text-align: center; transition: 0.3s; }
         .metric-card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .metric-icon { font-size: 2rem; margin-bottom: 1rem; color: var(--primary); }
         .metric-title { color: var(--text-muted); font-size: 0.875rem; text-transform: uppercase; margin-bottom: 0.5rem; }
@@ -241,7 +274,7 @@
             <div class="glass-card">
                 <div class="currency-header">
                     <h1>💰 Przeliczanie walut</h1>
-                    <p>Sprawdź, ile to kosztuje w innej walucie – kursy odświeżane co minutę!</p>
+                    <p>Sprawdź, ile to kosztuje w innej walucie – kursy odświeżane automatycznie!</p>
                     <div class="last-update" id="lastUpdate"><i class="fas fa-sync-alt fa-spin"></i> Ładowanie...</div>
                 </div>
 
@@ -269,7 +302,7 @@
                     </div>
                 </div>
 
-                <!-- Szybkie kwoty – dwa rzędy -->
+                <!-- Szybkie kwoty -->
                 <div class="quick-amounts">
                     <span style="color: var(--text-muted); margin-right: 0.25rem; font-size: 0.8rem;">Szybka kwota:</span>
                     <button class="quick-btn" onclick="setAmount(5)">5</button>
@@ -289,7 +322,9 @@
                     <button class="action-btn secondary" onclick="togglePrecision()" id="precisionBtn">
                         <i class="fas fa-search-plus"></i> Więcej miejsc po przecinku
                     </button>
-                    <button class="action-btn" onclick="fetchRates()"><i class="fas fa-sync-alt"></i> Odśwież kursy</button>
+                </div>
+                <div class="auto-refresh-note">
+                    <i class="fas fa-sync-alt"></i> Kursy odświeżają się automatycznie co minutę
                 </div>
 
                 <div class="rate-info">
@@ -381,11 +416,11 @@
 
         // ---- WALUTY ----
         let exchangeRates = {};
-        let previousRates = {};       // zawsze przechowuje kursy z POPRZEDNIEGO udanego pobrania
+        let previousRates = {};        // zawsze przechowuje kursy z POPRZEDNIEGO udanego pobrania
         let lastSuccessfulRates = null;
         let showFullPrecision = false;
-        let isFetching = false;       // blokada przed równoczesnymi żądaniami
-        let statsReady = false;       // czy mamy już dane do porównania
+        let isFetching = false;        // blokada przed równoczesnymi żądaniami
+        let statsReady = false;        // czy mamy już dane do porównania
 
         function populateCurrencyLists() {
             const currencies = Object.keys(exchangeRates).sort();
@@ -405,7 +440,7 @@
         }
 
         async function fetchRates() {
-            if (isFetching) return;   // ignoruj kliknięcia, gdy już pobieramy
+            if (isFetching) return;
             isFetching = true;
             try {
                 const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
@@ -413,19 +448,19 @@
                 const data = await res.json();
                 const newRates = data.rates;
 
-                // Przesuwamy obecne kursy do previousRates TYLKO jeśli już jakieś mamy
+                // Przenosimy obecne kursy do previousRates TYLKO jeśli już jakieś były
                 if (Object.keys(exchangeRates).length > 0) {
                     previousRates = { ...exchangeRates };
                     statsReady = true;
                 } else {
-                    // Pierwsze uruchomienie – generujemy sztuczne poprzednie dane
+                    // Pierwsze uruchomienie – generujemy orientacyjne dane historyczne
                     previousRates = { ...newRates };
                     for (let key in previousRates) {
                         previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015));
                     }
                     statsReady = true;
-                    document.getElementById('statsNote').textContent = 
-                        'Porównanie orientacyjne (dane historyczne zostaną zebrane przy kolejnej aktualizacji)';
+                    document.getElementById('statsNote').textContent =
+                        'Porównanie orientacyjne (dane historyczne pojawią się przy kolejnej aktualizacji)';
                 }
 
                 exchangeRates = newRates;
@@ -448,7 +483,7 @@
                 document.getElementById('lastUpdate').innerHTML =
                     '<i class="fas fa-exclamation-triangle"></i> Nie udało się pobrać nowych kursów – pokazuję ostatnie dane';
                 document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem – dane mogą być nieaktualne';
-                // Nie nadpisujemy previousRates przy błędzie!
+                // Nie ruszamy previousRates przy błędzie!
             } finally {
                 isFetching = false;
             }
@@ -849,7 +884,7 @@
 
         // Inicjalizacja
         fetchRates();
-        setInterval(fetchRates, 60000);
+        setInterval(fetchRates, 60000);   // automatyczne odświeżanie co 60 sekund
         document.getElementById('amount').addEventListener('wheel', e => e.preventDefault());
     </script>
 </body>
