@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MultiTool Pro – Waluty & Test Internetu</title>
-    <meta name="description" content="Przeliczaj waluty co do grosza i sprawdź prędkość internetu – wszystko za darmo online. Zaawansowane statystyki kursów.">
+    <title>MultiTool Pro – Waluty, Konwerter, Kalkulatory & Test Internetu</title>
+    <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu i korzystaj z kalkulatorów finansowych – wszystko za darmo online.">
 
     <!-- Google Analytics (podmień na swój identyfikator) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -71,14 +71,14 @@
             border-bottom: 1px solid var(--glass-border); padding: 1rem 2rem;
             position: sticky; top: 0; z-index: 1000;
         }
-        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem; }
-        .tabs { display: flex; gap: 0.5rem; background: rgba(30, 41, 59, 0.5); padding: 0.5rem; border-radius: 1rem; border: 1px solid var(--glass-border); }
+        .tabs { display: flex; gap: 0.25rem; background: rgba(30, 41, 59, 0.5); padding: 0.3rem; border-radius: 1rem; border: 1px solid var(--glass-border); flex-wrap: wrap; }
         .tab-btn {
-            padding: 0.75rem 1.5rem; border: none; background: transparent; color: var(--text-muted);
+            padding: 0.5rem 1rem; border: none; background: transparent; color: var(--text-muted);
             font-weight: 600; cursor: pointer; border-radius: 0.75rem; transition: all 0.3s;
-            display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;
+            display: flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; white-space: nowrap;
         }
         .tab-btn:hover { color: var(--text); background: rgba(99, 102, 241, 0.1); }
         .tab-btn.active { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
@@ -93,59 +93,32 @@
             border-radius: 1.5rem; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
-        .currency-header, .speed-header { text-align: center; margin-bottom: 2rem; }
-        .currency-header h1, .speed-header h1 {
-            font-size: 2.5rem; margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .section-title { font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { display: block; color: var(--text-muted); margin-bottom: 0.3rem; font-size: 0.9rem; }
+        .modern-input, .modern-select {
+            width: 100%; padding: 0.8rem 1rem; border-radius: 0.75rem; border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.3); color: var(--text); font-size: 1rem; outline: none;
         }
-        .converter-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center; margin: 2rem 0; }
-        .currency-box {
-            background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem; transition: 0.3s;
+        .modern-select { cursor: pointer; }
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none;
+            padding: 0.8rem 1.5rem; border-radius: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+            display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1rem;
         }
-        .currency-box:hover { border-color: var(--primary); box-shadow: 0 0 20px rgba(99,102,241,0.2); }
-        .currency-label { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .currency-input-group { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
-        .currency-select {
-            background: rgba(30,41,59,0.8); border: 1px solid var(--glass-border); color: var(--text);
-            padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 1rem; min-width: 120px; outline: none; transition: 0.3s;
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99,102,241,0.5); }
+        .result-big { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .table-wrapper { overflow-x: auto; margin-top: 1rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--glass-border); }
+        th { color: var(--text-muted); font-weight: 600; }
+        .sub-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .sub-tab-btn {
+            padding: 0.5rem 1rem; border-radius: 2rem; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border); color: var(--text); cursor: pointer; transition: 0.2s; font-size: 0.85rem;
         }
-        .currency-select:focus { border-color: var(--primary); }
-        .amount-input {
-            flex: 1; background: transparent; border: none; color: var(--text); font-size: 2rem; font-weight: 700; outline: none; width: 100%;
-        }
+        .sub-tab-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
 
-        .slider-container { margin-top: 1.5rem; }
-        input[type=range] {
-            -webkit-appearance: none; width: 100%; background: transparent; margin: 1rem 0; padding: 0;
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 20px; cursor: pointer;
-            background: linear-gradient(90deg, #6366f1, #ec4899); border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 40px; width: 40px; border-radius: 50%; background: #ffffff;
-            cursor: pointer; margin-top: -11px; box-shadow: 0 0 20px rgba(99, 102, 241, 0.9), 0 4px 10px rgba(0,0,0,0.3);
-            border: 3px solid #6366f1; transition: 0.15s ease;
-        }
-        input[type=range]::-moz-range-track {
-            width: 100%; height: 20px; cursor: pointer;
-            background: linear-gradient(90deg, #6366f1, #ec4899); border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
-        }
-        input[type=range]::-moz-range-thumb {
-            height: 40px; width: 40px; border-radius: 50%; background: white; cursor: pointer;
-            border: 3px solid #6366f1; box-shadow: 0 0 20px rgba(99,102,241,0.9), 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .swap-btn {
-            width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent));
-            border: none; color: white; font-size: 1.5rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(99,102,241,0.4);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .swap-btn:hover { transform: rotate(180deg) scale(1.1); }
-
-        .quick-amounts { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
         .quick-btn {
             background: rgba(99,102,241,0.15); border: 1px solid var(--glass-border);
             color: var(--text); padding: 0.5rem 0.8rem; border-radius: 2rem; cursor: pointer;
@@ -153,24 +126,10 @@
         }
         .quick-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); }
 
-        .actions-row { display: flex; gap: 1rem; align-items: center; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
-        .action-btn {
-            background: linear-gradient(135deg, var(--primary), var(--accent)); color: white;
-            border: none; padding: 0.7rem 1.2rem; border-radius: 0.8rem; font-weight: 600;
-            cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 10px rgba(99,102,241,0.3);
-            display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;
-        }
-        .action-btn.secondary { background: rgba(255,255,255,0.05); color: var(--text); box-shadow: none; border: 1px solid var(--glass-border); }
-        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99,102,241,0.5); }
-        .action-btn.secondary:hover { background: rgba(255,255,255,0.1); }
-
-        .rate-info { text-align: center; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem; margin-top: 1rem; border: 1px solid rgba(99,102,241,0.2); }
         .rate-value { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
-
-        .stats-section { margin-top: 2rem; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .stats-card {
-            background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem;
+            background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.25rem;
             display: flex; justify-content: space-between; align-items: center; transition: 0.3s;
         }
         .stats-card:hover { border-color: var(--primary); transform: translateY(-3px); }
@@ -178,48 +137,20 @@
         .top-movers { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
         .mover-group { flex: 1; min-width: 250px; }
         .mover-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-
-        .speed-gauge-container { display: flex; justify-content: center; margin: 2rem 0; }
-        .gauge-wrapper { position: relative; width: 300px; height: 300px; }
-        .gauge-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .gauge-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 20; }
-        .gauge-progress {
-            fill: none; stroke: url(#gaugeGradient); stroke-width: 20; stroke-linecap: round;
-            stroke-dasharray: 754; stroke-dashoffset: 754; transition: stroke-dashoffset 0.5s ease;
+        .metric-card {
+            background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem;
+            padding: 1.5rem; text-align: center; transition: 0.3s;
         }
-        .gauge-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
-        .gauge-value { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
-        .gauge-label { color: var(--text-muted); font-size: 1rem; margin-top: 0.5rem; }
-        .gauge-unit { font-size: 1.25rem; color: var(--text-muted); }
-        .test-controls { text-align: center; margin: 2rem 0; }
-        .start-btn {
-            background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; padding: 1rem 3rem;
-            font-size: 1.25rem; font-weight: 700; border-radius: 1rem; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 4px 20px rgba(99,102,241,0.4); display: inline-flex; align-items: center; gap: 0.75rem;
-        }
-        .start-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(99,102,241,0.6); }
-        .start-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .metric-card { background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem; text-align: center; transition: 0.3s; }
         .metric-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .metric-icon { font-size: 2rem; margin-bottom: 1rem; color: var(--primary); }
-        .metric-title { color: var(--text-muted); font-size: 0.875rem; text-transform: uppercase; margin-bottom: 0.5rem; }
-        .metric-value { font-size: 2rem; font-weight: 800; color: var(--text); }
-        .metric-sub { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem; }
-        .progress-bars { margin: 2rem 0; }
-        .progress-item { margin-bottom: 1.5rem; }
-        .progress-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.875rem; }
-        .progress-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.2s ease; background: linear-gradient(90deg, var(--primary), var(--secondary)); }
         .chart-container { margin-top: 2rem; height: 300px; position: relative; }
-        .loading { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-muted); }
-        .spinner { width: 20px; height: 20px; border: 2px solid var(--glass-border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
         .status-bar { position: fixed; bottom: 2rem; right: 2rem; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 0.75rem 1.25rem; border-radius: 2rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; z-index: 100; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: blink 2s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
-        .tooltip-text { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; font-style: italic; }
-        .note-text { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem; }
+
+        @media (max-width: 768px) {
+            .tabs { gap: 0.2rem; }
+            .tab-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+        }
     </style>
 </head>
 <body>
@@ -230,45 +161,47 @@
             <div class="logo"><i class="fas fa-bolt"></i> MultiTool Pro</div>
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('currency', event)"><i class="fas fa-coins"></i> Waluty</button>
+                <button class="tab-btn" onclick="switchTab('converter', event)"><i class="fas fa-exchange-alt"></i> Konwerter</button>
+                <button class="tab-btn" onclick="switchTab('finance', event)"><i class="fas fa-calculator"></i> Kalkulatory</button>
                 <button class="tab-btn" onclick="switchTab('speed', event)"><i class="fas fa-tachometer-alt"></i> Test szybkości</button>
             </div>
         </div>
     </nav>
 
     <div class="container">
+        <!-- ============ ZAKŁADKA WALUTY ============ -->
         <div id="currency-tab" class="tab-content active">
             <div class="glass-card">
-                <div class="currency-header">
-                    <h1>💰 Przeliczanie walut</h1>
-                    <p>Kursy pobierane są raz, przy ładowaniu strony – zawsze aktualne na ten moment.</p>
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="font-size: 2.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">💰 Przeliczanie walut</h1>
+                    <p style="color: var(--text-muted);">Kursy pobierane są raz, przy ładowaniu strony – zawsze aktualne na ten moment.</p>
                 </div>
 
-                <div class="converter-grid">
-                    <div class="currency-box">
-                        <div class="currency-label">Mam taką kwotę 👇</div>
-                        <div class="currency-input-group">
-                            <input list="currencyListFrom" class="currency-select" id="fromCurrencyInput" placeholder="Waluta" onchange="onBaseCurrencyChange()" autocomplete="off" value="USD">
+                <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center; margin: 2rem 0;">
+                    <div style="background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem;">
+                        <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">Mam taką kwotę 👇</div>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input list="currencyListFrom" class="modern-select" id="fromCurrencyInput" onchange="onBaseCurrencyChange()" autocomplete="off" value="USD" style="width: auto; min-width: 100px;">
                             <datalist id="currencyListFrom"></datalist>
-                            <input type="number" class="amount-input" id="amount" value="100" min="0" step="0.01"
-                                   oninput="updateSliderFromAmount(); convert();">
+                            <input type="number" class="modern-input" id="amount" value="100" min="0" step="0.01" oninput="updateSliderFromAmount(); convert();" style="flex:1;">
                         </div>
-                        <div class="slider-container">
-                            <input type="range" id="amountSlider" min="0" max="2000" value="100" step="0.01" oninput="updateAmountFromSlider(); convert();">
+                        <div style="margin-top: 1.5rem;">
+                            <input type="range" id="amountSlider" min="0" max="2000" value="100" step="0.01" oninput="updateAmountFromSlider(); convert();" style="width: 100%; height: 20px; cursor: pointer; background: linear-gradient(90deg, #6366f1, #ec4899); border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); -webkit-appearance: none;">
                         </div>
                     </div>
-                    <button class="swap-btn" onclick="swapCurrencies()" title="Zamień waluty"><i class="fas fa-exchange-alt"></i></button>
-                    <div class="currency-box">
-                        <div class="currency-label">Chcę dostać 👉</div>
-                        <div class="currency-input-group">
-                            <input list="currencyListTo" class="currency-select" id="toCurrencyInput" placeholder="Waluta" onchange="convert()" autocomplete="off" value="PLN">
+                    <button style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; color: white; font-size: 1.5rem; cursor: pointer;" onclick="swapCurrencies()" title="Zamień waluty"><i class="fas fa-exchange-alt"></i></button>
+                    <div style="background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem;">
+                        <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">Chcę dostać 👉</div>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input list="currencyListTo" class="modern-select" id="toCurrencyInput" onchange="convert()" autocomplete="off" value="PLN" style="width: auto; min-width: 100px;">
                             <datalist id="currencyListTo"></datalist>
-                            <input type="text" class="amount-input" id="result" readonly placeholder="0.00">
+                            <input type="text" class="modern-input" id="result" readonly placeholder="0.00" style="flex:1;">
                         </div>
                     </div>
                 </div>
 
-                <div class="quick-amounts">
-                    <span style="color: var(--text-muted); margin-right: 0.25rem; font-size: 0.8rem;">Szybka kwota:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin: 1rem 0;">
+                    <span style="color: var(--text-muted); font-size: 0.8rem; margin-right: 0.25rem;">Szybka kwota:</span>
                     <button class="quick-btn" onclick="setAmount(5)">5</button>
                     <button class="quick-btn" onclick="setAmount(10)">10</button>
                     <button class="quick-btn" onclick="setAmount(20)">20</button>
@@ -281,78 +214,162 @@
                     <button class="quick-btn" onclick="setAmount(1000)">1,000</button>
                 </div>
 
-                <div class="actions-row">
-                    <button class="action-btn secondary" onclick="copyResult()"><i class="fas fa-copy"></i> Kopiuj wynik</button>
-                    <button class="action-btn secondary" onclick="togglePrecision()" id="precisionBtn">
-                        <i class="fas fa-search-plus"></i> Więcej miejsc po przecinku
-                    </button>
+                <div style="display: flex; gap: 1rem; align-items: center; justify-content: center; margin: 1rem 0;">
+                    <button class="btn" onclick="copyResult()" style="background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--glass-border);"><i class="fas fa-copy"></i> Kopiuj wynik</button>
+                    <button class="btn" onclick="togglePrecision()" id="precisionBtn" style="background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--glass-border);"><i class="fas fa-search-plus"></i> Więcej miejsc po przecinku</button>
                 </div>
 
-                <div class="rate-info">
+                <div style="text-align: center; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem; margin-top: 1rem;">
                     <div class="rate-value" id="rateDisplay">1 USD = ... PLN</div>
-                    <div style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.875rem;">
-                        Kurs orientacyjny – bez prowizji
-                    </div>
+                    <div style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.875rem;">Kurs orientacyjny – bez prowizji</div>
                 </div>
 
-                <div class="stats-section" id="statsSection">
+                <div style="margin-top: 2rem;" id="statsSection">
                     <h3 class="section-title"><i class="fas fa-chart-bar"></i> Analiza rynku (względem <span id="statsBaseCurrency">USD</span>)</h3>
-                    <div class="note-text" id="statsNote">Dane historyczne z chwili uruchomienia strony</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 1rem;" id="statsNote">Dane historyczne z chwili uruchomienia strony</div>
                     <div class="top-movers" id="topMovers"></div>
-                    <div class="section-title" style="margin-top: 1.5rem;"><i class="fas fa-list"></i> Wszystkie kursy</div>
+                    <h3 class="section-title" style="margin-top: 1.5rem;"><i class="fas fa-list"></i> Wszystkie kursy</h3>
                     <div class="stats-grid" id="allStats"></div>
                 </div>
             </div>
         </div>
 
+        <!-- ============ ZAKŁADKA KONWERTER ============ -->
+        <div id="converter-tab" class="tab-content">
+            <div class="glass-card">
+                <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📏 Konwerter Pro</h2>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Wpisz wartość i natychmiast zobacz wszystkie przeliczenia w danej kategorii.</p>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                    <select id="convCategory" class="modern-select" style="flex:1; min-width: 200px;" onchange="updateConverter()">
+                        <option value="length">📐 Długość</option>
+                        <option value="weight">⚖️ Masa</option>
+                        <option value="temperature">🌡️ Temperatura</option>
+                        <option value="data">💾 Dane</option>
+                        <option value="time">⏱️ Czas</option>
+                        <option value="speed">🚗 Prędkość</option>
+                        <option value="energy">⚡ Energia</option>
+                        <option value="power">🔋 Moc</option>
+                        <option value="pressure">🧪 Ciśnienie</option>
+                        <option value="volume">💧 Objętość</option>
+                    </select>
+                    <input type="number" id="convValue" class="modern-input" style="flex:2;" placeholder="Wartość" value="1" oninput="convertUnits()">
+                    <select id="convFrom" class="modern-select" style="flex:1;" onchange="convertUnits()"></select>
+                </div>
+                <div id="dataModeDiv" style="margin-bottom: 1rem; display: none;">
+                    <label style="color: var(--text-muted); margin-right: 1rem;">System:</label>
+                    <label style="margin-right: 1rem;"><input type="radio" name="dataMode" value="1000" checked onchange="convertUnits()"> SI (1000)</label>
+                    <label><input type="radio" name="dataMode" value="1024" onchange="convertUnits()"> IEC (1024)</label>
+                </div>
+                <div class="table-wrapper">
+                    <table id="convTable">
+                        <thead><tr><th>Jednostka</th><th>Wynik</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ ZAKŁADKA KALKULATORY ============ -->
+        <div id="finance-tab" class="tab-content">
+            <div class="glass-card">
+                <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">💸 Kalkulatory Pro</h2>
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" onclick="switchSubTab('credit', event)">🏦 Kredyt</button>
+                    <button class="sub-tab-btn" onclick="switchSubTab('deposit', event)">📈 Lokata</button>
+                    <button class="sub-tab-btn" onclick="switchSubTab('inflation', event)">📉 Inflacja</button>
+                    <button class="sub-tab-btn" onclick="switchSubTab('percent', event)">🧮 Procenty</button>
+                    <button class="sub-tab-btn" onclick="switchSubTab('tax', event)">💸 Podatki</button>
+                </div>
+
+                <div id="sub-credit" class="sub-content">
+                    <div class="input-group"><label>Kwota kredytu</label><input type="number" id="crAmount" class="modern-input" value="100000" oninput="calcCredit()"></div>
+                    <div class="input-group"><label>Oprocentowanie nominalne (%)</label><input type="number" id="crRate" class="modern-input" value="7" oninput="calcCredit()"></div>
+                    <div class="input-group"><label>Okres (lata)</label><input type="number" id="crYears" class="modern-input" value="25" oninput="calcCredit()"></div>
+                    <div class="input-group"><label>Typ rat</label><select id="crType" class="modern-select" onchange="calcCredit()"><option value="equal">Równe</option><option value="decreasing">Malejące</option></select></div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem;">
+                        <div>Rata miesięczna: <span id="crInstallment" class="result-big">0.00</span> PLN</div>
+                        <div>Całkowity koszt: <span id="crTotal" style="font-weight: 700;"></span> PLN</div>
+                        <div>Suma odsetek: <span id="crInterest" style="font-weight: 700;"></span> PLN</div>
+                    </div>
+                </div>
+
+                <div id="sub-deposit" class="sub-content" style="display: none;">
+                    <div class="input-group"><label>Kwota początkowa</label><input type="number" id="depAmount" class="modern-input" value="10000" oninput="calcDeposit()"></div>
+                    <div class="input-group"><label>Oprocentowanie (%)</label><input type="number" id="depRate" class="modern-input" value="5" oninput="calcDeposit()"></div>
+                    <div class="input-group"><label>Okres (lata)</label><input type="number" id="depYears" class="modern-input" value="5" oninput="calcDeposit()"></div>
+                    <div class="input-group"><label>Kapitalizacja</label><select id="depCap" class="modern-select" onchange="calcDeposit()"><option value="monthly">Miesięczna</option><option value="yearly">Roczna</option></select></div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem;">
+                        <div>Końcowa kwota: <span id="depFinal" class="result-big">0.00</span> PLN</div>
+                        <div>Zysk: <span id="depProfit" style="font-weight: 700;"></span> PLN</div>
+                    </div>
+                </div>
+
+                <div id="sub-inflation" class="sub-content" style="display: none;">
+                    <div class="input-group"><label>Kwota</label><input type="number" id="infAmount" class="modern-input" value="1000" oninput="calcInflation()"></div>
+                    <div class="input-group"><label>Inflacja roczna (%)</label><input type="number" id="infRate" class="modern-input" value="5" oninput="calcInflation()"></div>
+                    <div class="input-group"><label>Po ilu latach</label><input type="number" id="infYears" class="modern-input" value="10" oninput="calcInflation()"></div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem;">
+                        <div>Wartość realna: <span id="infValue" class="result-big">0.00</span> PLN</div>
+                        <div>Spadek siły nabywczej: <span id="infLoss" style="font-weight: 700;"></span>%</div>
+                    </div>
+                </div>
+
+                <div id="sub-percent" class="sub-content" style="display: none;">
+                    <div class="input-group"><label>X% z Y</label><input type="number" id="percX" class="modern-input" placeholder="X" oninput="calcPercent()" style="width: 100px; display: inline;"> % z <input type="number" id="percY" class="modern-input" placeholder="Y" oninput="calcPercent()" style="width: 150px; display: inline;"> = <span id="percResult" class="result-big"></span></div>
+                    <div class="input-group"><label>Wzrost o %</label><input type="number" id="percBase" class="modern-input" placeholder="Kwota" oninput="calcPercent2()" style="width: 150px; display: inline;"> + <input type="number" id="percPct" class="modern-input" placeholder="%" oninput="calcPercent2()" style="width: 100px; display: inline;"> % = <span id="percUpResult" class="result-big"></span></div>
+                    <div class="input-group"><label>Różnica %</label>A: <input type="number" id="diffA" class="modern-input" placeholder="A" oninput="calcDiff()" style="width: 120px; display: inline;"> B: <input type="number" id="diffB" class="modern-input" placeholder="B" oninput="calcDiff()" style="width: 120px; display: inline;"> = <span id="diffResult" style="font-weight: 700;"></span></div>
+                </div>
+
+                <div id="sub-tax" class="sub-content" style="display: none;">
+                    <div class="input-group"><label>Kwota brutto</label><input type="number" id="taxBrutto" class="modern-input" value="123" oninput="calcTax()"></div>
+                    <div class="input-group"><label>Stawka VAT (%)</label><input type="number" id="taxVat" class="modern-input" value="23" oninput="calcTax()"></div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem;">
+                        <div>Netto: <span id="taxNetto" class="result-big">0.00</span> PLN</div>
+                        <div>VAT: <span id="taxVatVal" style="font-weight: 700;"></span> PLN</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ ZAKŁADKA SPEED TEST ============ -->
         <div id="speed-tab" class="tab-content">
             <div class="glass-card">
-                <div class="speed-header">
-                    <h1>⚡ Sprawdź prędkość internetu</h1>
-                    <p>Dowiedz się, jak szybko ładują się strony, filmiki i gry online!</p>
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="font-size: 2.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">⚡ Sprawdź prędkość internetu</h1>
+                    <p style="color: var(--text-muted);">Dowiedz się, jak szybko ładują się strony, filmiki i gry online!</p>
                 </div>
-                <div class="speed-gauge-container">
-                    <div class="gauge-wrapper">
-                        <svg class="gauge-svg" viewBox="0 0 300 300">
-                            <defs>
-                                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
-                                    <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <circle class="gauge-bg" cx="150" cy="150" r="120"></circle>
-                            <circle class="gauge-progress" id="gaugeProgress" cx="150" cy="150" r="120"></circle>
+                <div style="display: flex; justify-content: center; margin: 2rem 0;">
+                    <div style="position: relative; width: 300px; height: 300px;">
+                        <svg style="transform: rotate(-90deg);" viewBox="0 0 300 300">
+                            <defs><linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                            </linearGradient></defs>
+                            <circle cx="150" cy="150" r="120" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="20"></circle>
+                            <circle id="gaugeProgress" cx="150" cy="150" r="120" fill="none" stroke="url(#gaugeGradient)" stroke-width="20" stroke-linecap="round" stroke-dasharray="754" stroke-dashoffset="754"></circle>
                         </svg>
-                        <div class="gauge-center">
-                            <div class="gauge-value" id="gaugeValue">0.0</div>
-                            <div class="gauge-unit">Mb/s</div>
-                            <div class="gauge-label" id="gaugeLabel">Kliknij „Rozpocznij test”</div>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center;">
+                            <div id="gaugeValue" style="font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">0.0</div>
+                            <div style="font-size: 1.25rem; color: var(--text-muted);">Mb/s</div>
+                            <div id="gaugeLabel" style="color: var(--text-muted); font-size: 1rem;">Kliknij „Rozpocznij test”</div>
                         </div>
                     </div>
                 </div>
-                <div class="test-controls">
-                    <button class="start-btn" id="startBtn" onclick="startSpeedTest()"><i class="fas fa-play"></i> Rozpocznij test</button>
+                <div style="text-align: center; margin: 2rem 0;">
+                    <button class="btn" id="startBtn" onclick="startSpeedTest()"><i class="fas fa-play"></i> Rozpocznij test</button>
                 </div>
-                <div class="progress-bars" id="progressSection" style="display: none;">
-                    <div class="progress-item">
-                        <div class="progress-header"><span>📥 Pobieranie</span><span id="dlProgressText">0%</span></div>
-                        <div class="progress-track"><div class="progress-fill" id="dlProgress" style="width:0%"></div></div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header"><span>📤 Wysyłanie</span><span id="ulProgressText">0%</span></div>
-                        <div class="progress-track"><div class="progress-fill" id="ulProgress" style="width:0%"></div></div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header"><span>⏱️ Ping</span><span id="pingText">-- ms</span></div>
-                        <div class="progress-track"><div class="progress-fill" id="pingProgress" style="width:0%; background: #10b981;"></div></div>
-                    </div>
+                <div id="progressSection" style="display: none; margin: 2rem 0;">
+                    <div style="margin-bottom: 1rem;"><span>📥 Pobieranie</span> <span id="dlProgressText">0%</span><div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;"><div id="dlProgress" style="width:0%; height:100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px;"></div></div></div>
+                    <div style="margin-bottom: 1rem;"><span>📤 Wysyłanie</span> <span id="ulProgressText">0%</span><div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;"><div id="ulProgress" style="width:0%; height:100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px;"></div></div></div>
+                    <div style="margin-bottom: 1rem;"><span>⏱️ Ping</span> <span id="pingText">-- ms</span><div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;"><div id="pingProgress" style="width:0%; height:100%; background: #10b981; border-radius: 4px;"></div></div></div>
                 </div>
-                <div class="metrics-grid" id="resultsGrid" style="display: none;">
-                    <div class="metric-card"><div class="metric-icon"><i class="fas fa-download"></i></div><div class="metric-title">Pobieranie</div><div class="metric-value" id="dlResult">--</div><div class="metric-sub">Megabitów / s</div></div>
-                    <div class="metric-card"><div class="metric-icon"><i class="fas fa-upload"></i></div><div class="metric-title">Wysyłanie</div><div class="metric-value" id="ulResult">--</div><div class="metric-sub">Megabitów / s</div></div>
-                    <div class="metric-card"><div class="metric-icon"><i class="fas fa-stopwatch"></i></div><div class="metric-title">Ping</div><div class="metric-value" id="pingResult">--</div><div class="metric-sub">Milisekund (ms)</div></div>
-                    <div class="metric-card"><div class="metric-icon"><i class="fas fa-network-wired"></i></div><div class="metric-title">Stabilność</div><div class="metric-value" id="jitterResult">--</div><div class="metric-sub">Jitter (ms) - mniej = lepiej</div></div>
+                <div id="resultsGrid" style="display: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="metric-card"><i class="fas fa-download" style="font-size: 2rem; color: var(--primary);"></i><div style="color: var(--text-muted); text-transform: uppercase; font-size: 0.875rem;">Pobieranie</div><div class="result-big" id="dlResult">--</div></div>
+                    <div class="metric-card"><i class="fas fa-upload" style="font-size: 2rem; color: var(--primary);"></i><div style="color: var(--text-muted); text-transform: uppercase; font-size: 0.875rem;">Wysyłanie</div><div class="result-big" id="ulResult">--</div></div>
+                    <div class="metric-card"><i class="fas fa-stopwatch" style="font-size: 2rem; color: var(--primary);"></i><div style="color: var(--text-muted); text-transform: uppercase; font-size: 0.875rem;">Ping</div><div class="result-big" id="pingResult">--</div></div>
+                    <div class="metric-card"><i class="fas fa-network-wired" style="font-size: 2rem; color: var(--primary);"></i><div style="color: var(--text-muted); text-transform: uppercase; font-size: 0.875rem;">Stabilność</div><div class="result-big" id="jitterResult">--</div></div>
                 </div>
                 <div class="chart-container" id="chartContainer" style="display: none;"><canvas id="speedChart"></canvas></div>
             </div>
@@ -362,7 +379,7 @@
     <div class="status-bar"><div class="status-dot"></div><span id="connectionStatus">Połączenie aktywne</span></div>
 
     <script>
-        // ---- ZAKŁADKI ----
+        // ======================== ZAKŁADKI GŁÓWNE ========================
         function switchTab(tab, event) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -370,7 +387,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        // ---- WALUTY ----
+        // ======================== MODUŁ WALUTY ========================
         let exchangeRates = {};
         let previousRates = {};
         let lastSuccessfulRates = null;
@@ -609,7 +626,7 @@
         function copyResult() {
             const result = document.getElementById('result').value;
             navigator.clipboard.writeText(result).then(() => {
-                const btn = document.querySelector('.action-btn .fa-copy')?.parentElement;
+                const btn = document.querySelector('#currency-tab .btn .fa-copy')?.parentElement;
                 if (btn) {
                     btn.innerHTML = '<i class="fas fa-check"></i> Skopiowano!';
                     setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Kopiuj wynik'; }, 1500);
@@ -628,7 +645,164 @@
             convert();
         }
 
-        // ---- SPEED TEST ----
+        // ======================== MODUŁ KONWERTERA ========================
+        const unitCategories = {
+            length: { base: 'm', units: { mm:0.001, cm:0.01, dm:0.1, m:1, km:1000, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344, nmi:1852 } },
+            weight: { base: 'kg', units: { mg:1e-6, g:0.001, kg:1, t:1000, oz:0.0283495, lb:0.453592, st:6.35029 } },
+            temperature: { base: '°C', units: {} },
+            data: { base: 'byte', units: { bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 } },
+            time: { base: 's', units: { ms:0.001, s:1, min:60, h:3600, d:86400, week:604800, month:2629800, year:31557600 } },
+            speed: { base: 'm/s', units: { 'm/s':1, 'km/h':0.277778, mph:0.44704, knot:0.514444 } },
+            energy: { base: 'J', units: { J:1, kJ:1000, kcal:4184, Wh:3600, kWh:3.6e6 } },
+            power: { base: 'W', units: { W:1, kW:1000, MW:1e6, HP:745.7 } },
+            pressure: { base: 'Pa', units: { Pa:1, hPa:100, bar:1e5, atm:101325, mmHg:133.322 } },
+            volume: { base: 'l', units: { ml:0.001, l:1, 'm³':1000, gal:3.78541, pint:0.473176, cup:0.236588 } }
+        };
+
+        function updateConverter() {
+            const cat = document.getElementById('convCategory').value;
+            const select = document.getElementById('convFrom');
+            select.innerHTML = '';
+            if (cat === 'temperature') {
+                ['°C','°F','K'].forEach(u => select.add(new Option(u, u)));
+                document.getElementById('dataModeDiv').style.display = 'none';
+            } else {
+                const units = Object.keys(unitCategories[cat].units);
+                units.forEach(u => select.add(new Option(u, u)));
+                document.getElementById('dataModeDiv').style.display = cat === 'data' ? 'block' : 'none';
+            }
+            convertUnits();
+        }
+
+        function convertUnits() {
+            const cat = document.getElementById('convCategory').value;
+            const val = parseFloat(document.getElementById('convValue').value) || 0;
+            const from = document.getElementById('convFrom').value;
+            const tbody = document.querySelector('#convTable tbody');
+            tbody.innerHTML = '';
+
+            if (cat === 'temperature') {
+                let celsius;
+                if (from === '°C') celsius = val;
+                else if (from === '°F') celsius = (val - 32) * 5/9;
+                else if (from === 'K') celsius = val - 273.15;
+                const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 };
+                Object.entries(results).forEach(([unit, value]) => {
+                    tbody.innerHTML += `<tr><td>${unit}</td><td>${value.toFixed(4)}</td></tr>`;
+                });
+                return;
+            }
+
+            if (cat === 'data') {
+                const mode = document.querySelector('input[name="dataMode"]:checked').value;
+                const activeUnits = mode === '1000' ? 
+                    { bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15 } :
+                    { bit:0.125, byte:1, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 };
+                const factor = activeUnits[from] || 1;
+                const baseVal = val * factor;
+                Object.entries(activeUnits).forEach(([unit, factor]) => {
+                    tbody.innerHTML += `<tr><td>${unit}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
+                });
+            } else {
+                const units = unitCategories[cat].units;
+                const factor = units[from] || 1;
+                const baseVal = val * factor;
+                Object.entries(units).forEach(([unit, factor]) => {
+                    tbody.innerHTML += `<tr><td>${unit}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
+                });
+            }
+        }
+
+        // ======================== MODUŁ KALKULATORÓW ========================
+        function switchSubTab(sub, event) {
+            document.querySelectorAll('#finance-tab .sub-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('#finance-tab .sub-tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('sub-' + sub).style.display = 'block';
+            event.currentTarget.classList.add('active');
+        }
+
+        function calcCredit() {
+            const amount = parseFloat(document.getElementById('crAmount').value) || 0;
+            const rate = (parseFloat(document.getElementById('crRate').value) || 0) / 100 / 12;
+            const months = (parseFloat(document.getElementById('crYears').value) || 0) * 12;
+            const type = document.getElementById('crType').value;
+            let installment = 0, total = 0, interest = 0;
+            if (months <= 0 || amount <= 0) {
+                document.getElementById('crInstallment').textContent = '0.00';
+                document.getElementById('crTotal').textContent = '0.00';
+                document.getElementById('crInterest').textContent = '0.00';
+                return;
+            }
+            if (type === 'equal' && rate > 0) {
+                installment = amount * rate * Math.pow(1+rate, months) / (Math.pow(1+rate, months) - 1);
+                total = installment * months;
+                interest = total - amount;
+            } else if (type === 'equal' && rate === 0) {
+                installment = amount / months;
+                total = amount;
+                interest = 0;
+            } else if (type === 'decreasing') {
+                const capitalPart = amount / months;
+                total = 0;
+                for (let i = 0; i < months; i++) {
+                    total += capitalPart + (amount - (capitalPart * i)) * rate;
+                }
+                installment = capitalPart + amount * rate; // pierwsza rata
+                interest = total - amount;
+            }
+            document.getElementById('crInstallment').textContent = installment.toFixed(2);
+            document.getElementById('crTotal').textContent = total.toFixed(2);
+            document.getElementById('crInterest').textContent = interest.toFixed(2);
+        }
+
+        function calcDeposit() {
+            const amount = parseFloat(document.getElementById('depAmount').value) || 0;
+            const rate = (parseFloat(document.getElementById('depRate').value) || 0) / 100;
+            const years = parseFloat(document.getElementById('depYears').value) || 0;
+            const cap = document.getElementById('depCap').value;
+            let final;
+            if (cap === 'monthly') final = amount * Math.pow(1 + rate/12, years * 12);
+            else final = amount * Math.pow(1 + rate, years);
+            document.getElementById('depFinal').textContent = final.toFixed(2);
+            document.getElementById('depProfit').textContent = (final - amount).toFixed(2);
+        }
+
+        function calcInflation() {
+            const amount = parseFloat(document.getElementById('infAmount').value) || 0;
+            const rate = (parseFloat(document.getElementById('infRate').value) || 0) / 100;
+            const years = parseFloat(document.getElementById('infYears').value) || 0;
+            const realValue = amount / Math.pow(1 + rate, years);
+            const loss = (1 - 1 / Math.pow(1 + rate, years)) * 100;
+            document.getElementById('infValue').textContent = realValue.toFixed(2);
+            document.getElementById('infLoss').textContent = loss.toFixed(2);
+        }
+
+        function calcPercent() {
+            const x = parseFloat(document.getElementById('percX').value) || 0;
+            const y = parseFloat(document.getElementById('percY').value) || 0;
+            document.getElementById('percResult').textContent = (x / 100 * y).toFixed(2);
+        }
+        function calcPercent2() {
+            const base = parseFloat(document.getElementById('percBase').value) || 0;
+            const pct = parseFloat(document.getElementById('percPct').value) || 0;
+            document.getElementById('percUpResult').textContent = (base * (1 + pct/100)).toFixed(2);
+        }
+        function calcDiff() {
+            const a = parseFloat(document.getElementById('diffA').value) || 0;
+            const b = parseFloat(document.getElementById('diffB').value) || 0;
+            if (b === 0) { document.getElementById('diffResult').textContent = '—'; return; }
+            document.getElementById('diffResult').textContent = ((a - b) / b * 100).toFixed(2) + '%';
+        }
+
+        function calcTax() {
+            const brutto = parseFloat(document.getElementById('taxBrutto').value) || 0;
+            const vat = (parseFloat(document.getElementById('taxVat').value) || 0) / 100;
+            const netto = brutto / (1 + vat);
+            document.getElementById('taxNetto').textContent = netto.toFixed(2);
+            document.getElementById('taxVatVal').textContent = (brutto - netto).toFixed(2);
+        }
+
+        // ======================== MODUŁ SPEED TESTU ========================
         let speedChart = null;
         let isTesting = false;
 
@@ -820,8 +994,9 @@
             });
         }
 
-        // Inicjalizacja
+        // ======================== INICJALIZACJA ========================
         fetchRates();
+        updateConverter();
         document.getElementById('amount').addEventListener('wheel', e => e.preventDefault());
     </script>
 </body>
