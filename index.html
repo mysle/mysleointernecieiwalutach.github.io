@@ -96,11 +96,28 @@
         .section-title { font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
         .input-group { margin-bottom: 1rem; }
         .input-group label { display: block; color: var(--text-muted); margin-bottom: 0.3rem; font-size: 0.9rem; }
+
+        /* Spójne pola i selektory */
         .modern-input, .modern-select {
             width: 100%; padding: 0.8rem 1rem; border-radius: 0.75rem; border: 1px solid var(--glass-border);
-            background: rgba(0,0,0,0.3); color: var(--text); font-size: 1rem; outline: none;
+            background: rgba(0,0,0,0.4); color: var(--text); font-size: 1rem; outline: none;
+            transition: border 0.2s, background 0.2s;
         }
-        .modern-select { cursor: pointer; }
+        .modern-select {
+            cursor: pointer;
+            /* niestandardowa strzałka */
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2394a3b8" viewBox="0 0 16 16"><path d="M4.646 5.646a.5.5 0 0 1 .708 0L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px;
+            padding-right: 2.5rem;
+        }
+        .modern-select option {
+            background: #1e293b !important;
+            color: #f1f5f9 !important;
+        }
+
         .btn {
             background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none;
             padding: 0.8rem 1.5rem; border-radius: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.2s;
