@@ -107,6 +107,7 @@
             display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1rem;
         }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99,102,241,0.5); }
+        .btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
         .result-big { font-size: 2rem; font-weight: 800; color: var(--primary); }
         .table-wrapper { overflow-x: auto; margin-top: 1rem; }
         table { width: 100%; border-collapse: collapse; }
@@ -146,6 +147,12 @@
         .status-bar { position: fixed; bottom: 2rem; right: 2rem; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 0.75rem 1.25rem; border-radius: 2rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; z-index: 100; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: blink 2s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+        .result-box { margin-top: 1rem; padding: 1.5rem; background: rgba(99,102,241,0.1); border-radius: 1rem; border: 1px solid var(--glass-border); }
+        .result-box .label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .result-box .value { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .result-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .result-item { flex: 1; min-width: 150px; }
 
         @media (max-width: 768px) {
             .tabs { gap: 0.2rem; }
@@ -226,7 +233,6 @@
 
                 <div style="margin-top: 2rem;" id="statsSection">
                     <h3 class="section-title"><i class="fas fa-chart-bar"></i> Analiza rynku (względem <span id="statsBaseCurrency">USD</span>)</h3>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 1rem;" id="statsNote">Dane historyczne z chwili uruchomienia strony</div>
                     <div class="top-movers" id="topMovers"></div>
                     <h3 class="section-title" style="margin-top: 1.5rem;"><i class="fas fa-list"></i> Wszystkie kursy</h3>
                     <div class="stats-grid" id="allStats"></div>
@@ -238,28 +244,28 @@
         <div id="converter-tab" class="tab-content">
             <div class="glass-card">
                 <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📏 Konwerter Pro</h2>
-                <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Wpisz wartość i natychmiast zobacz wszystkie przeliczenia w danej kategorii.</p>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Wpisz wartość – wszystkie przeliczenia w jednym miejscu.</p>
 
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
                     <select id="convCategory" class="modern-select" style="flex:1; min-width: 200px;" onchange="updateConverter()">
-                        <option value="length">📐 Długość</option>
-                        <option value="weight">⚖️ Masa</option>
-                        <option value="temperature">🌡️ Temperatura</option>
-                        <option value="data">💾 Dane</option>
-                        <option value="time">⏱️ Czas</option>
-                        <option value="speed">🚗 Prędkość</option>
-                        <option value="energy">⚡ Energia</option>
-                        <option value="power">🔋 Moc</option>
-                        <option value="pressure">🧪 Ciśnienie</option>
-                        <option value="volume">💧 Objętość</option>
+                        <option value="length">📐 Długość (Length)</option>
+                        <option value="weight">⚖️ Masa (Weight)</option>
+                        <option value="temperature">🌡️ Temperatura (Temperature)</option>
+                        <option value="data">💾 Dane (Data)</option>
+                        <option value="time">⏱️ Czas (Time)</option>
+                        <option value="speed">🚗 Prędkość (Speed)</option>
+                        <option value="energy">⚡ Energia (Energy)</option>
+                        <option value="power">🔋 Moc (Power)</option>
+                        <option value="pressure">🧪 Ciśnienie (Pressure)</option>
+                        <option value="volume">💧 Objętość (Volume)</option>
                     </select>
                     <input type="number" id="convValue" class="modern-input" style="flex:2;" placeholder="Wartość" value="1" oninput="convertUnits()">
                     <select id="convFrom" class="modern-select" style="flex:1;" onchange="convertUnits()"></select>
                 </div>
-                <div id="dataModeDiv" style="margin-bottom: 1rem; display: none;">
-                    <label style="color: var(--text-muted); margin-right: 1rem;">System:</label>
-                    <label style="margin-right: 1rem;"><input type="radio" name="dataMode" value="1000" checked onchange="convertUnits()"> SI (1000)</label>
-                    <label><input type="radio" name="dataMode" value="1024" onchange="convertUnits()"> IEC (1024)</label>
+                <div id="dataModeDiv" style="margin-bottom: 1rem; display: none; text-align: center;">
+                    <label style="color: var(--text-muted); margin-right: 1rem;">System przeliczania:</label>
+                    <label style="margin-right: 1rem; cursor: pointer;"><input type="radio" name="dataMode" value="1000" checked onchange="convertUnits()"> SI (1 KB = 1000 B)</label>
+                    <label style="cursor: pointer;"><input type="radio" name="dataMode" value="1024" onchange="convertUnits()"> IEC (1 KiB = 1024 B)</label>
                 </div>
                 <div class="table-wrapper">
                     <table id="convTable">
@@ -282,51 +288,87 @@
                     <button class="sub-tab-btn" onclick="switchSubTab('tax', event)">💸 Podatki</button>
                 </div>
 
+                <!-- Kredyt -->
                 <div id="sub-credit" class="sub-content">
-                    <div class="input-group"><label>Kwota kredytu</label><input type="number" id="crAmount" class="modern-input" value="100000" oninput="calcCredit()"></div>
-                    <div class="input-group"><label>Oprocentowanie nominalne (%)</label><input type="number" id="crRate" class="modern-input" value="7" oninput="calcCredit()"></div>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                        <span style="color: var(--text-muted); font-size: 0.8rem; padding-top: 0.5rem;">Szybka kwota:</span>
+                        <button class="quick-btn" onclick="setCreditAmount(50000)">50k</button>
+                        <button class="quick-btn" onclick="setCreditAmount(100000)">100k</button>
+                        <button class="quick-btn" onclick="setCreditAmount(200000)">200k</button>
+                        <button class="quick-btn" onclick="setCreditAmount(300000)">300k</button>
+                        <button class="quick-btn" onclick="setCreditAmount(500000)">500k</button>
+                    </div>
+                    <div class="input-group"><label>Kwota kredytu (PLN)</label><input type="number" id="crAmount" class="modern-input" value="100000" oninput="calcCredit()"></div>
+                    <div class="input-group"><label>Oprocentowanie nominalne (%)</label><input type="number" id="crRate" class="modern-input" value="7" step="0.01" oninput="calcCredit()"></div>
                     <div class="input-group"><label>Okres (lata)</label><input type="number" id="crYears" class="modern-input" value="25" oninput="calcCredit()"></div>
-                    <div class="input-group"><label>Typ rat</label><select id="crType" class="modern-select" onchange="calcCredit()"><option value="equal">Równe</option><option value="decreasing">Malejące</option></select></div>
-                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem;">
-                        <div>Rata miesięczna: <span id="crInstallment" class="result-big">0.00</span> PLN</div>
-                        <div>Całkowity koszt: <span id="crTotal" style="font-weight: 700;"></span> PLN</div>
-                        <div>Suma odsetek: <span id="crInterest" style="font-weight: 700;"></span> PLN</div>
+                    <div class="input-group"><label>Typ rat</label><select id="crType" class="modern-select" onchange="calcCredit()"><option value="equal">Równe (annuitetowe)</option><option value="decreasing">Malejące</option></select></div>
+                    <div class="result-box">
+                        <div class="result-row">
+                            <div class="result-item"><div class="label">Rata miesięczna</div><div class="value" id="crInstallment">0.00</div><div style="color: var(--text-muted);">PLN</div></div>
+                            <div class="result-item"><div class="label">Całkowity koszt</div><div class="value" id="crTotal" style="font-size: 1.5rem;">0.00</div><div style="color: var(--text-muted);">PLN</div></div>
+                            <div class="result-item"><div class="label">Suma odsetek</div><div class="value" id="crInterest" style="font-size: 1.5rem;">0.00</div><div style="color: var(--text-muted);">PLN</div></div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 0.5rem;">
+                        <button class="btn btn-sm" onclick="clearCredit()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
                     </div>
                 </div>
 
+                <!-- Lokata -->
                 <div id="sub-deposit" class="sub-content" style="display: none;">
-                    <div class="input-group"><label>Kwota początkowa</label><input type="number" id="depAmount" class="modern-input" value="10000" oninput="calcDeposit()"></div>
-                    <div class="input-group"><label>Oprocentowanie (%)</label><input type="number" id="depRate" class="modern-input" value="5" oninput="calcDeposit()"></div>
+                    <div class="input-group"><label>Kwota początkowa (PLN)</label><input type="number" id="depAmount" class="modern-input" value="10000" oninput="calcDeposit()"></div>
+                    <div class="input-group"><label>Oprocentowanie roczne (%)</label><input type="number" id="depRate" class="modern-input" value="5" step="0.01" oninput="calcDeposit()"></div>
                     <div class="input-group"><label>Okres (lata)</label><input type="number" id="depYears" class="modern-input" value="5" oninput="calcDeposit()"></div>
-                    <div class="input-group"><label>Kapitalizacja</label><select id="depCap" class="modern-select" onchange="calcDeposit()"><option value="monthly">Miesięczna</option><option value="yearly">Roczna</option></select></div>
-                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem;">
-                        <div>Końcowa kwota: <span id="depFinal" class="result-big">0.00</span> PLN</div>
-                        <div>Zysk: <span id="depProfit" style="font-weight: 700;"></span> PLN</div>
+                    <div class="input-group"><label>Kapitalizacja odsetek</label><select id="depCap" class="modern-select" onchange="calcDeposit()"><option value="monthly">Miesięczna</option><option value="yearly">Roczna</option></select></div>
+                    <div class="result-box">
+                        <div class="result-row">
+                            <div class="result-item"><div class="label">Końcowa kwota</div><div class="value" id="depFinal">0.00</div><div style="color: var(--text-muted);">PLN</div></div>
+                            <div class="result-item"><div class="label">Zysk</div><div class="value" id="depProfit" style="font-size: 1.5rem;">0.00</div><div style="color: var(--text-muted);">PLN</div></div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 0.5rem;">
+                        <button class="btn btn-sm" onclick="clearDeposit()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
                     </div>
                 </div>
 
+                <!-- Inflacja -->
                 <div id="sub-inflation" class="sub-content" style="display: none;">
-                    <div class="input-group"><label>Kwota</label><input type="number" id="infAmount" class="modern-input" value="1000" oninput="calcInflation()"></div>
-                    <div class="input-group"><label>Inflacja roczna (%)</label><input type="number" id="infRate" class="modern-input" value="5" oninput="calcInflation()"></div>
-                    <div class="input-group"><label>Po ilu latach</label><input type="number" id="infYears" class="modern-input" value="10" oninput="calcInflation()"></div>
-                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem;">
-                        <div>Wartość realna: <span id="infValue" class="result-big">0.00</span> PLN</div>
-                        <div>Spadek siły nabywczej: <span id="infLoss" style="font-weight: 700;"></span>%</div>
+                    <div class="input-group"><label>Kwota dziś (PLN)</label><input type="number" id="infAmount" class="modern-input" value="1000" oninput="calcInflation()"></div>
+                    <div class="input-group"><label>Roczna inflacja (%)</label><input type="number" id="infRate" class="modern-input" value="5" step="0.1" oninput="calcInflation()"></div>
+                    <div class="input-group"><label>Za ile lat</label><input type="number" id="infYears" class="modern-input" value="10" oninput="calcInflation()"></div>
+                    <div class="result-box">
+                        <div class="result-row">
+                            <div class="result-item"><div class="label">Wartość realna</div><div class="value" id="infValue">0.00</div><div style="color: var(--text-muted);">PLN</div></div>
+                            <div class="result-item"><div class="label">Spadek siły nabywczej</div><div class="value" id="infLoss" style="font-size: 1.5rem;">0.00</div><div style="color: var(--text-muted);">%</div></div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 0.5rem;">
+                        <button class="btn btn-sm" onclick="clearInflation()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
                     </div>
                 </div>
 
+                <!-- Procenty -->
                 <div id="sub-percent" class="sub-content" style="display: none;">
-                    <div class="input-group"><label>X% z Y</label><input type="number" id="percX" class="modern-input" placeholder="X" oninput="calcPercent()" style="width: 100px; display: inline;"> % z <input type="number" id="percY" class="modern-input" placeholder="Y" oninput="calcPercent()" style="width: 150px; display: inline;"> = <span id="percResult" class="result-big"></span></div>
-                    <div class="input-group"><label>Wzrost o %</label><input type="number" id="percBase" class="modern-input" placeholder="Kwota" oninput="calcPercent2()" style="width: 150px; display: inline;"> + <input type="number" id="percPct" class="modern-input" placeholder="%" oninput="calcPercent2()" style="width: 100px; display: inline;"> % = <span id="percUpResult" class="result-big"></span></div>
-                    <div class="input-group"><label>Różnica %</label>A: <input type="number" id="diffA" class="modern-input" placeholder="A" oninput="calcDiff()" style="width: 120px; display: inline;"> B: <input type="number" id="diffB" class="modern-input" placeholder="B" oninput="calcDiff()" style="width: 120px; display: inline;"> = <span id="diffResult" style="font-weight: 700;"></span></div>
+                    <div class="input-group"><label>Procent z liczby</label><div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;"><input type="number" id="percX" class="modern-input" placeholder="X" oninput="calcPercent()" style="width: 100px;"> <span>% z</span> <input type="number" id="percY" class="modern-input" placeholder="Y" oninput="calcPercent()" style="width: 150px;"> <span>=</span> <span id="percResult" class="result-big" style="font-size: 1.5rem;"></span></div></div>
+                    <div class="input-group"><label>Wzrost o procent</label><div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;"><input type="number" id="percBase" class="modern-input" placeholder="Kwota" oninput="calcPercent2()" style="width: 150px;"> <span>+</span> <input type="number" id="percPct" class="modern-input" placeholder="%" oninput="calcPercent2()" style="width: 100px;"> <span>% =</span> <span id="percUpResult" class="result-big" style="font-size: 1.5rem;"></span></div></div>
+                    <div class="input-group"><label>Różnica procentowa</label><div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;"><span>A:</span> <input type="number" id="diffA" class="modern-input" placeholder="A" oninput="calcDiff()" style="width: 120px;"> <span>B:</span> <input type="number" id="diffB" class="modern-input" placeholder="B" oninput="calcDiff()" style="width: 120px;"> <span>=</span> <span id="diffResult" style="font-weight: 700; font-size: 1.2rem;"></span></div></div>
+                    <div style="text-align: center; margin-top: 0.5rem;">
+                        <button class="btn btn-sm" onclick="clearPercent()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
+                    </div>
                 </div>
 
+                <!-- Podatki -->
                 <div id="sub-tax" class="sub-content" style="display: none;">
-                    <div class="input-group"><label>Kwota brutto</label><input type="number" id="taxBrutto" class="modern-input" value="123" oninput="calcTax()"></div>
+                    <div class="input-group"><label>Kwota brutto (PLN)</label><input type="number" id="taxBrutto" class="modern-input" value="123" oninput="calcTax()"></div>
                     <div class="input-group"><label>Stawka VAT (%)</label><input type="number" id="taxVat" class="modern-input" value="23" oninput="calcTax()"></div>
-                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem;">
-                        <div>Netto: <span id="taxNetto" class="result-big">0.00</span> PLN</div>
-                        <div>VAT: <span id="taxVatVal" style="font-weight: 700;"></span> PLN</div>
+                    <div class="result-box">
+                        <div class="result-row">
+                            <div class="result-item"><div class="label">Kwota netto</div><div class="value" id="taxNetto">0.00</div><div style="color: var(--text-muted);">PLN</div></div>
+                            <div class="result-item"><div class="label">VAT</div><div class="value" id="taxVatVal" style="font-size: 1.5rem;">0.00</div><div style="color: var(--text-muted);">PLN</div></div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 0.5rem;">
+                        <button class="btn btn-sm" onclick="clearTax()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-undo"></i> Wyczyść</button>
                     </div>
                 </div>
             </div>
@@ -376,7 +418,7 @@
         </div>
     </div>
 
-    <div class="status-bar"><div class="status-dot"></div><span id="connectionStatus">Połączenie aktywne</span></div>
+    <div class="status-bar"><div class="status-dot"></div><span>Połączenie aktywne</span></div>
 
     <script>
         // ======================== ZAKŁADKI GŁÓWNE ========================
@@ -447,7 +489,6 @@
 
                 exchangeRates = newRates;
                 lastSuccessfulRates = { ...exchangeRates };
-                document.getElementById('connectionStatus').innerHTML = 'Dane walut online – kursy z chwili uruchomienia';
 
                 populateCurrencyLists();
                 updateMarketStats();
@@ -466,7 +507,6 @@
                         statsReady = true;
                     }
                 }
-                document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem – dane orientacyjne';
                 updateMarketStats();
             } finally {
                 isFetching = false;
@@ -646,6 +686,23 @@
         }
 
         // ======================== MODUŁ KONWERTERA ========================
+        const unitNames = {
+            mm: 'milimetr', cm: 'centymetr', dm: 'decymetr', m: 'metr', km: 'kilometr',
+            in: 'cal', ft: 'stopa', yd: 'jard', mi: 'mila', nmi: 'mila morska',
+            mg: 'miligram', g: 'gram', kg: 'kilogram', t: 'tona',
+            oz: 'uncja', lb: 'funt', st: 'kamień',
+            bit: 'bit', byte: 'bajt', KB: 'kilobajt', MB: 'megabajt', GB: 'gigabajt', TB: 'terabajt', PB: 'petabajt',
+            KiB: 'kibibajt', MiB: 'mebibajt', GiB: 'gibibajt', TiB: 'tebibajt', PiB: 'pebibajt',
+            ms: 'milisekunda', s: 'sekunda', min: 'minuta', h: 'godzina', d: 'dzień',
+            week: 'tydzień', month: 'miesiąc', year: 'rok',
+            'm/s': 'metr na sekundę', 'km/h': 'kilometr na godzinę', mph: 'mila na godzinę', knot: 'węzeł',
+            J: 'dżul', kJ: 'kilodżul', kcal: 'kilokaloria', Wh: 'watogodzina', kWh: 'kilowatogodzina',
+            W: 'wat', kW: 'kilowat', MW: 'megawat', HP: 'koń mechaniczny',
+            Pa: 'paskal', hPa: 'hektopaskal', bar: 'bar', atm: 'atmosfera', mmHg: 'milimetr słupa rtęci',
+            ml: 'mililitr', l: 'litr', 'm³': 'metr sześcienny', gal: 'galon', pint: 'pinta', cup: 'szklanka',
+            '°C': 'stopień Celsjusza', '°F': 'stopień Fahrenheita', 'K': 'kelwin'
+        };
+
         const unitCategories = {
             length: { base: 'm', units: { mm:0.001, cm:0.01, dm:0.1, m:1, km:1000, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344, nmi:1852 } },
             weight: { base: 'kg', units: { mg:1e-6, g:0.001, kg:1, t:1000, oz:0.0283495, lb:0.453592, st:6.35029 } },
@@ -659,16 +716,21 @@
             volume: { base: 'l', units: { ml:0.001, l:1, 'm³':1000, gal:3.78541, pint:0.473176, cup:0.236588 } }
         };
 
+        function formatUnit(unit) {
+            const name = unitNames[unit] || '';
+            return name ? `${unit} (${name})` : unit;
+        }
+
         function updateConverter() {
             const cat = document.getElementById('convCategory').value;
             const select = document.getElementById('convFrom');
             select.innerHTML = '';
             if (cat === 'temperature') {
-                ['°C','°F','K'].forEach(u => select.add(new Option(u, u)));
+                ['°C','°F','K'].forEach(u => select.add(new Option(formatUnit(u), u)));
                 document.getElementById('dataModeDiv').style.display = 'none';
             } else {
                 const units = Object.keys(unitCategories[cat].units);
-                units.forEach(u => select.add(new Option(u, u)));
+                units.forEach(u => select.add(new Option(formatUnit(u), u)));
                 document.getElementById('dataModeDiv').style.display = cat === 'data' ? 'block' : 'none';
             }
             convertUnits();
@@ -688,7 +750,7 @@
                 else if (from === 'K') celsius = val - 273.15;
                 const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 };
                 Object.entries(results).forEach(([unit, value]) => {
-                    tbody.innerHTML += `<tr><td>${unit}</td><td>${value.toFixed(4)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></tr>`;
                 });
                 return;
             }
@@ -701,14 +763,14 @@
                 const factor = activeUnits[from] || 1;
                 const baseVal = val * factor;
                 Object.entries(activeUnits).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${unit}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
                 });
             } else {
                 const units = unitCategories[cat].units;
                 const factor = units[from] || 1;
                 const baseVal = val * factor;
                 Object.entries(units).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${unit}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
                 });
             }
         }
@@ -719,6 +781,52 @@
             document.querySelectorAll('#finance-tab .sub-tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('sub-' + sub).style.display = 'block';
             event.currentTarget.classList.add('active');
+        }
+
+        function setCreditAmount(val) {
+            document.getElementById('crAmount').value = val;
+            calcCredit();
+        }
+
+        function clearCredit() {
+            document.getElementById('crAmount').value = 100000;
+            document.getElementById('crRate').value = 7;
+            document.getElementById('crYears').value = 25;
+            document.getElementById('crType').value = 'equal';
+            calcCredit();
+        }
+
+        function clearDeposit() {
+            document.getElementById('depAmount').value = 10000;
+            document.getElementById('depRate').value = 5;
+            document.getElementById('depYears').value = 5;
+            document.getElementById('depCap').value = 'monthly';
+            calcDeposit();
+        }
+
+        function clearInflation() {
+            document.getElementById('infAmount').value = 1000;
+            document.getElementById('infRate').value = 5;
+            document.getElementById('infYears').value = 10;
+            calcInflation();
+        }
+
+        function clearPercent() {
+            document.getElementById('percX').value = '';
+            document.getElementById('percY').value = '';
+            document.getElementById('percBase').value = '';
+            document.getElementById('percPct').value = '';
+            document.getElementById('diffA').value = '';
+            document.getElementById('diffB').value = '';
+            document.getElementById('percResult').textContent = '';
+            document.getElementById('percUpResult').textContent = '';
+            document.getElementById('diffResult').textContent = '';
+        }
+
+        function clearTax() {
+            document.getElementById('taxBrutto').value = 123;
+            document.getElementById('taxVat').value = 23;
+            calcTax();
         }
 
         function calcCredit() {
@@ -747,7 +855,7 @@
                 for (let i = 0; i < months; i++) {
                     total += capitalPart + (amount - (capitalPart * i)) * rate;
                 }
-                installment = capitalPart + amount * rate; // pierwsza rata
+                installment = capitalPart + amount * rate;
                 interest = total - amount;
             }
             document.getElementById('crInstallment').textContent = installment.toFixed(2);
