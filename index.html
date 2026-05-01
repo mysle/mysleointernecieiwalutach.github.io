@@ -391,11 +391,11 @@
 
         // ---- WALUTY ----
         let exchangeRates = {};
-        let previousRates = {};               // przechowuje kursy z POPRZEDNIEGO udanego pobrania
+        let previousRates = {};               // kursy z poprzedniego udanego pobrania
         let lastSuccessfulRates = null;
         let showFullPrecision = false;
         let isFetching = false;
-        let statsReady = false;
+        let statsReady = false;               // czy mamy dane do porównania
         let lastBaseCurrency = 'USD';         // dynamiczna baza dla statystyk
 
         function populateCurrencyLists() {
@@ -427,7 +427,6 @@
         async function fetchRates() {
             if (isFetching) return;
             isFetching = true;
-            // Zapamiętujemy stare kursy przed pobieraniem (jeśli istnieją)
             const oldRates = Object.keys(exchangeRates).length > 0 ? { ...exchangeRates } : null;
             try {
                 const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
@@ -435,7 +434,7 @@
                 const data = await res.json();
                 const newRates = data.rates;
 
-                // Ustawiamy previousRates dopiero po udanym pobraniu
+                // Zachowujemy stare kursy jako previousRates dopiero po udanym pobraniu
                 if (oldRates) {
                     previousRates = oldRates;
                     statsReady = true;
@@ -447,7 +446,7 @@
                         previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015));
                     }
                     statsReady = true;
-                    document.getElementById('statsNote').textContent = 'Porównanie orientacyjne (historyczne dane przy kolejnej aktualizacji)';
+                    document.getElementById('statsNote').textContent = 'Porównanie orientacyjne (dane historyczne pojawią się przy kolejnej aktualizacji)';
                 }
 
                 exchangeRates = newRates;
@@ -464,13 +463,23 @@
                 if (lastSuccessfulRates) {
                     exchangeRates = { ...lastSuccessfulRates };
                 } else {
+                    // Fallback – używamy sztywnych kursów
                     exchangeRates = { USD:1, EUR:0.92, GBP:0.79, PLN:4.0, CHF:0.88, JPY:150, CAD:1.35, AUD:1.52 };
                     populateCurrencyLists();
+                    // Jeśli nie mamy jeszcze previousRates, generujemy je z fallbacku
+                    if (!statsReady) {
+                        previousRates = { ...exchangeRates };
+                        for (let key in previousRates) {
+                            previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015));
+                        }
+                        statsReady = true;
+                        document.getElementById('statsNote').textContent = 'Dane orientacyjne – brak połączenia z API';
+                    }
                 }
                 document.getElementById('lastUpdate').innerHTML =
                     '<i class="fas fa-exclamation-triangle"></i> Nie udało się pobrać nowych kursów – pokazuję ostatnie dane';
                 document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem – dane mogą być nieaktualne';
-                // previousRates pozostaje bez zmian, więc statystyki nie zostaną wyzerowane
+                updateMarketStats();   // odświeżamy statystyki nawet przy błędzie
             } finally {
                 isFetching = false;
             }
@@ -486,7 +495,6 @@
                     return;
                 }
 
-                // Aktualizuj etykietę
                 document.getElementById('statsBaseCurrency').textContent = baseCurrency;
 
                 const statsContainer = document.getElementById('allStats');
@@ -549,9 +557,9 @@
 
                 statsContainer.innerHTML = allStatsData.map(c => {
                     const absChange = Math.abs(c.changePercent);
-                    const changeClass = c.changePercent > 0.001 ? 'stat-positive' : c.changePercent < -0.001 ? 'stat-negative' : '';
-                    const icon = c.changePercent > 0.001 ? 'fa-arrow-up' : c.changePercent < -0.001 ? 'fa-arrow-down' : 'fa-minus';
-                    const changeText = absChange < 0.001 ? 'Bez zmian' : `${c.changePercent.toFixed(2)}% <i class="fas ${icon}"></i>`;
+                    const changeClass = c.changePercent > 0.01 ? 'stat-positive' : c.changePercent < -0.01 ? 'stat-negative' : '';
+                    const icon = c.changePercent > 0.01 ? 'fa-arrow-up' : c.changePercent < -0.01 ? 'fa-arrow-down' : 'fa-minus';
+                    const changeText = absChange < 0.01 ? '~0%' : `${c.changePercent.toFixed(2)}% <i class="fas ${icon}"></i>`;
                     return `
                         <div class="stats-card">
                             <div>
@@ -617,7 +625,7 @@
             const from = document.getElementById('fromCurrencyInput');
             const to = document.getElementById('toCurrencyInput');
             [from.value, to.value] = [to.value, from.value];
-            onBaseCurrencyChange();   // ważne, aby zmienić też bazę statystyk
+            onBaseCurrencyChange();
         }
 
         function copyResult() {
