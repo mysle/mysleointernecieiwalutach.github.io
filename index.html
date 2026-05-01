@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MultiTool Pro – Waluty, Konwerter, Kalkulatory, Test Internetu & IP + Czas i strefy</title>
-    <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP, a także sprawdź czas na świecie, konwertuj strefy czasowe – wszystko za darmo online.">
+    <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP i DNS, a także sprawdź czas na świecie, konwertuj strefy czasowe – wszystko za darmo online.">
 
     <!-- Google Analytics (podmień na swój identyfikator) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -171,7 +171,7 @@
         .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
         .info-item { background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.25rem; }
         .info-item .label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem; }
-        .info-item .value { font-size: 1.2rem; font-weight: 600; }
+        .info-item .value { font-size: 1.2rem; font-weight: 600; word-break: break-word; }
         #ipMap { height: 350px; border-radius: 1rem; margin-top: 1rem; border: 1px solid var(--glass-border); }
         .ip-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin: 1.5rem 0; }
         .loading-spinner { display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 2rem; color: var(--text-muted); }
@@ -184,6 +184,7 @@
             margin: 1.5rem 0;
         }
         .time-card {
+            position: relative;
             background: rgba(15,23,42,0.6);
             border: 1px solid var(--glass-border);
             border-radius: 1rem;
@@ -192,6 +193,27 @@
             transition: 0.2s;
         }
         .time-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .time-card .close-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            background: rgba(0,0,0,0.3);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .time-card .close-btn:hover {
+            color: var(--danger);
+            background: rgba(239,68,68,0.2);
+        }
         .city-name { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; }
         .time-digits { font-size: 1.8rem; font-weight: 700; font-family: monospace; letter-spacing: 2px; color: #fff; }
         .time-date { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; }
@@ -419,7 +441,7 @@
             </div>
         </div>
 
-        <!-- ============ ZAKŁADKA IP INFO ============ -->
+        <!-- ============ ZAKŁADKA IP INFO (ulepszona) ============ -->
         <div id="ip-tab" class="tab-content">
             <div class="glass-card">
                 <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🌐 Twój adres IP i dane sieci</h2>
@@ -455,10 +477,20 @@
                         <div class="info-item"><div class="label">Host</div><div class="value" id="ipHost">—</div></div>
                     </div>
 
-                    <!-- Mapa -->
-                    <h3 class="section-title"><i class="fas fa-map-marked-alt"></i> Geolokalizacja (przybliżona)</h3>
+                    <!-- NOWA: Szczegółowa sekcja DNS -->
+                    <h3 class="section-title"><i class="fas fa-dns"></i> Szczegółowe informacje DNS</h3>
+                    <div id="dnsInfo" class="info-grid">
+                        <div class="info-item"><div class="label">Adres serwera DNS</div><div class="value" id="dnsServer">Pobieranie...</div></div>
+                        <div class="info-item"><div class="label">Dostawca DNS</div><div class="value" id="dnsIsp">—</div></div>
+                        <div class="info-item"><div class="label">Kraj DNS</div><div class="value" id="dnsCountry">—</div></div>
+                        <div class="info-item"><div class="label">Organizacja DNS</div><div class="value" id="dnsOrg">—</div></div>
+                        <div class="info-item"><div class="label">ASN DNS</div><div class="value" id="dnsAsn">—</div></div>
+                    </div>
+
+                    <!-- Mapa (dokładniejszy zoom) -->
+                    <h3 class="section-title"><i class="fas fa-map-marked-alt"></i> Geolokalizacja IP</h3>
                     <div id="ipMap"></div>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">⚠️ Lokalizacja na podstawie IP nie jest dokładna – to przybliżona pozycja geograficzna.</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Lokalizacja na podstawie IP – dane szacunkowe, mogą różnić się od rzeczywistej pozycji.</p>
 
                     <!-- Urządzenie -->
                     <h3 class="section-title" style="margin-top: 2rem;"><i class="fas fa-laptop"></i> Informacje o urządzeniu</h3>
@@ -473,6 +505,7 @@
                     <div class="ip-actions">
                         <button class="btn" onclick="copyIP()"><i class="fas fa-copy"></i> Kopiuj IP</button>
                         <button class="btn" onclick="checkCustomIP()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-search"></i> Sprawdź inne IP</button>
+                        <button class="btn" onclick="refreshDNSInfo()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-sync-alt"></i> Odśwież DNS</button>
                     </div>
                 </div>
             </div>
@@ -521,17 +554,15 @@
             </div>
         </div>
 
-        <!-- ============ NOWA ZAKŁADKA: CZAS I STREFY CZASOWE ============ -->
+        <!-- ============ ZAKŁADKA CZAS I STREFY (ulepszona) ============ -->
         <div id="time-tab" class="tab-content">
             <div class="glass-card">
                 <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📅 Czas i strefy czasowe</h2>
                 <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Aktualny czas na świecie, konwerter czasu i różnice między strefami.</p>
 
-                <!-- 1. Aktualny czas na świecie - dynamiczne karty -->
-                <h3 class="section-title"><i class="fas fa-globe-americas"></i> Aktualny czas na świecie</h3>
+                <h3 class="section-title"><i class="fas fa-globe-americas"></i> Aktualny czas na świecie <span style="font-size:0.8rem;">(kliknij ✕ aby usunąć)</span></h3>
                 <div class="time-cards" id="worldClocksContainer"></div>
 
-                <!-- 2. Dodaj własną strefę -->
                 <div style="margin: 1rem 0 2rem 0; display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
                     <div style="flex:1; min-width: 200px;">
                         <label style="font-size: 0.8rem; color:var(--text-muted)">Wybierz inną strefę czasową</label>
@@ -542,7 +573,6 @@
                     </div>
                 </div>
 
-                <!-- 3. Konwerter czasu (godzina między strefami) -->
                 <h3 class="section-title"><i class="fas fa-exchange-alt"></i> Konwerter czasu</h3>
                 <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; background: rgba(15,23,42,0.4); border-radius: 1rem; padding: 1.5rem; margin: 1rem 0;">
                     <div style="flex:1; min-width: 180px;">
@@ -567,7 +597,6 @@
                     <div style="color: var(--text-muted); font-size: 0.85rem;" id="convertedDateHint"></div>
                 </div>
 
-                <!-- 4. Różnice czasu względem wybranej strefy -->
                 <h3 class="section-title" style="margin-top: 2rem;"><i class="fas fa-clock"></i> Różnice czasu względem</h3>
                 <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;">
                     <select id="differenceBaseTZ" class="modern-select" style="width: auto; min-width: 200px;"></select>
@@ -576,10 +605,10 @@
                 <div class="table-wrapper">
                     <table id="timeDiffTable">
                         <thead><tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th></tr></thead>
-                        <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tr></tbody>
+                        <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
                     </table>
                 </div>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Uwaga: Różnice obliczane dla bieżącej daty z uwzględnieniem czasu letniego (DST).</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Różnice obliczane dla bieżącej daty z uwzględnieniem czasu letniego (DST).</p>
             </div>
         </div>
     </div>
@@ -606,6 +635,7 @@
         let ipData = null;
         window.ipDataLoaded = false;
         let ipMap = null;
+        let dnsData = null;
 
         async function fetchIPInfo(ip = '') {
             document.getElementById('ipLoading').style.display = 'flex';
@@ -619,12 +649,56 @@
                 if (data.error) throw new Error(data.reason);
                 ipData = data;
                 renderIPData(data);
+                // Po pobraniu IP, pobieramy informacje DNS
+                fetchDNSInfo();
             } catch (e) {
                 console.warn('Błąd IP API:', e);
                 ipData = { ip: 'Nie można pobrać', country_name: '—', city: '—' };
                 renderIPData(ipData);
                 document.getElementById('ipAddress').textContent = 'Błąd połączenia';
+                document.getElementById('dnsServer').textContent = 'Błąd';
             }
+        }
+
+        async function fetchDNSInfo() {
+            try {
+                // 1. Pobieramy adres serwera DNS
+                const dnsRes = await fetch('https://api.my-ip.io/dns.json');
+                if (!dnsRes.ok) throw new Error();
+                const dnsJson = await dnsRes.json();
+                const dnsIp = dnsJson.dns;
+                document.getElementById('dnsServer').textContent = dnsIp || 'nieznany';
+
+                if (dnsIp && dnsIp !== '0.0.0.0') {
+                    // 2. Dla tego adresu DNS pobieramy szczegóły (dostawca, kraj, ASN)
+                    const detailsRes = await fetch(`https://ipapi.co/${dnsIp}/json/`);
+                    if (detailsRes.ok) {
+                        const details = await detailsRes.json();
+                        document.getElementById('dnsIsp').textContent = details.org || details.isp || '—';
+                        document.getElementById('dnsCountry').textContent = details.country_name || '—';
+                        document.getElementById('dnsOrg').textContent = details.org || '—';
+                        document.getElementById('dnsAsn').textContent = details.asn || '—';
+                    } else {
+                        throw new Error();
+                    }
+                } else {
+                    document.getElementById('dnsIsp').textContent = '—';
+                    document.getElementById('dnsCountry').textContent = '—';
+                    document.getElementById('dnsOrg').textContent = '—';
+                    document.getElementById('dnsAsn').textContent = '—';
+                }
+            } catch (e) {
+                console.warn('Nie udało się pobrać informacji DNS:', e);
+                document.getElementById('dnsServer').textContent = 'Nie udało się wykryć';
+                document.getElementById('dnsIsp').textContent = '—';
+                document.getElementById('dnsCountry').textContent = '—';
+                document.getElementById('dnsOrg').textContent = '—';
+                document.getElementById('dnsAsn').textContent = '—';
+            }
+        }
+
+        function refreshDNSInfo() {
+            fetchDNSInfo();
         }
 
         function renderIPData(data) {
@@ -642,14 +716,15 @@
             document.getElementById('ipOrg').textContent = data.org || '—';
             document.getElementById('ipHost').textContent = data.ip || '—';
 
+            // Mapa - zwiększony zoom dla lepszej dokładności
             if (data.latitude && data.longitude) {
                 if (ipMap) ipMap.remove();
-                ipMap = L.map('ipMap').setView([data.latitude, data.longitude], 11);
+                ipMap = L.map('ipMap').setView([data.latitude, data.longitude], 13); // zoom 13 zamiast 11
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap'
                 }).addTo(ipMap);
                 L.marker([data.latitude, data.longitude]).addTo(ipMap)
-                    .bindPopup(`${data.city || ''}, ${data.country_name || ''}`).openPopup();
+                    .bindPopup(`${data.city || ''}, ${data.country_name || ''}<br>Współrzędne: ${data.latitude}, ${data.longitude}`).openPopup();
             }
 
             const ua = navigator.userAgent;
@@ -1324,9 +1399,12 @@
             });
         }
 
-        // ======================== MODUŁ CZASU I STREF ========================
-        // Lista domyślnych miast/stref do wyświetlenia
-        const defaultTimezones = [
+        // ======================== MODUŁ CZASU I STREF (ULEPSZONY) ========================
+        // Jedna tablica wszystkich kart (aby umożliwić usuwanie i dodawanie)
+        let timezoneCards = []; // elementy { name, tz }
+
+        // Domyślne karty na start
+        const defaultCards = [
             { name: "Warszawa", tz: "Europe/Warsaw" },
             { name: "Londyn", tz: "Europe/London" },
             { name: "Nowy Jork", tz: "America/New_York" },
@@ -1335,15 +1413,17 @@
             { name: "Los Angeles", tz: "America/Los_Angeles" },
             { name: "Dubaj", tz: "Asia/Dubai" }
         ];
-        
-        let customTimezoneCards = []; // przechowuje dodatkowe strefy dodane przez użytkownika (obiekty {name, tz})
 
-        // Pobranie listy wszystkich dostępnych stref (nowoczesne API)
+        // Inicjalizacja listy kart
+        function initTimezoneCards() {
+            timezoneCards = [...defaultCards];
+        }
+
+        // Pobranie listy wszystkich dostępnych stref
         function getAllTimezones() {
             if (typeof Intl !== 'undefined' && Intl.supportedValuesOf) {
                 return Intl.supportedValuesOf('timeZone');
             } else {
-                // Fallback dla starszych przeglądarek
                 return [
                     "Europe/Warsaw", "Europe/London", "Europe/Paris", "Europe/Berlin", "America/New_York", "America/Los_Angeles",
                     "Asia/Tokyo", "Asia/Dubai", "Australia/Sydney", "Africa/Cairo", "Asia/Shanghai", "Asia/Kolkata",
@@ -1352,14 +1432,12 @@
             }
         }
 
-        // Formatowanie daty w danej strefie (zwraca obiekt z czasem i datą)
         function getFormattedTimeInZone(timezone) {
             const now = new Date();
             const optionsTime = { timeZone: timezone, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             const optionsDate = { timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit' };
             const timeStr = new Intl.DateTimeFormat('pl-PL', optionsTime).format(now);
             const dateStr = new Intl.DateTimeFormat('pl-PL', optionsDate).format(now);
-            // offset UTC
             const offsetMinutes = getTimezoneOffsetMinutes(timezone, now);
             const sign = offsetMinutes >= 0 ? '+' : '-';
             const absOffset = Math.abs(offsetMinutes);
@@ -1369,49 +1447,78 @@
             return { time: timeStr, date: dateStr, offset: offsetStr };
         }
 
-        // Oblicza offset w minutach dla danej strefy i daty
         function getTimezoneOffsetMinutes(timeZone, date = new Date()) {
             const tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
             const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
             return (tzDate.getTime() - utcDate.getTime()) / 60000;
         }
 
-        // Renderowanie kart z zegarami
-        function renderWorldClocks() {
+        // Renderowanie kart (tylko przy starcie, dodaniu lub usunięciu)
+        function renderTimeCards() {
             const container = document.getElementById('worldClocksContainer');
             if (!container) return;
-            const allZones = [...defaultTimezones, ...customTimezoneCards];
-            container.innerHTML = allZones.map(zone => {
-                const { time, date, offset } = getFormattedTimeInZone(zone.tz);
-                return `
-                    <div class="time-card">
-                        <div class="city-name">${zone.name} <span style="font-size:0.7rem;">(${zone.tz.split('/').pop()})</span></div>
-                        <div class="time-digits">${time}</div>
-                        <div class="time-date">${date}</div>
-                        <div class="utc-offset">${offset}</div>
-                    </div>
+            container.innerHTML = '';
+            timezoneCards.forEach((card, idx) => {
+                const { time, date, offset } = getFormattedTimeInZone(card.tz);
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'time-card';
+                cardDiv.setAttribute('data-tz', card.tz);
+                cardDiv.setAttribute('data-name', card.name);
+                cardDiv.innerHTML = `
+                    <div class="close-btn" data-index="${idx}">&times;</div>
+                    <div class="city-name">${card.name} <span style="font-size:0.7rem;">(${card.tz.split('/').pop()})</span></div>
+                    <div class="time-digits">${time}</div>
+                    <div class="time-date">${date}</div>
+                    <div class="utc-offset">${offset}</div>
                 `;
-            }).join('');
+                container.appendChild(cardDiv);
+            });
+            // Dodajemy nasłuch do przycisków zamykania
+            document.querySelectorAll('.time-card .close-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(btn.getAttribute('data-index'), 10);
+                    if (!isNaN(idx) && idx >= 0 && idx < timezoneCards.length) {
+                        timezoneCards.splice(idx, 1);
+                        renderTimeCards();   // odświeżamy widok
+                        updateTimeDifferences(); // odśwież tabelę różnic
+                        populateTimezoneSelects(); // odśwież listy w selectach
+                    }
+                    e.stopPropagation();
+                });
+            });
         }
 
-        // Dodawanie własnej strefy (z dropdown)
+        // Aktualizacja tylko treści kart (godziny, daty) - bez przesuwania layoutu
+        function updateTimeCardsContent() {
+            const cards = document.querySelectorAll('.time-card');
+            cards.forEach((card, idx) => {
+                if (idx >= timezoneCards.length) return;
+                const tz = timezoneCards[idx].tz;
+                const { time, date, offset } = getFormattedTimeInZone(tz);
+                const timeDigits = card.querySelector('.time-digits');
+                const timeDate = card.querySelector('.time-date');
+                const utcOffsetSpan = card.querySelector('.utc-offset');
+                if (timeDigits) timeDigits.textContent = time;
+                if (timeDate) timeDate.textContent = date;
+                if (utcOffsetSpan) utcOffsetSpan.textContent = offset;
+            });
+        }
+
         function addCustomTimezoneCard() {
             const select = document.getElementById('customTimezoneSelect');
             const selectedTZ = select.value;
             if (!selectedTZ) return;
             const tzName = selectedTZ.split('/').pop().replace(/_/g, ' ');
-            const alreadyExists = [...defaultTimezones, ...customTimezoneCards].some(z => z.tz === selectedTZ);
-            if (alreadyExists) {
+            if (timezoneCards.some(card => card.tz === selectedTZ)) {
                 alert('Ta strefa jest już wyświetlana.');
                 return;
             }
-            customTimezoneCards.push({ name: tzName, tz: selectedTZ });
-            renderWorldClocks();
-            // aktualizacja również selectów w konwerterze i różnicach? zrobimy osobno
-            populateTimezoneSelects();
+            timezoneCards.push({ name: tzName, tz: selectedTZ });
+            renderTimeCards();
+            populateTimezoneSelects(); // odśwież listy w selectach
+            updateTimeDifferences();   // odśwież tabelę różnic
         }
 
-        // Wypełnianie wszystkich selectów (konwerter, różnice, dodawanie własnej)
         function populateTimezoneSelects() {
             const allTZs = getAllTimezones();
             const selects = ['customTimezoneSelect', 'convertFromTZ', 'convertToTZ', 'differenceBaseTZ'];
@@ -1434,7 +1541,6 @@
             });
         }
 
-        // Konwerter czasu między strefami (na podstawie godziny)
         function convertTimeBetweenZones() {
             const timeInput = document.getElementById('convertTimeInput').value;
             const fromTZ = document.getElementById('convertFromTZ').value;
@@ -1443,13 +1549,10 @@
 
             const [hours, minutes] = timeInput.split(':').map(Number);
             const now = new Date();
-            // Ustawiamy datę na dzisiejszą z podaną godziną w strefie źródłowej
             const dateInFromTZ = new Date(now.toLocaleString('en-US', { timeZone: fromTZ }));
             dateInFromTZ.setHours(hours, minutes, 0, 0);
-            // Konwertujemy na timestamp
             const timestamp = dateInFromTZ.getTime();
             const convertedDate = new Date(timestamp);
-            // Formatowanie w strefie docelowej
             const optionsTime = { timeZone: toTZ, hour: '2-digit', minute: '2-digit', hour12: false };
             const optionsDate = { timeZone: toTZ, year: 'numeric', month: '2-digit', day: '2-digit' };
             const convertedTime = new Intl.DateTimeFormat('pl-PL', optionsTime).format(convertedDate);
@@ -1458,31 +1561,28 @@
             document.getElementById('convertedDateHint').textContent = `(data: ${convertedDateStr})`;
         }
 
-        // Aktualizacja tabeli różnic czasu względem wybranej strefy bazowej
         function updateTimeDifferences() {
             const baseTZ = document.getElementById('differenceBaseTZ').value;
             if (!baseTZ) return;
-            const referenceZones = [...defaultTimezones.map(z => ({ name: z.name, tz: z.tz })), ...customTimezoneCards];
             const now = new Date();
             const baseOffset = getTimezoneOffsetMinutes(baseTZ, now);
             const baseFormatted = getFormattedTimeInZone(baseTZ);
             const tbody = document.getElementById('timeDiffTableBody');
             tbody.innerHTML = '';
-            referenceZones.forEach(zone => {
-                const targetOffset = getTimezoneOffsetMinutes(zone.tz, now);
+            timezoneCards.forEach(card => {
+                const targetOffset = getTimezoneOffsetMinutes(card.tz, now);
                 const diffMinutes = targetOffset - baseOffset;
                 const diffHours = diffMinutes / 60;
                 const diffStr = diffHours === 0 ? '0h' : (diffHours > 0 ? `+${diffHours.toFixed(1)}h` : `${diffHours.toFixed(1)}h`);
-                const { time, date } = getFormattedTimeInZone(zone.tz);
+                const { time, date } = getFormattedTimeInZone(card.tz);
                 tbody.innerHTML += `
                     <tr>
-                        <td><strong>${zone.name}</strong><br><span style="font-size:0.7rem;">${zone.tz}</span></td>
+                        <td><strong>${card.name}</strong><br><span style="font-size:0.7rem;">${card.tz}</span></td>
                         <td>${time}<br><span style="font-size:0.7rem;">${date}</span></td>
                         <td>${diffStr}</td>
                     </tr>
                 `;
             });
-            // Dodajemy też wiersz ze strefą bazową
             tbody.innerHTML += `
                 <tr style="background:rgba(99,102,241,0.2);">
                     <td><strong>Strefa bazowa</strong><br><span style="font-size:0.7rem;">${baseTZ}</span></td>
@@ -1492,18 +1592,17 @@
             `;
         }
 
-        // Odświeżanie całej zakładki czasowej (zegary + różnice po zmianie)
-        let timeRefreshInterval = null;
         function refreshAllTimes() {
-            renderWorldClocks();
+            updateTimeCardsContent();
             if (document.getElementById('differenceBaseTZ') && document.getElementById('differenceBaseTZ').value) {
                 updateTimeDifferences();
             }
         }
+
+        let timeRefreshInterval = null;
         function startTimeAutoRefresh() {
             if (timeRefreshInterval) clearInterval(timeRefreshInterval);
             timeRefreshInterval = setInterval(() => {
-                // odświeżamy tylko jeśli zakładka czasu jest aktywna
                 const timeTab = document.getElementById('time-tab');
                 if (timeTab && timeTab.classList.contains('active')) {
                     refreshAllTimes();
@@ -1515,13 +1614,13 @@
         fetchRates();
         updateConverter();
         document.getElementById('amount').addEventListener('wheel', e => e.preventDefault());
+        // Czas i strefy
+        initTimezoneCards();
+        renderTimeCards();
         populateTimezoneSelects();
-        renderWorldClocks();
         startTimeAutoRefresh();
-        // dodatkowo ustawienie nasłuchu na zmianę selecta bazowego dla różnic
         const diffBaseSelect = document.getElementById('differenceBaseTZ');
         if (diffBaseSelect) diffBaseSelect.addEventListener('change', updateTimeDifferences);
-        // domyślne wywołanie różnic po załadowaniu
         setTimeout(() => {
             if (diffBaseSelect && diffBaseSelect.value) updateTimeDifferences();
         }, 500);
