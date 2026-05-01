@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MultiTool Pro – Waluty & Test Internetu</title>
-    <meta name="description" content="Przeliczaj waluty co do grosza i sprawdź prędkość internetu – wszystko za darmo online.">
+    <meta name="description" content="Przeliczaj waluty co do grosza i sprawdź prędkość internetu – za darmo online. Zobacz, które waluty idą w górę, a które spadają!">
     
-    <!-- Google Analytics (podmień na swój identyfikator) -->
+    <!-- Google Analytics (podmień) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,7 +15,7 @@
         gtag('config', 'G-XXXXXXXXXX');
     </script>
     
-    <!-- Google AdSense (podmień na swój identyfikator) -->
+    <!-- Google AdSense (podmień) -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
         crossorigin="anonymous"></script>
 
@@ -28,11 +28,12 @@
             --secondary: #ec4899;
             --accent: #8b5cf6;
             --dark: #0f172a;
-            --glass: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(30, 41, 59, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --text: #f1f5f9;
             --text-muted: #94a3b8;
             --success: #10b981;
+            --warning: #f59e0b;
             --danger: #ef4444;
         }
 
@@ -125,7 +126,22 @@
         }
         .swap-btn:hover { transform: rotate(180deg) scale(1.1); }
 
-        .quick-amounts { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+        /* Slider */
+        .slider-container {
+            margin: 1.5rem 0 0.5rem; display: flex; align-items: center; gap: 1rem;
+        }
+        .slider-label { color: var(--text-muted); font-size: 0.9rem; white-space: nowrap; }
+        .amount-slider {
+            -webkit-appearance: none; width: 100%; height: 10px; border-radius: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary)); outline: none;
+        }
+        .amount-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%;
+            background: white; cursor: pointer; box-shadow: 0 0 15px var(--primary); border: 2px solid var(--primary);
+        }
+        .slider-value { color: var(--text); font-weight: 600; min-width: 50px; text-align: right; }
+
+        .quick-amounts { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
         .quick-btn {
             background: rgba(99,102,241,0.15); border: 1px solid var(--glass-border);
             color: var(--text); padding: 0.5rem 1rem; border-radius: 2rem; cursor: pointer;
@@ -133,7 +149,7 @@
         }
         .quick-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); }
 
-        .actions-row { display: flex; gap: 1rem; align-items: center; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+        .actions-row { display: flex; gap: 1rem; align-items: center; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
         .action-btn {
             background: linear-gradient(135deg, var(--primary), var(--accent)); color: white;
             border: none; padding: 0.7rem 1.2rem; border-radius: 0.8rem; font-weight: 600;
@@ -147,22 +163,24 @@
         .rate-info { text-align: center; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem; margin-top: 1rem; border: 1px solid rgba(99,102,241,0.2); }
         .rate-value { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
 
-        .section-title { font-size: 1.25rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-        .rates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-        .rate-card {
-            background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.25rem;
-            display: flex; justify-content: space-between; align-items: center; transition: 0.3s;
+        /* Statistics Section */
+        .stats-section { margin-top: 2.5rem; }
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
         }
-        .rate-card:hover { transform: translateY(-2px); border-color: var(--primary); }
-        .rate-pair { display: flex; align-items: center; gap: 0.75rem; }
-        .currency-flag {
-            width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.875rem;
+        .stat-card {
+            background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1rem;
+            display: flex; align-items: center; gap: 0.75rem;
         }
-        .rate-change { font-size: 0.875rem; font-weight: 600; }
-        .rate-change.up { color: var(--success); } .rate-change.down { color: var(--danger); }
+        .stat-card .currency-icon {
+            width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: flex;
+            align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;
+        }
+        .stat-card .stat-info { flex: 1; }
+        .stat-card .stat-name { font-weight: 600; }
+        .stat-card .stat-change { font-size: 0.9rem; }
 
-        /* Speed Test - bez zmian wizualnych */
+        /* Speed Test */
         .speed-gauge-container { display: flex; justify-content: center; margin: 2rem 0; }
         .gauge-wrapper { position: relative; width: 300px; height: 300px; }
         .gauge-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
@@ -183,6 +201,8 @@
         }
         .start-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(99,102,241,0.6); }
         .start-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .start-btn.running { background: linear-gradient(135deg, var(--danger), #dc2626); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100%{box-shadow: 0 0 0 0 rgba(239,68,68,0.4)} 50%{box-shadow: 0 0 0 20px rgba(239,68,68,0)} }
         .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
         .metric-card {
             background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem;
@@ -199,13 +219,14 @@
         .progress-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
         .progress-fill { height: 100%; border-radius: 4px; transition: width 0.2s ease; background: linear-gradient(90deg, var(--primary), var(--secondary)); }
         .chart-container { margin-top: 2rem; height: 300px; position: relative; }
+        .rating-box { text-align: center; margin: 1.5rem 0; font-size: 1.3rem; font-weight: 600; }
+        .rating-box span { margin-left: 0.5rem; }
         .loading { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-muted); }
         .spinner { width: 20px; height: 20px; border: 2px solid var(--glass-border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .status-bar { position: fixed; bottom: 2rem; right: 2rem; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 0.75rem 1.25rem; border-radius: 2rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; z-index: 100; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: blink 2s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
-        .tooltip-text { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; font-style: italic; }
     </style>
 </head>
 <body>
@@ -235,24 +256,30 @@
                     <div class="currency-box">
                         <div class="currency-label">Mam taką kwotę 👇</div>
                         <div class="currency-input-group">
-                            <input list="currencyListFrom" class="currency-select" id="fromCurrencyInput" placeholder="Waluta" onchange="convert()" onfocus="this.value=''; this.blur(); this.focus();" autocomplete="off" value="USD">
+                            <input list="currencyListFrom" class="currency-select" id="fromCurrencyInput" placeholder="Waluta" onchange="convert()" autocomplete="off" value="USD">
                             <datalist id="currencyListFrom"></datalist>
                             <input type="number" class="amount-input" id="amount" value="100" min="0" step="0.01"
-                                   oninput="this.value = Math.max(0, this.value); convert();">
+                                   oninput="syncSliderFromInput(); convert();">
+                        </div>
+                        <!-- Suwak -->
+                        <div class="slider-container">
+                            <span class="slider-label">Przesuń:</span>
+                            <input type="range" class="amount-slider" id="amountSlider" min="0" max="10000" value="100" step="1"
+                                   oninput="document.getElementById('amount').value = this.value; convert();">
+                            <span class="slider-value" id="sliderDisplay">100</span>
                         </div>
                     </div>
                     <button class="swap-btn" onclick="swapCurrencies()" title="Zamień waluty"><i class="fas fa-exchange-alt"></i></button>
                     <div class="currency-box">
                         <div class="currency-label">Chcę dostać 👉</div>
                         <div class="currency-input-group">
-                            <input list="currencyListTo" class="currency-select" id="toCurrencyInput" placeholder="Waluta" onchange="convert()" onfocus="this.value=''; this.blur(); this.focus();" autocomplete="off" value="PLN">
+                            <input list="currencyListTo" class="currency-select" id="toCurrencyInput" placeholder="Waluta" onchange="convert()" autocomplete="off" value="PLN">
                             <datalist id="currencyListTo"></datalist>
                             <input type="text" class="amount-input" id="result" readonly placeholder="0.00">
                         </div>
                     </div>
                 </div>
 
-                <!-- Szybkie kwoty -->
                 <div class="quick-amounts">
                     <span style="color: var(--text-muted); margin-right: 0.5rem;">Szybka kwota:</span>
                     <button class="quick-btn" onclick="setAmount(10)">10</button>
@@ -262,50 +289,37 @@
                     <button class="quick-btn" onclick="setAmount(1000)">1000</button>
                 </div>
 
-                <!-- Akcje -->
                 <div class="actions-row">
                     <button class="action-btn secondary" onclick="copyResult()"><i class="fas fa-copy"></i> Kopiuj wynik</button>
                     <button class="action-btn secondary" onclick="togglePrecision()" id="precisionBtn">
-                        <i class="fas fa-search-plus"></i> Więcej miejsc po przecinku
+                        <i class="fas fa-search-plus"></i> Więcej miejsc
                     </button>
                     <button class="action-btn" onclick="fetchRates()"><i class="fas fa-sync-alt"></i> Odśwież kursy</button>
                 </div>
 
                 <div class="rate-info">
                     <div class="rate-value" id="rateDisplay">1 USD = 4.00 PLN</div>
-                    <div style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.875rem;">
-                        Kurs orientacyjny – bez prowizji
+                    <div style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.875rem;">Kurs orientacyjny – bez prowizji</div>
+                </div>
+
+                <!-- Statystyki walut -->
+                <div class="stats-section">
+                    <h3 class="section-title" style="margin-bottom: 1.5rem;">
+                        <i class="fas fa-chart-bar"></i> Które waluty poszły w górę, a które w dół?
+                    </h3>
+                    <div class="stats-grid" id="statsContainer">
+                        <div class="stat-card"><div class="loading"><div class="spinner"></div> Ładowanie...</div></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TEST PRĘDKOŚCI INTERNETU (bez zmian) -->
+        <!-- TEST PRĘDKOŚCI INTERNETU -->
         <div id="speed-tab" class="tab-content">
             <div class="glass-card">
                 <div class="speed-header">
                     <h1>⚡ Sprawdź prędkość internetu</h1>
                     <p>Dowiedz się, jak szybko ładują się strony, filmiki i gry online!</p>
-                </div>
-                <div class="speed-gauge-container">
-                    <div class="gauge-wrapper">
-                        <svg class="gauge-svg" viewBox="0 0 300 300">
-                            <defs>
-                                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
-                                    <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <circle class="gauge-bg" cx="150" cy="150" r="120"></circle>
-                            <circle class="gauge-progress" id="gaugeProgress" cx="150" cy="150" r="120"></circle>
-                        </svg>
-                        <div class="gauge-center">
-                            <div class="gauge-value" id="gaugeValue">0.0</div>
-                            <div class="gauge-unit">Mb/s</div>
-                            <div class="gauge-label" id="gaugeLabel">Kliknij „Rozpocznij test”</div>
-                        </div>
-                    </div>
                 </div>
                 <div class="test-controls">
                     <button class="start-btn" id="startBtn" onclick="startSpeedTest()"><i class="fas fa-play"></i> Rozpocznij test</button>
@@ -330,6 +344,7 @@
                     <div class="metric-card"><div class="metric-icon"><i class="fas fa-stopwatch"></i></div><div class="metric-title">Ping</div><div class="metric-value" id="pingResult">--</div></div>
                     <div class="metric-card"><div class="metric-icon"><i class="fas fa-network-wired"></i></div><div class="metric-title">Stabilność</div><div class="metric-value" id="jitterResult">--</div></div>
                 </div>
+                <div class="rating-box" id="ratingBox" style="display: none;"></div>
                 <div class="chart-container" id="chartContainer" style="display: none;"><canvas id="speedChart"></canvas></div>
             </div>
         </div>
@@ -349,6 +364,7 @@
         // ---- WALUTY ----
         let exchangeRates = {};
         let lastSuccessfulRates = null;
+        let previousRates = null; // do porównania zmian
         let showFullPrecision = false;
 
         function populateCurrencyLists() {
@@ -361,10 +377,6 @@
                 fromList.insertAdjacentHTML('beforeend', option);
                 toList.insertAdjacentHTML('beforeend', option);
             });
-            // Ustaw domyślne, jeśli puste
-            if (!document.getElementById('fromCurrencyInput').value) document.getElementById('fromCurrencyInput').value = 'USD';
-            if (!document.getElementById('toCurrencyInput').value) document.getElementById('toCurrencyInput').value = 'PLN';
-            convert();
         }
 
         async function fetchRates() {
@@ -372,12 +384,18 @@
                 const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
                 if (!res.ok) throw new Error('Błąd sieci');
                 const data = await res.json();
+                // Przechowaj poprzednie kursy przed nadpisaniem (jeśli istnieją)
+                if (lastSuccessfulRates) {
+                    previousRates = { ...lastSuccessfulRates };
+                }
                 exchangeRates = data.rates;
                 lastSuccessfulRates = { ...exchangeRates };
                 document.getElementById('lastUpdate').innerHTML =
                     '<i class="fas fa-check-circle"></i> Zaktualizowano: ' + new Date().toLocaleTimeString('pl-PL');
                 document.getElementById('connectionStatus').innerHTML = 'Dane walut online – kursy na żywo';
                 populateCurrencyLists();
+                convert();
+                updateStatistics();
             } catch (e) {
                 if (lastSuccessfulRates) {
                     exchangeRates = { ...lastSuccessfulRates };
@@ -388,8 +406,8 @@
                 document.getElementById('lastUpdate').innerHTML =
                     '<i class="fas fa-exclamation-triangle"></i> Nie udało się pobrać nowych kursów – pokazuję ostatnie dane';
                 document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem – dane mogą być nieaktualne';
+                convert();
             }
-            convert();
         }
 
         function getPrecisionValue(amount, rate) {
@@ -405,15 +423,33 @@
             const rate = exchangeRates[to] / exchangeRates[from];
             document.getElementById('result').value = getPrecisionValue(amount, rate);
             document.getElementById('rateDisplay').textContent = `1 ${from} = ${rate.toFixed(4)} ${to}`;
+            // Synchronizuj suwak (tylko jeśli zmiana nie pochodzi od suwaka)
+            const slider = document.getElementById('amountSlider');
+            if (slider.value != amount && amount >= slider.min && amount <= slider.max) {
+                slider.value = amount;
+                document.getElementById('sliderDisplay').textContent = amount;
+            }
+        }
+
+        function syncSliderFromInput() {
+            const amount = document.getElementById('amount').value;
+            const slider = document.getElementById('amountSlider');
+            if (amount >= 0 && amount <= slider.max) {
+                slider.value = amount;
+                document.getElementById('sliderDisplay').textContent = amount;
+            }
         }
 
         function setAmount(val) {
             document.getElementById('amount').value = val;
-            convert();
             // Animacja przycisku
             const btn = event.target;
             btn.style.transform = 'scale(0.9)';
             setTimeout(() => btn.style.transform = '', 150);
+            // Sync slider
+            document.getElementById('amountSlider').value = val;
+            document.getElementById('sliderDisplay').textContent = val;
+            convert();
         }
 
         function swapCurrencies() {
@@ -436,12 +472,67 @@
             showFullPrecision = !showFullPrecision;
             const btn = document.getElementById('precisionBtn');
             btn.innerHTML = showFullPrecision
-                ? '<i class="fas fa-search-minus"></i> Mniej miejsc po przecinku'
-                : '<i class="fas fa-search-plus"></i> Więcej miejsc po przecinku';
+                ? '<i class="fas fa-search-minus"></i> Mniej miejsc'
+                : '<i class="fas fa-search-plus"></i> Więcej miejsc';
             convert();
         }
 
-        // ---- TEST PRĘDKOŚCI (bez zmian) ----
+        function updateStatistics() {
+            const container = document.getElementById('statsContainer');
+            if (!previousRates || !exchangeRates) {
+                container.innerHTML = '<div class="stat-card"><div class="loading"><div class="spinner"></div> Brak danych do porównania</div></div>';
+                return;
+            }
+            // Oblicz zmiany procentowe względem USD (rate to wartość 1 USD = X waluty)
+            const changes = [];
+            for (const [currency, rate] of Object.entries(exchangeRates)) {
+                if (currency in previousRates) {
+                    const oldRate = previousRates[currency];
+                    const changePercent = ((rate - oldRate) / oldRate) * 100;
+                    changes.push({ currency, changePercent });
+                }
+            }
+            changes.sort((a, b) => b.changePercent - a.changePercent);
+            const topGainers = changes.slice(0, 5).filter(c => c.changePercent > 0);
+            const topLosers = changes.slice(-5).filter(c => c.changePercent < 0).reverse();
+
+            let html = '';
+            if (topGainers.length > 0) {
+                html += `<div style="grid-column: 1/-1; margin-bottom: 0.5rem; color: var(--success); font-weight: 600;"><i class="fas fa-arrow-up"></i> Największe wzrosty (względem USD)</div>`;
+                topGainers.forEach(c => {
+                    html += `<div class="stat-card">
+                        <div class="currency-icon" style="background: var(--success);">${c.currency}</div>
+                        <div class="stat-info">
+                            <div class="stat-name">${c.currency}</div>
+                            <div class="stat-change" style="color: var(--success);">+${c.changePercent.toFixed(2)}%</div>
+                        </div>
+                    </div>`;
+                });
+            }
+            if (topLosers.length > 0) {
+                html += `<div style="grid-column: 1/-1; margin: 1rem 0 0.5rem; color: var(--danger); font-weight: 600;"><i class="fas fa-arrow-down"></i> Największe spadki (względem USD)</div>`;
+                topLosers.forEach(c => {
+                    html += `<div class="stat-card">
+                        <div class="currency-icon" style="background: var(--danger);">${c.currency}</div>
+                        <div class="stat-info">
+                            <div class="stat-name">${c.currency}</div>
+                            <div class="stat-change" style="color: var(--danger);">${c.changePercent.toFixed(2)}%</div>
+                        </div>
+                    </div>`;
+                });
+            }
+            if (html === '') html = '<div class="stat-card">Brak znaczących zmian od ostatniej aktualizacji.</div>';
+            container.innerHTML = html;
+        }
+
+        // Inicjalizacja suwaka
+        document.getElementById('amountSlider').addEventListener('input', function() {
+            document.getElementById('amount').value = this.value;
+            document.getElementById('sliderDisplay').textContent = this.value;
+            convert();
+        });
+
+        // ---- TEST PRĘDKOŚCI ----
         let speedChart = null;
         let isTesting = false;
 
@@ -481,7 +572,8 @@
                 const bytes = sizesMB[i] * 1024 * 1024;
                 const start = performance.now();
                 try {
-                    const response = await fetch(`https://httpbin.org/bytes/${bytes}`, { cache: 'no-store' });
+                    // Cloudflare speed test (CORS ok)
+                    const response = await fetch(`https://speed.cloudflare.com/__down?bytes=${bytes}`, { cache: 'no-store' });
                     const reader = response.body.getReader();
                     let loaded = 0;
                     while (true) {
@@ -503,7 +595,7 @@
         }
 
         async function measureUpload() {
-            const sizesMB = [1, 2];
+            const sizesMB = [0.5, 1]; // mniejsze dla szybszego testu
             const speeds = [];
             for (let i = 0; i < sizesMB.length; i++) {
                 const bytes = sizesMB[i] * 1024 * 1024;
@@ -528,6 +620,13 @@
             return speeds.length ? speeds.reduce((a,b) => a+b, 0) / speeds.length : 0;
         }
 
+        function getRating(download, upload, ping) {
+            if (download > 100 && upload > 20 && ping < 20) return { text: 'Doskonałe łącze – idealne do 4K i gier!', icon: '🌟' };
+            if (download > 30 && upload > 5 && ping < 50) return { text: 'Szybki internet – bez problemu z streamingiem', icon: '👍' };
+            if (download > 10 && upload > 1 && ping < 100) return { text: 'Przyzwoite łącze – strony ładują się szybko', icon: '😊' };
+            return { text: 'Wolne łącze – może być problem z wideo', icon: '🐢' };
+        }
+
         async function startSpeedTest() {
             if (isTesting) return;
             isTesting = true;
@@ -537,6 +636,7 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testowanie...';
             document.getElementById('progressSection').style.display = 'block';
             document.getElementById('resultsGrid').style.display = 'none';
+            document.getElementById('ratingBox').style.display = 'none';
             document.getElementById('chartContainer').style.display = 'none';
             updateGauge(0, 100, 'Inicjalizacja...');
             document.getElementById('dlProgress').style.width = '0%';
@@ -560,6 +660,10 @@
             document.getElementById('pingResult').textContent = results.ping + ' ms';
             document.getElementById('jitterResult').textContent = results.jitter + ' ms';
             document.getElementById('resultsGrid').style.display = 'grid';
+
+            const rating = getRating(results.download, results.upload, results.ping);
+            document.getElementById('ratingBox').style.display = 'block';
+            document.getElementById('ratingBox').innerHTML = `${rating.icon} ${rating.text}`;
 
             showChart(results);
             btn.classList.remove('running');
@@ -587,7 +691,7 @@
             });
         }
 
-        // Inicjalizacja
+        // Start
         fetchRates();
         setInterval(fetchRates, 60000);
         document.getElementById('amount').addEventListener('wheel', e => e.preventDefault());
