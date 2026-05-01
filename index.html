@@ -119,54 +119,33 @@
             flex: 1; background: transparent; border: none; color: var(--text); font-size: 2rem; font-weight: 700; outline: none; width: 100%;
         }
 
-        /* 🎚️ POWIĘKSZONY, PIĘKNY SUWAK */
+        /* SUWAK */
         .slider-container { margin-top: 1.5rem; }
         input[type=range] {
-            -webkit-appearance: none;
-            width: 100%;
-            background: transparent;
-            margin: 1rem 0;
-            padding: 0; /* ważne dla Firefox */
+            -webkit-appearance: none; width: 100%; background: transparent; margin: 1rem 0; padding: 0;
         }
         input[type=range]:focus { outline: none; }
-        /* Tor suwaka */
         input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 20px;
-            cursor: pointer;
-            background: linear-gradient(90deg, #6366f1, #ec4899);
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+            width: 100%; height: 20px; cursor: pointer;
+            background: linear-gradient(90deg, #6366f1, #ec4899); border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
         }
-        /* Uchwyt suwaka */
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 40px;
-            width: 40px;
-            border-radius: 50%;
-            background: #ffffff;
-            cursor: pointer;
-            margin-top: -11px; /* Wyśrodkowanie względem toru */
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.9), 0 4px 10px rgba(0,0,0,0.3);
-            border: 3px solid #6366f1;
-            transition: 0.15s ease;
+            -webkit-appearance: none; height: 40px; width: 40px; border-radius: 50%; background: #ffffff;
+            cursor: pointer; margin-top: -11px; box-shadow: 0 0 20px rgba(99, 102, 241, 0.9), 0 4px 10px rgba(0,0,0,0.3);
+            border: 3px solid #6366f1; transition: 0.15s ease;
         }
         input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
-            box-shadow: 0 0 30px rgba(99, 102, 241, 1), 0 4px 15px rgba(0,0,0,0.4);
+            transform: scale(1.15); box-shadow: 0 0 30px rgba(99, 102, 241, 1), 0 4px 15px rgba(0,0,0,0.4);
         }
-        /* Styl dla Firefox */
         input[type=range]::-moz-range-track {
             width: 100%; height: 20px; cursor: pointer;
-            background: linear-gradient(90deg, #6366f1, #ec4899);
-            border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, #6366f1, #ec4899); border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
         }
         input[type=range]::-moz-range-thumb {
-            height: 40px; width: 40px; border-radius: 50%; background: white;
-            cursor: pointer; border: 3px solid #6366f1;
-            box-shadow: 0 0 20px rgba(99,102,241,0.9), 0 4px 10px rgba(0,0,0,0.3);
+            height: 40px; width: 40px; border-radius: 50%; background: white; cursor: pointer;
+            border: 3px solid #6366f1; box-shadow: 0 0 20px rgba(99,102,241,0.9), 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .swap-btn {
@@ -269,7 +248,6 @@
     </nav>
 
     <div class="container">
-        <!-- PRZELICZNIK WALUT -->
         <div id="currency-tab" class="tab-content active">
             <div class="glass-card">
                 <div class="currency-header">
@@ -282,7 +260,7 @@
                     <div class="currency-box">
                         <div class="currency-label">Mam taką kwotę 👇</div>
                         <div class="currency-input-group">
-                            <input list="currencyListFrom" class="currency-select" id="fromCurrencyInput" placeholder="Waluta" onchange="convert()" autocomplete="off" value="USD">
+                            <input list="currencyListFrom" class="currency-select" id="fromCurrencyInput" placeholder="Waluta" onchange="onBaseCurrencyChange()" autocomplete="off" value="USD">
                             <datalist id="currencyListFrom"></datalist>
                             <input type="number" class="amount-input" id="amount" value="100" min="0" step="0.01"
                                    oninput="updateSliderFromAmount(); convert();">
@@ -302,7 +280,6 @@
                     </div>
                 </div>
 
-                <!-- Szybkie kwoty -->
                 <div class="quick-amounts">
                     <span style="color: var(--text-muted); margin-right: 0.25rem; font-size: 0.8rem;">Szybka kwota:</span>
                     <button class="quick-btn" onclick="setAmount(5)">5</button>
@@ -334,10 +311,9 @@
                     </div>
                 </div>
 
-                <!-- Zaawansowane statystyki rynku -->
                 <div class="stats-section" id="statsSection">
-                    <h3 class="section-title"><i class="fas fa-chart-bar"></i> Analiza rynku (względem PLN)</h3>
-                    <div class="note-text" id="statsNote" style="margin-bottom: 1rem;">Porównanie z poprzednim pobraniem kursów</div>
+                    <h3 class="section-title"><i class="fas fa-chart-bar"></i> Analiza rynku (względem <span id="statsBaseCurrency">USD</span>)</h3>
+                    <div class="note-text" id="statsNote">Porównanie z poprzednim pobraniem kursów</div>
                     <div class="top-movers" id="topMovers"></div>
                     <div class="section-title" style="margin-top: 1.5rem;"><i class="fas fa-list"></i> Wszystkie kursy</div>
                     <div class="stats-grid" id="allStats"></div>
@@ -345,7 +321,6 @@
             </div>
         </div>
 
-        <!-- TEST PRĘDKOŚCI INTERNETU -->
         <div id="speed-tab" class="tab-content">
             <div class="glass-card">
                 <div class="speed-header">
@@ -416,11 +391,12 @@
 
         // ---- WALUTY ----
         let exchangeRates = {};
-        let previousRates = {};        // zawsze przechowuje kursy z POPRZEDNIEGO udanego pobrania
+        let previousRates = {};               // przechowuje kursy z POPRZEDNIEGO udanego pobrania
         let lastSuccessfulRates = null;
         let showFullPrecision = false;
-        let isFetching = false;        // blokada przed równoczesnymi żądaniami
-        let statsReady = false;        // czy mamy już dane do porównania
+        let isFetching = false;
+        let statsReady = false;
+        let lastBaseCurrency = 'USD';         // dynamiczna baza dla statystyk
 
         function populateCurrencyLists() {
             const currencies = Object.keys(exchangeRates).sort();
@@ -439,19 +415,31 @@
             convert();
         }
 
+        function onBaseCurrencyChange() {
+            const newBase = document.getElementById('fromCurrencyInput').value.toUpperCase();
+            if (newBase !== lastBaseCurrency) {
+                lastBaseCurrency = newBase;
+                updateMarketStats();
+            }
+            convert();
+        }
+
         async function fetchRates() {
             if (isFetching) return;
             isFetching = true;
+            // Zapamiętujemy stare kursy przed pobieraniem (jeśli istnieją)
+            const oldRates = Object.keys(exchangeRates).length > 0 ? { ...exchangeRates } : null;
             try {
                 const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
                 if (!res.ok) throw new Error('Błąd sieci');
                 const data = await res.json();
                 const newRates = data.rates;
 
-                // Przenosimy obecne kursy do previousRates TYLKO jeśli już jakieś były
-                if (Object.keys(exchangeRates).length > 0) {
-                    previousRates = { ...exchangeRates };
+                // Ustawiamy previousRates dopiero po udanym pobraniu
+                if (oldRates) {
+                    previousRates = oldRates;
                     statsReady = true;
+                    document.getElementById('statsNote').textContent = 'Porównanie z poprzednim pobraniem kursów';
                 } else {
                     // Pierwsze uruchomienie – generujemy orientacyjne dane historyczne
                     previousRates = { ...newRates };
@@ -459,8 +447,7 @@
                         previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015));
                     }
                     statsReady = true;
-                    document.getElementById('statsNote').textContent =
-                        'Porównanie orientacyjne (dane historyczne pojawią się przy kolejnej aktualizacji)';
+                    document.getElementById('statsNote').textContent = 'Porównanie orientacyjne (historyczne dane przy kolejnej aktualizacji)';
                 }
 
                 exchangeRates = newRates;
@@ -483,7 +470,7 @@
                 document.getElementById('lastUpdate').innerHTML =
                     '<i class="fas fa-exclamation-triangle"></i> Nie udało się pobrać nowych kursów – pokazuję ostatnie dane';
                 document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem – dane mogą być nieaktualne';
-                // Nie ruszamy previousRates przy błędzie!
+                // previousRates pozostaje bez zmian, więc statystyki nie zostaną wyzerowane
             } finally {
                 isFetching = false;
             }
@@ -492,12 +479,15 @@
 
         function updateMarketStats() {
             try {
-                const baseCurrency = 'PLN';
+                const baseCurrency = lastBaseCurrency;
                 if (!exchangeRates[baseCurrency]) {
-                    document.getElementById('topMovers').innerHTML = '<p>Brak danych o PLN.</p>';
+                    document.getElementById('topMovers').innerHTML = '<p>Brak danych dla wybranej waluty.</p>';
                     document.getElementById('allStats').innerHTML = '';
                     return;
                 }
+
+                // Aktualizuj etykietę
+                document.getElementById('statsBaseCurrency').textContent = baseCurrency;
 
                 const statsContainer = document.getElementById('allStats');
                 const topMoversContainer = document.getElementById('topMovers');
@@ -514,35 +504,34 @@
                     const rate = exchangeRates[currency];
                     if (rate <= 0) return;
 
-                    const valueInPLN = baseRate / rate;
+                    const valueInBase = baseRate / rate;
                     let changePercent = 0;
 
                     if (statsReady && previousRates[currency] && previousRates[baseCurrency]) {
-                        const oldValueInPLN = previousRates[baseCurrency] / previousRates[currency];
-                        if (oldValueInPLN > 0) {
-                            changePercent = ((valueInPLN - oldValueInPLN) / oldValueInPLN) * 100;
+                        const oldValueInBase = previousRates[baseCurrency] / previousRates[currency];
+                        if (oldValueInBase > 0) {
+                            changePercent = ((valueInBase - oldValueInBase) / oldValueInBase) * 100;
                         }
                     }
 
-                    changes.push({ currency, valueInPLN, changePercent });
-                    allStatsData.push({ currency, valueInPLN, changePercent });
+                    changes.push({ currency, valueInBase, changePercent });
+                    allStatsData.push({ currency, valueInBase, changePercent });
                 });
 
-                // Sortowanie po zmianie procentowej
                 changes.sort((a, b) => b.changePercent - a.changePercent);
                 const topGainers = changes.slice(0, 5);
                 const topLosers = changes.slice(-5).reverse();
 
                 const gainersHTML = topGainers.length > 0 ? topGainers.map(c => `
                     <div class="mover-item">
-                        <span><strong>${c.currency}</strong> ${c.valueInPLN.toFixed(4)} PLN</span>
+                        <span><strong>${c.currency}</strong> ${c.valueInBase.toFixed(4)} ${baseCurrency}</span>
                         <span class="stat-positive">+${c.changePercent.toFixed(2)}% <i class="fas fa-arrow-up"></i></span>
                     </div>
                 `).join('') : '<p>Brak danych</p>';
 
                 const losersHTML = topLosers.length > 0 ? topLosers.map(c => `
                     <div class="mover-item">
-                        <span><strong>${c.currency}</strong> ${c.valueInPLN.toFixed(4)} PLN</span>
+                        <span><strong>${c.currency}</strong> ${c.valueInBase.toFixed(4)} ${baseCurrency}</span>
                         <span class="stat-negative">${c.changePercent.toFixed(2)}% <i class="fas fa-arrow-down"></i></span>
                     </div>
                 `).join('') : '<p>Brak danych</p>';
@@ -567,7 +556,7 @@
                         <div class="stats-card">
                             <div>
                                 <strong>${c.currency}</strong>
-                                <div style="font-size: 0.9rem; color: var(--text-muted);">1 ${c.currency} = ${c.valueInPLN.toFixed(4)} PLN</div>
+                                <div style="font-size: 0.9rem; color: var(--text-muted);">1 ${c.currency} = ${c.valueInBase.toFixed(4)} ${baseCurrency}</div>
                             </div>
                             <div class="${changeClass}">${changeText}</div>
                         </div>
@@ -628,7 +617,7 @@
             const from = document.getElementById('fromCurrencyInput');
             const to = document.getElementById('toCurrencyInput');
             [from.value, to.value] = [to.value, from.value];
-            convert();
+            onBaseCurrencyChange();   // ważne, aby zmienić też bazę statystyk
         }
 
         function copyResult() {
@@ -767,7 +756,7 @@
                         }
                     } catch (e) {
                         console.warn('Błąd wysyłania:', e.message);
-                        updateProgress(sizePerUpload); // i tak liczymy czas
+                        updateProgress(sizePerUpload);
                     }
                 })());
             }
@@ -797,7 +786,6 @@
             document.getElementById('pingProgress').style.width = '0%';
 
             const results = {};
-
             try {
                 const pingData = await measurePing();
                 results.ping = pingData.ping.toFixed(1);
@@ -805,22 +793,10 @@
                 document.getElementById('pingText').textContent = results.ping + ' ms';
                 document.getElementById('pingProgress').style.width = '100%';
                 updateGauge(pingData.ping, 200, 'Ping zakończony');
-            } catch (e) {
-                results.ping = '--';
-                results.jitter = '--';
-            }
+            } catch (e) { results.ping = '--'; results.jitter = '--'; }
 
-            try {
-                results.download = await measureDownload();
-            } catch (e) {
-                results.download = 0;
-            }
-
-            try {
-                results.upload = await measureUpload();
-            } catch (e) {
-                results.upload = 0;
-            }
+            try { results.download = await measureDownload(); } catch (e) { results.download = 0; }
+            try { results.upload = await measureUpload(); } catch (e) { results.upload = 0; }
 
             updateGauge(results.download || 0, 1000, 'Test ukończony!');
             document.getElementById('dlResult').textContent = (results.download || 0).toFixed(2);
@@ -848,43 +824,19 @@
                 data: {
                     labels: ['Pobieranie', 'Wysyłanie', 'Ping (÷10)', 'Stabilność (÷10)'],
                     datasets: [{
-                        data: [
-                            results.download || 0,
-                            results.upload || 0,
-                            (parseFloat(results.ping) || 0) / 10,
-                            (parseFloat(results.jitter) || 0) / 10
-                        ],
+                        data: [results.download||0, results.upload||0, (parseFloat(results.ping)||0)/10, (parseFloat(results.jitter)||0)/10],
                         backgroundColor: ['rgba(99,102,241,0.8)','rgba(139,92,246,0.8)','rgba(16,185,129,0.8)','rgba(245,158,11,0.8)'],
                         borderColor: ['rgba(99,102,241,1)','rgba(139,92,246,1)','rgba(16,185,129,1)','rgba(245,158,11,1)'],
                         borderWidth: 2, borderRadius: 8
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: (ctx) => {
-                                    const val = ctx.raw;
-                                    if (ctx.dataIndex >= 2) return (val * 10).toFixed(1) + ' ms';
-                                    return val.toFixed(2) + ' Mbps';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8' } },
-                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
         // Inicjalizacja
         fetchRates();
-        setInterval(fetchRates, 60000);   // automatyczne odświeżanie co 60 sekund
+        setInterval(fetchRates, 60000);
         document.getElementById('amount').addEventListener('wheel', e => e.preventDefault());
     </script>
 </body>
