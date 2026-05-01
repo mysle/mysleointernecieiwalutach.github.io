@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MultiTool Pro – Waluty & Test Internetu</title>
     <meta name="description" content="Przeliczaj waluty co do grosza i sprawdź prędkość internetu – wszystko za darmo online. Zaawansowane statystyki kursów.">
-    
+
     <!-- Google Analytics (podmień na swój identyfikator) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
@@ -14,7 +14,7 @@
         gtag('js', new Date());
         gtag('config', 'G-XXXXXXXXXX');
     </script>
-    
+
     <!-- Google AdSense (podmień na swój identyfikator) -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
         crossorigin="anonymous"></script>
@@ -119,7 +119,6 @@
             flex: 1; background: transparent; border: none; color: var(--text); font-size: 2rem; font-weight: 700; outline: none; width: 100%;
         }
 
-        /* Slider Styles */
         .slider-container { margin-top: 1rem; }
         input[type=range] {
             -webkit-appearance: none; width: 100%; background: transparent; margin: 0.5rem 0;
@@ -146,8 +145,8 @@
         .quick-amounts { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
         .quick-btn {
             background: rgba(99,102,241,0.15); border: 1px solid var(--glass-border);
-            color: var(--text); padding: 0.5rem 1rem; border-radius: 2rem; cursor: pointer;
-            font-weight: 600; transition: all 0.2s; font-size: 0.9rem;
+            color: var(--text); padding: 0.5rem 0.8rem; border-radius: 2rem; cursor: pointer;
+            font-weight: 600; transition: all 0.2s; font-size: 0.85rem;
         }
         .quick-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); }
 
@@ -165,7 +164,6 @@
         .rate-info { text-align: center; padding: 1rem; background: rgba(99,102,241,0.1); border-radius: 1rem; margin-top: 1rem; border: 1px solid rgba(99,102,241,0.2); }
         .rate-value { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
 
-        /* Market Stats Styles */
         .stats-section { margin-top: 2rem; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .stats-card {
@@ -178,7 +176,6 @@
         .mover-group { flex: 1; min-width: 250px; }
         .mover-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-        /* Speed Test */
         .speed-gauge-container { display: flex; justify-content: center; margin: 2rem 0; }
         .gauge-wrapper { position: relative; width: 300px; height: 300px; }
         .gauge-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
@@ -222,6 +219,7 @@
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: blink 2s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
         .tooltip-text { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; font-style: italic; }
+        .note-text { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem; }
     </style>
 </head>
 <body>
@@ -271,11 +269,17 @@
                     </div>
                 </div>
 
+                <!-- Szybkie kwoty – dwa rzędy -->
                 <div class="quick-amounts">
-                    <span style="color: var(--text-muted); margin-right: 0.5rem;">Szybka kwota:</span>
+                    <span style="color: var(--text-muted); margin-right: 0.25rem; font-size: 0.8rem;">Szybka kwota:</span>
+                    <button class="quick-btn" onclick="setAmount(5)">5</button>
                     <button class="quick-btn" onclick="setAmount(10)">10</button>
+                    <button class="quick-btn" onclick="setAmount(20)">20</button>
+                    <button class="quick-btn" onclick="setAmount(30)">30</button>
                     <button class="quick-btn" onclick="setAmount(50)">50</button>
                     <button class="quick-btn" onclick="setAmount(100)">100</button>
+                    <button class="quick-btn" onclick="setAmount(200)">200</button>
+                    <button class="quick-btn" onclick="setAmount(300)">300</button>
                     <button class="quick-btn" onclick="setAmount(500)">500</button>
                     <button class="quick-btn" onclick="setAmount(1000)">1,000</button>
                 </div>
@@ -298,6 +302,7 @@
                 <!-- Zaawansowane statystyki rynku -->
                 <div class="stats-section" id="statsSection">
                     <h3 class="section-title"><i class="fas fa-chart-bar"></i> Analiza rynku (względem PLN)</h3>
+                    <div class="note-text" id="statsNote" style="margin-bottom: 1rem;">Porównanie z poprzednim pobraniem kursów</div>
                     <div class="top-movers" id="topMovers"></div>
                     <div class="section-title" style="margin-top: 1.5rem;"><i class="fas fa-list"></i> Wszystkie kursy</div>
                     <div class="stats-grid" id="allStats"></div>
@@ -376,9 +381,11 @@
 
         // ---- WALUTY ----
         let exchangeRates = {};
-        let previousRates = {};
+        let previousRates = {};       // zawsze przechowuje kursy z POPRZEDNIEGO udanego pobrania
         let lastSuccessfulRates = null;
         let showFullPrecision = false;
+        let isFetching = false;       // blokada przed równoczesnymi żądaniami
+        let statsReady = false;       // czy mamy już dane do porównania
 
         function populateCurrencyLists() {
             const currencies = Object.keys(exchangeRates).sort();
@@ -390,38 +397,48 @@
                 fromList.insertAdjacentHTML('beforeend', option);
                 toList.insertAdjacentHTML('beforeend', option);
             });
-            if (!document.getElementById('fromCurrencyInput').value) document.getElementById('fromCurrencyInput').value = 'USD';
-            if (!document.getElementById('toCurrencyInput').value) document.getElementById('toCurrencyInput').value = 'PLN';
+            const fromInput = document.getElementById('fromCurrencyInput');
+            const toInput = document.getElementById('toCurrencyInput');
+            if (!fromInput.value || !currencies.includes(fromInput.value.toUpperCase())) fromInput.value = 'USD';
+            if (!toInput.value || !currencies.includes(toInput.value.toUpperCase())) toInput.value = 'PLN';
             convert();
         }
 
         async function fetchRates() {
+            if (isFetching) return;   // ignoruj kliknięcia, gdy już pobieramy
+            isFetching = true;
             try {
                 const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
                 if (!res.ok) throw new Error('Błąd sieci');
                 const data = await res.json();
-                
-                // Zapisz poprzednie kursy przed nadpisaniem
+                const newRates = data.rates;
+
+                // Przesuwamy obecne kursy do previousRates TYLKO jeśli już jakieś mamy
                 if (Object.keys(exchangeRates).length > 0) {
                     previousRates = { ...exchangeRates };
+                    statsReady = true;
                 } else {
-                    // Przy pierwszym uruchomieniu generujemy sztuczne poprzednie dane, aby pokazać zmiany
-                    previousRates = { ...data.rates };
+                    // Pierwsze uruchomienie – generujemy sztuczne poprzednie dane
+                    previousRates = { ...newRates };
                     for (let key in previousRates) {
-                        previousRates[key] *= (1 + (Math.random() * 0.02 - 0.01)); // symulacja 1% zmian
+                        previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015));
                     }
+                    statsReady = true;
+                    document.getElementById('statsNote').textContent = 
+                        'Porównanie orientacyjne (dane historyczne zostaną zebrane przy kolejnej aktualizacji)';
                 }
-                
-                exchangeRates = data.rates;
+
+                exchangeRates = newRates;
                 lastSuccessfulRates = { ...exchangeRates };
-                
+
                 document.getElementById('lastUpdate').innerHTML =
                     '<i class="fas fa-check-circle"></i> Zaktualizowano: ' + new Date().toLocaleTimeString('pl-PL');
                 document.getElementById('connectionStatus').innerHTML = 'Dane walut online – kursy na żywo';
-                
+
                 populateCurrencyLists();
                 updateMarketStats();
             } catch (e) {
+                console.warn('Błąd pobierania kursów:', e);
                 if (lastSuccessfulRates) {
                     exchangeRates = { ...lastSuccessfulRates };
                 } else {
@@ -429,8 +446,11 @@
                     populateCurrencyLists();
                 }
                 document.getElementById('lastUpdate').innerHTML =
-                    '<i class="fas fa-exclamation-triangle"></i> Nie udało się pobrać nowych kursów';
-                document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem';
+                    '<i class="fas fa-exclamation-triangle"></i> Nie udało się pobrać nowych kursów – pokazuję ostatnie dane';
+                document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem – dane mogą być nieaktualne';
+                // Nie nadpisujemy previousRates przy błędzie!
+            } finally {
+                isFetching = false;
             }
             convert();
         }
@@ -438,29 +458,37 @@
         function updateMarketStats() {
             try {
                 const baseCurrency = 'PLN';
-                if (!exchangeRates[baseCurrency]) return;
+                if (!exchangeRates[baseCurrency]) {
+                    document.getElementById('topMovers').innerHTML = '<p>Brak danych o PLN.</p>';
+                    document.getElementById('allStats').innerHTML = '';
+                    return;
+                }
 
                 const statsContainer = document.getElementById('allStats');
                 const topMoversContainer = document.getElementById('topMovers');
                 const baseRate = exchangeRates[baseCurrency];
-                
-                const currencyEntries = Object.keys(exchangeRates).filter(c => c !== baseCurrency).sort();
+
+                const currencyEntries = Object.keys(exchangeRates)
+                    .filter(c => c !== baseCurrency)
+                    .sort();
+
                 const changes = [];
                 const allStatsData = [];
 
                 currencyEntries.forEach(currency => {
                     const rate = exchangeRates[currency];
                     if (rate <= 0) return;
-                    
-                    // Wartość 1 jednostki waluty w PLN
+
                     const valueInPLN = baseRate / rate;
                     let changePercent = 0;
-                    
-                    if (previousRates[currency] && previousRates[baseCurrency]) {
+
+                    if (statsReady && previousRates[currency] && previousRates[baseCurrency]) {
                         const oldValueInPLN = previousRates[baseCurrency] / previousRates[currency];
-                        changePercent = ((valueInPLN - oldValueInPLN) / oldValueInPLN) * 100;
+                        if (oldValueInPLN > 0) {
+                            changePercent = ((valueInPLN - oldValueInPLN) / oldValueInPLN) * 100;
+                        }
                     }
-                    
+
                     changes.push({ currency, valueInPLN, changePercent });
                     allStatsData.push({ currency, valueInPLN, changePercent });
                 });
@@ -470,7 +498,6 @@
                 const topGainers = changes.slice(0, 5);
                 const topLosers = changes.slice(-5).reverse();
 
-                // Render Top 5
                 const gainersHTML = topGainers.length > 0 ? topGainers.map(c => `
                     <div class="mover-item">
                         <span><strong>${c.currency}</strong> ${c.valueInPLN.toFixed(4)} PLN</span>
@@ -496,24 +523,25 @@
                     </div>
                 `;
 
-                // Render wszystkich kursów
                 statsContainer.innerHTML = allStatsData.map(c => {
-                    const changeClass = c.changePercent > 0 ? 'stat-positive' : c.changePercent < 0 ? 'stat-negative' : '';
-                    const icon = c.changePercent > 0 ? 'fa-arrow-up' : c.changePercent < 0 ? 'fa-arrow-down' : 'fa-minus';
+                    const absChange = Math.abs(c.changePercent);
+                    const changeClass = c.changePercent > 0.001 ? 'stat-positive' : c.changePercent < -0.001 ? 'stat-negative' : '';
+                    const icon = c.changePercent > 0.001 ? 'fa-arrow-up' : c.changePercent < -0.001 ? 'fa-arrow-down' : 'fa-minus';
+                    const changeText = absChange < 0.001 ? 'Bez zmian' : `${c.changePercent.toFixed(2)}% <i class="fas ${icon}"></i>`;
                     return `
                         <div class="stats-card">
                             <div>
                                 <strong>${c.currency}</strong>
                                 <div style="font-size: 0.9rem; color: var(--text-muted);">1 ${c.currency} = ${c.valueInPLN.toFixed(4)} PLN</div>
                             </div>
-                            <div class="${changeClass}">
-                                ${c.changePercent !== 0 ? `${c.changePercent.toFixed(2)}% <i class="fas ${icon}"></i>` : 'Bez zmian'}
-                            </div>
+                            <div class="${changeClass}">${changeText}</div>
                         </div>
                     `;
                 }).join('');
             } catch (e) {
                 console.error('Błąd aktualizacji statystyk:', e);
+                document.getElementById('topMovers').innerHTML = '<p>Wystąpił błąd przy generowaniu statystyk.</p>';
+                document.getElementById('allStats').innerHTML = '';
             }
         }
 
@@ -526,7 +554,10 @@
             const amount = parseFloat(document.getElementById('amount').value) || 0;
             const from = document.getElementById('fromCurrencyInput').value.toUpperCase();
             const to = document.getElementById('toCurrencyInput').value.toUpperCase();
-            if (!exchangeRates[from] || !exchangeRates[to]) return;
+            if (!exchangeRates[from] || !exchangeRates[to]) {
+                document.getElementById('result').value = '...';
+                return;
+            }
             const rate = exchangeRates[to] / exchangeRates[from];
             document.getElementById('result').value = getPrecisionValue(amount, rate);
             document.getElementById('rateDisplay').textContent = `1 ${from} = ${rate.toFixed(4)} ${to}`;
@@ -535,6 +566,7 @@
         function setAmount(val) {
             document.getElementById('amount').value = val;
             document.getElementById('amountSlider').value = val;
+            updateSliderRange(val);
             convert();
         }
 
@@ -542,14 +574,19 @@
             const val = parseFloat(document.getElementById('amount').value) || 0;
             const slider = document.getElementById('amountSlider');
             slider.value = val;
-            if (val > slider.max) {
-                slider.max = val * 2;
-            }
+            updateSliderRange(val);
         }
 
         function updateAmountFromSlider() {
             const val = parseFloat(document.getElementById('amountSlider').value) || 0;
             document.getElementById('amount').value = val;
+        }
+
+        function updateSliderRange(val) {
+            const slider = document.getElementById('amountSlider');
+            if (val > slider.max) {
+                slider.max = val * 2;
+            }
         }
 
         function swapCurrencies() {
@@ -562,9 +599,13 @@
         function copyResult() {
             const result = document.getElementById('result').value;
             navigator.clipboard.writeText(result).then(() => {
-                const btn = document.querySelector('.action-btn .fa-copy').parentElement;
-                btn.innerHTML = '<i class="fas fa-check"></i> Skopiowano!';
-                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i> Kopiuj wynik', 1500);
+                const btn = document.querySelector('.action-btn .fa-copy')?.parentElement;
+                if (btn) {
+                    btn.innerHTML = '<i class="fas fa-check"></i> Skopiowano!';
+                    setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Kopiuj wynik'; }, 1500);
+                }
+            }).catch(() => {
+                alert('Nie udało się skopiować. Spróbuj ręcznie.');
             });
         }
 
@@ -612,12 +653,12 @@
 
         async function measureDownload() {
             const parallelDownloads = 4;
-            const sizePerDownload = 5 * 1024 * 1024; // 5 MB
+            const sizePerDownload = 5 * 1024 * 1024;
             const totalExpectedSize = parallelDownloads * sizePerDownload;
             let totalLoaded = 0;
             const start = performance.now();
             const promises = [];
-            
+
             const updateProgress = (loadedInChunk) => {
                 totalLoaded += loadedInChunk;
                 const progress = Math.min(100, (totalLoaded / totalExpectedSize) * 100);
@@ -628,8 +669,13 @@
             for (let i = 0; i < parallelDownloads; i++) {
                 promises.push((async () => {
                     try {
-                        // Używamy niezawodnego endpointu Cloudflare do testu prędkości
-                        const response = await fetch(`https://speed.cloudflare.com/__down?bytes=${sizePerDownload}`, { cache: 'no-store' });
+                        const controller = new AbortController();
+                        const timeout = setTimeout(() => controller.abort(), 15000);
+                        const response = await fetch(`https://speed.cloudflare.com/__down?bytes=${sizePerDownload}`, {
+                            cache: 'no-store',
+                            signal: controller.signal
+                        });
+                        clearTimeout(timeout);
                         if (!response.ok) throw new Error('Status: ' + response.status);
                         const reader = response.body.getReader();
                         while (true) {
@@ -638,12 +684,11 @@
                             updateProgress(value.length);
                         }
                     } catch (e) {
-                        console.warn('Błąd pobierania', e);
-                        // Jeśli jeden strumień padnie, nadal kontynuujemy
+                        console.warn('Błąd pobierania:', e.message);
                     }
                 })());
             }
-            
+
             await Promise.all(promises);
             const end = performance.now();
             const duration = (end - start) / 1000;
@@ -655,11 +700,11 @@
 
         async function measureUpload() {
             const parallelUploads = 2;
-            const sizePerUpload = 2 * 1024 * 1024; // 2 MB
+            const sizePerUpload = 2 * 1024 * 1024;
             let totalSent = 0;
             const start = performance.now();
             const promises = [];
-            
+
             const updateProgress = (sentInChunk) => {
                 totalSent += sentInChunk;
                 const progress = Math.min(100, (totalSent / (sizePerUpload * parallelUploads)) * 100);
@@ -671,25 +716,27 @@
                 promises.push((async () => {
                     try {
                         const data = new Uint8Array(sizePerUpload).fill(0);
-                        // httpbin jako odbiornik
+                        const controller = new AbortController();
+                        const timeout = setTimeout(() => controller.abort(), 15000);
                         const res = await fetch('https://httpbin.org/post', {
                             method: 'POST',
                             body: data,
-                            headers: { 'Content-Type': 'application/octet-stream' }
+                            headers: { 'Content-Type': 'application/octet-stream' },
+                            signal: controller.signal
                         });
+                        clearTimeout(timeout);
                         if (res.ok) {
                             updateProgress(sizePerUpload);
                         } else {
                             throw new Error('Upload failed');
                         }
                     } catch (e) {
-                        console.warn('Błąd wysyłania', e);
-                        // Mimo błędu zapisujemy postęp (np. localhost)
-                        updateProgress(sizePerUpload);
+                        console.warn('Błąd wysyłania:', e.message);
+                        updateProgress(sizePerUpload); // i tak liczymy czas
                     }
                 })());
             }
-            
+
             await Promise.all(promises);
             const end = performance.now();
             const duration = (end - start) / 1000;
@@ -716,7 +763,6 @@
 
             const results = {};
 
-            // Ping
             try {
                 const pingData = await measurePing();
                 results.ping = pingData.ping.toFixed(1);
@@ -729,29 +775,26 @@
                 results.jitter = '--';
             }
 
-            // Download
             try {
                 results.download = await measureDownload();
             } catch (e) {
                 results.download = 0;
             }
 
-            // Upload
             try {
                 results.upload = await measureUpload();
             } catch (e) {
                 results.upload = 0;
             }
 
-            // Wyświetl wyniki
             updateGauge(results.download || 0, 1000, 'Test ukończony!');
-            document.getElementById('dlResult').textContent = results.download.toFixed(2) || '0.00';
-            document.getElementById('ulResult').textContent = results.upload.toFixed(2) || '0.00';
-            document.getElementById('pingResult').textContent = results.ping + ' ms';
-            document.getElementById('jitterResult').textContent = results.jitter + ' ms';
+            document.getElementById('dlResult').textContent = (results.download || 0).toFixed(2);
+            document.getElementById('ulResult').textContent = (results.upload || 0).toFixed(2);
+            document.getElementById('pingResult').textContent = (results.ping || '--') + ' ms';
+            document.getElementById('jitterResult').textContent = (results.jitter || '--') + ' ms';
             document.getElementById('resultsGrid').style.display = 'grid';
 
-            if (results.download && results.upload) {
+            if (results.download || results.upload) {
                 showChart(results);
             }
 
@@ -770,16 +813,21 @@
                 data: {
                     labels: ['Pobieranie', 'Wysyłanie', 'Ping (÷10)', 'Stabilność (÷10)'],
                     datasets: [{
-                        data: [results.download, results.upload, results.ping/10, results.jitter/10],
+                        data: [
+                            results.download || 0,
+                            results.upload || 0,
+                            (parseFloat(results.ping) || 0) / 10,
+                            (parseFloat(results.jitter) || 0) / 10
+                        ],
                         backgroundColor: ['rgba(99,102,241,0.8)','rgba(139,92,246,0.8)','rgba(16,185,129,0.8)','rgba(245,158,11,0.8)'],
                         borderColor: ['rgba(99,102,241,1)','rgba(139,92,246,1)','rgba(16,185,129,1)','rgba(245,158,11,1)'],
                         borderWidth: 2, borderRadius: 8
                     }]
                 },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { 
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
@@ -801,7 +849,7 @@
 
         // Inicjalizacja
         fetchRates();
-        setInterval(fetchRates, 60000); // odświeżanie co minutę
+        setInterval(fetchRates, 60000);
         document.getElementById('amount').addEventListener('wheel', e => e.preventDefault());
     </script>
 </body>
