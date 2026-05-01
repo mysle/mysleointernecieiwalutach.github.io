@@ -123,7 +123,6 @@
         input[type=range] {
             -webkit-appearance: none; width: 100%; background: transparent; margin: 1rem 0; padding: 0;
         }
-        input[type=range]:focus { outline: none; }
         input[type=range]::-webkit-slider-runnable-track {
             width: 100%; height: 20px; cursor: pointer;
             background: linear-gradient(90deg, #6366f1, #ec4899); border-radius: 12px;
@@ -133,9 +132,6 @@
             -webkit-appearance: none; height: 40px; width: 40px; border-radius: 50%; background: #ffffff;
             cursor: pointer; margin-top: -11px; box-shadow: 0 0 20px rgba(99, 102, 241, 0.9), 0 4px 10px rgba(0,0,0,0.3);
             border: 3px solid #6366f1; transition: 0.15s ease;
-        }
-        input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.15); box-shadow: 0 0 30px rgba(99, 102, 241, 1), 0 4px 15px rgba(0,0,0,0.4);
         }
         input[type=range]::-moz-range-track {
             width: 100%; height: 20px; cursor: pointer;
@@ -390,7 +386,7 @@
 
         // ---- WALUTY ----
         let exchangeRates = {};               // zawsze względem USD (z API)
-        let previousRates = {};               // archiwalne kursy (też względem USD)
+        let previousRates = {};               // archiwalne kursy (też względem USD) – nie ruszane przy zmianie bazy
         let lastSuccessfulRates = null;
         let showFullPrecision = false;
         let isFetching = false;
@@ -420,10 +416,7 @@
             baseChangeTimer = setTimeout(() => {
                 const newBase = document.getElementById('fromCurrencyInput').value.toUpperCase();
                 if (newBase !== lastBaseCurrency && exchangeRates[newBase]) {
-                    // Archiwizujemy obecne kursy jako poprzednie przy zmianie bazy
-                    if (Object.keys(exchangeRates).length > 0 && statsReady) {
-                        previousRates = { ...exchangeRates };
-                    }
+                    // NIE nadpisujemy previousRates! Tylko zmieniamy bazę i przeliczamy.
                     lastBaseCurrency = newBase;
                     convert();
                     updateMarketStats();
@@ -443,12 +436,13 @@
                 const data = await res.json();
                 const newRates = data.rates;
 
+                // Aktualizacja previousRates TYLKO po udanym pobraniu
                 if (oldRates) {
                     previousRates = oldRates;
                     statsReady = true;
                     document.getElementById('statsNote').textContent = 'Porównanie z poprzednim pobraniem kursów';
                 } else {
-                    // Pierwsze uruchomienie
+                    // Pierwsze uruchomienie – generujemy orientacyjne dane
                     previousRates = { ...newRates };
                     for (let key in previousRates) {
                         previousRates[key] *= (1 + (Math.random() * 0.03 - 0.015));
@@ -502,18 +496,17 @@
                 }
 
                 document.getElementById('statsBaseCurrency').textContent = baseCurrency;
-
                 const statsContainer = document.getElementById('allStats');
                 const topMoversContainer = document.getElementById('topMovers');
-                const currentBaseRate = exchangeRates[baseCurrency]; // względem USD
+                const currentBaseRate = exchangeRates[baseCurrency]; // w USD
 
-                // Jeśli nie ma danych do porównania, wyświetl pustą informację
                 if (!statsReady || Object.keys(previousRates).length === 0) {
                     topMoversContainer.innerHTML = '<p>Zbieranie danych do porównania...</p>';
                     statsContainer.innerHTML = '';
                     return;
                 }
 
+                // Jeśli brak poprzedniego kursu dla obecnej bazy, użyj obecnego (ostrożnie, żeby nie wyzerować zmian)
                 const previousBaseRate = previousRates[baseCurrency] || currentBaseRate;
 
                 const currencyEntries = Object.keys(exchangeRates)
@@ -524,15 +517,14 @@
                 const allStatsData = [];
 
                 currencyEntries.forEach(currency => {
-                    const currentRate = exchangeRates[currency]; // wobec USD
+                    const currentRate = exchangeRates[currency];
                     if (!currentRate || currentRate <= 0) return;
 
-                    // Wartość 1 jednostki waluty w bazowej: baseRate / rate
                     const valueInBase = currentBaseRate / currentRate;
                     let changePercent = 0;
 
                     if (previousRates[currency]) {
-                        const oldValueInBase = previousBaseRate / previousRates[currency];
+                        const oldValueInBase = (previousRates[baseCurrency] || previousBaseRate) / previousRates[currency];
                         if (oldValueInBase > 0) {
                             changePercent = ((valueInBase - oldValueInBase) / oldValueInBase) * 100;
                         }
@@ -606,7 +598,6 @@
                 document.getElementById('result').value = '...';
                 return;
             }
-            // Kursy są wobec USD, więc przeliczamy: (1/USD_from) * USD_to = USD_to / USD_from
             const rate = exchangeRates[to] / exchangeRates[from];
             document.getElementById('result').value = getPrecisionValue(amount, rate);
             document.getElementById('rateDisplay').textContent = `1 ${from} = ${rate.toFixed(4)} ${to}`;
