@@ -98,11 +98,6 @@
             font-size: 2.5rem; margin-bottom: 0.5rem;
             background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .last-update {
-            display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16,185,129,0.1);
-            color: var(--success); padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.875rem;
-            margin-top: 1rem; border: 1px solid rgba(16,185,129,0.2);
-        }
         .converter-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center; margin: 2rem 0; }
         .currency-box {
             background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem; transition: 0.3s;
@@ -246,7 +241,6 @@
                 <div class="currency-header">
                     <h1>💰 Przeliczanie walut</h1>
                     <p>Kursy pobierane są raz, przy ładowaniu strony – zawsze aktualne na ten moment.</p>
-                    <div class="last-update" id="lastUpdate"><i class="fas fa-sync-alt fa-spin"></i> Ładowanie...</div>
                 </div>
 
                 <div class="converter-grid">
@@ -377,8 +371,8 @@
         }
 
         // ---- WALUTY ----
-        let exchangeRates = {};               // zawsze względem USD (z API)
-        let previousRates = {};               // archiwalne kursy (też względem USD) – ustawiane tylko raz
+        let exchangeRates = {};
+        let previousRates = {};
         let lastSuccessfulRates = null;
         let showFullPrecision = false;
         let isFetching = false;
@@ -426,7 +420,6 @@
                 const data = await res.json();
                 const newRates = data.rates;
 
-                // Inicjalizacja previousRates tylko przy pierwszym pobraniu
                 if (!statsReady) {
                     previousRates = { ...newRates };
                     for (let key in previousRates) {
@@ -437,9 +430,6 @@
 
                 exchangeRates = newRates;
                 lastSuccessfulRates = { ...exchangeRates };
-
-                document.getElementById('lastUpdate').innerHTML =
-                    '<i class="fas fa-check-circle"></i> Zaktualizowano: ' + new Date().toLocaleTimeString('pl-PL');
                 document.getElementById('connectionStatus').innerHTML = 'Dane walut online – kursy z chwili uruchomienia';
 
                 populateCurrencyLists();
@@ -459,9 +449,7 @@
                         statsReady = true;
                     }
                 }
-                document.getElementById('lastUpdate').innerHTML =
-                    '<i class="fas fa-exclamation-triangle"></i> Nie udało się pobrać kursów – dane orientacyjne';
-                document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem';
+                document.getElementById('connectionStatus').innerHTML = 'Problem z połączeniem – dane orientacyjne';
                 updateMarketStats();
             } finally {
                 isFetching = false;
@@ -832,7 +820,7 @@
             });
         }
 
-        // Inicjalizacja – TYLKO RAZ, ŻADNEGO interwału
+        // Inicjalizacja
         fetchRates();
         document.getElementById('amount').addEventListener('wheel', e => e.preventDefault());
     </script>
