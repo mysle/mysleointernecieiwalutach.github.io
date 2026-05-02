@@ -740,19 +740,18 @@
                     <table id="timeDiffTable">
                         <thead><tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th></tr></thead>
                         <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
-                    </tr>
+                    </table>
                 </div>
                 <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Różnice obliczane dla bieżącej daty z uwzględnieniem czasu letniego (DST).</p>
             </div>
         </div>
     </div>
 
-    <!-- ============ DODANA SEKCJA KONTAKT ============ -->
+    <!-- ============ SEKCJA KONTAKT (przekierowuje do kontakt.html) ============ -->
     <div id="kontakt" class="glass-card" style="margin: 2rem auto; max-width: 1400px; text-align: center;">
         <h3 style="margin-bottom: 1rem;"><i class="fas fa-envelope"></i> Kontakt</h3>
-        <p>Masz pytania lub uwagi? Napisz do nas:</p>
-        <p><a href="kontakt.html" style="color: var(--primary); font-size: 1.2rem;">➡️ Przejdź do formularza kontaktowego</a></p>
-        <p style="font-size: 0.9rem; margin-top: 0.5rem;">lub skopiuj adres: <strong style="color: var(--text);">myslezelukasz@gmail.com</strong></p>
+        <p>Masz pytania lub uwagi? Napisz do nas przez formularz:</p>
+        <p><a href="kontakt.html" style="color: var(--primary); font-size: 1.2rem;">✉️ Przejdź do formularza kontaktowego</a></p>
     </div>
 
     <!-- ============ STOPKA ============ -->
@@ -1198,7 +1197,7 @@
                 else if (from === 'K') celsius = val - 273.15;
                 const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 };
                 Object.entries(results).forEach(([unit, value]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}<td><td>${value.toFixed(4)}</td></tr>`;
                 });
                 return;
             }
@@ -1211,14 +1210,14 @@
                 const factor = activeUnits[from] || 1;
                 const baseVal = val * factor;
                 Object.entries(activeUnits).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td><tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
                 });
             } else {
                 const units = unitCategories[cat].units;
                 const factor = units[from] || 1;
                 const baseVal = val * factor;
                 Object.entries(units).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}<tr></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
                 });
             }
         }
@@ -1791,15 +1790,14 @@
                         <td><strong>${card.name}</strong><br><span style="font-size:0.7rem;">${card.tz}</span></td>
                         <td>${time}<br><span style="font-size:0.7rem;">${date}</span></td>
                         <td>${diffStr}</td>
-                    </td>
+                    </tr>
                 `;
             });
             tbody.innerHTML += `
                 <tr style="background:rgba(99,102,241,0.2);">
                     <td><strong>Strefa bazowa</strong><br><span style="font-size:0.7rem;">${baseTZ}</span></td>
                     <td>${baseFormatted.time}<br><span style="font-size:0.7rem;">${baseFormatted.date}</span></td>
-                    <td>0h</span></div>
-                    <td>0h</span></div>
+                    <td>0h</td>
                 </tr>
             `;
         }
