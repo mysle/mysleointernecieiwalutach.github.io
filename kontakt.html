@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontakt – MultiTool Pro</title>
+    <meta name="description" content="Skontaktuj się z administratorem MultiTool Pro – wyślij wiadomość, zadaj pytanie lub zgłoś problem.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --accent: #8b5cf6;
+            --dark: #0f172a;
+            --glass: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(99, 102, 241, 0.1);
+            animation: float 20s infinite linear;
+            border-radius: 50%;
+        }
+        .bg-animation span:nth-child(1) { left: 10%; width: 80px; height: 80px; }
+        .bg-animation span:nth-child(2) { left: 30%; width: 40px; height: 40px; animation-delay: 2s; animation-duration: 25s; }
+        .bg-animation span:nth-child(3) { left: 50%; width: 100px; height: 100px; animation-delay: 4s; }
+        .bg-animation span:nth-child(4) { left: 70%; width: 60px; height: 60px; animation-duration: 30s; }
+        .bg-animation span:nth-child(5) { left: 90%; width: 50px; height: 50px; animation-delay: 6s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+        .required-star {
+            color: var(--danger);
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.4);
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s;
+            font-family: inherit;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+        }
+        .btn-outline {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            background: rgba(99,102,241,0.2);
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: rgba(15,23,42,0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .email-copy {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .email-address {
+            background: rgba(0,0,0,0.4);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-family: monospace;
+            font-size: 1rem;
+        }
+        .copy-feedback {
+            font-size: 0.8rem;
+            color: var(--success);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 1rem; }
+            .glass-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"><span></span><span></span><span></span><span></span><span></span></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-bolt"></i> MultiTool Pro</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Strona główna</a>
+                <a href="polityka.html" class="nav-link"><i class="fas fa-shield-alt"></i> Polityka prywatności</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="glass-card">
+            <h1><i class="fas fa-envelope"></i> Kontakt z administratorem</h1>
+            <p class="subtitle">Masz pytanie, uwagę lub potrzebujesz pomocy? Wyślij wiadomość – odpowiem tak szybko, jak to możliwe.</p>
+
+            <form id="contactForm">
+                <div class="form-group">
+                    <label>Twoje imię <span class="required-star">*</span></label>
+                    <input type="text" id="name" placeholder="np. Jan Kowalski" required>
+                </div>
+                <div class="form-group">
+                    <label>Twój adres e-mail <span class="required-star">*</span></label>
+                    <input type="email" id="email" placeholder="jan@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Temat <span class="required-star">*</span></label>
+                    <input type="text" id="subject" placeholder="W czym możemy pomóc?" required>
+                </div>
+                <div class="form-group">
+                    <label>Wiadomość <span class="required-star">*</span></label>
+                    <textarea id="message" placeholder="Treść wiadomości..." required></textarea>
+                </div>
+                <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Wyślij wiadomość</button>
+            </form>
+
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i> <strong>Informacja</strong><br>
+                Kliknięcie „Wyślij wiadomość” otworzy Twoją domyślną aplikację pocztową z wypełnionymi danymi. Jeśli nie masz skonfigurowanego klienta poczty, możesz skopiować adres poniżej.
+                <div class="email-copy">
+                    <span class="email-address">myslezelukasz@gmail.com</span>
+                    <button id="copyEmailBtn" class="btn-outline" style="padding: 0.4rem 1rem; width: auto;"><i class="fas fa-copy"></i> Kopiuj adres</button>
+                </div>
+                <div id="copyFeedback" class="copy-feedback"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2025 MultiTool Pro | <a href="index.html" style="color: var(--primary);">Strona główna</a> | <a href="polityka.html" style="color: var(--primary);">Polityka prywatności</a>
+        </div>
+    </div>
+
+    <script>
+        const contactForm = document.getElementById('contactForm');
+        const adminEmail = 'myslezelukasz@gmail.com';
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !email || !subject || !message) {
+                alert('Proszę wypełnić wszystkie wymagane pola.');
+                return;
+            }
+
+            // Prosta walidacja e-mail
+            const emailPattern = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
+            if (!emailPattern.test(email)) {
+                alert('Podaj poprawny adres e-mail.');
+                return;
+            }
+
+            // Tworzymy treść wiadomości
+            const body = `Imię: ${name}%0AAdres zwrotny: ${email}%0A%0A${message.replace(/\n/g, '%0A')}`;
+            const mailtoLink = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${body}`;
+
+            // Otwieramy domyślny klient poczty
+            window.location.href = mailtoLink;
+
+            // Opcjonalny komunikat
+            alert('Twoja domyślna aplikacja pocztowa zostanie otwarta. Jeśli nic się nie dzieje, skopiuj adres ręcznie.');
+        });
+
+        // Kopiowanie adresu email
+        const copyBtn = document.getElementById('copyEmailBtn');
+        const copyFeedback = document.getElementById('copyFeedback');
+
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(adminEmail);
+                copyFeedback.textContent = '✓ Adres e-mail skopiowany!';
+                setTimeout(() => {
+                    copyFeedback.textContent = '';
+                }, 2000);
+            } catch (err) {
+                copyFeedback.textContent = '❌ Nie udało się skopiować. Spróbuj ręcznie.';
+                setTimeout(() => {
+                    copyFeedback.textContent = '';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
