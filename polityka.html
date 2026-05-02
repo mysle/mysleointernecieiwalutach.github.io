@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polityka prywatności – MultiTool Pro</title>
+    <meta name="description" content="Polityka prywatności i pliki cookie – dowiedz się, jak przetwarzamy Twoje dane osobowe, jakie pliki cookie stosujemy i jak możesz zarządzać swoimi zgodami.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --accent: #8b5cf6;
+            --dark: #0f172a;
+            --glass: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(99, 102, 241, 0.1);
+            animation: float 20s infinite linear;
+            border-radius: 50%;
+        }
+        .bg-animation span:nth-child(1) { left: 10%; width: 80px; height: 80px; }
+        .bg-animation span:nth-child(2) { left: 30%; width: 40px; height: 40px; animation-delay: 2s; animation-duration: 25s; }
+        .bg-animation span:nth-child(3) { left: 50%; width: 100px; height: 100px; animation-delay: 4s; }
+        .bg-animation span:nth-child(4) { left: 70%; width: 60px; height: 60px; animation-duration: 30s; }
+        .bg-animation span:nth-child(5) { left: 90%; width: 50px; height: 50px; animation-delay: 6s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+        }
+        h3 {
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.5rem 0;
+            color: var(--accent);
+        }
+        p, li {
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+        ul, ol {
+            margin-left: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .last-update {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: right;
+            margin-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 1rem;
+        }
+        .contact-email {
+            background: rgba(99,102,241,0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 0 1rem; }
+            .glass-card { padding: 1.5rem; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"><span></span><span></span><span></span><span></span><span></span></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-bolt"></i> MultiTool Pro</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Strona główna</a>
+                <a href="index.html#kontakt" class="nav-link"><i class="fas fa-envelope"></i> Kontakt</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="glass-card">
+            <h1>Polityka prywatności i pliki cookie</h1>
+            <p style="margin-bottom: 1.5rem;">Niniejszy dokument określa zasady przetwarzania danych osobowych oraz wykorzystywania plików cookie na stronie <strong>MultiTool Pro</strong> (dostępnej pod adresem: <em>twojadomena.pl</em> – wstaw właściwą domenę).</p>
+
+            <h2>1. Administrator danych</h2>
+            <p>Administratorem Twoich danych osobowych jest:</p>
+            <ul>
+                <li><strong>Łukasz</strong> (właściciel strony)</li>
+                <li>Adres e-mail: <span class="contact-email">myslezelukasz@gmail.com</span></li>
+            </ul>
+            <p>Administrator wyznaczył kontakt do spraw ochrony danych – ten sam adres e-mail.</p>
+
+            <h2>2. Zakres zbieranych danych i cele przetwarzania</h2>
+            <p>Podczas korzystania ze strony mogą być zbierane następujące informacje:</p>
+            <ul>
+                <li><strong>Adres IP</strong> – w celu zapewnienia bezpieczeństwa, diagnozowania problemów technicznych oraz wyświetlania spersonalizowanych reklam (po uzyskaniu zgody).</li>
+                <li><strong>Informacje o przeglądarce i urządzeniu</strong> – w celu optymalizacji wyświetlania strony.</li>
+                <li><strong>Dane dotyczące aktywności na stronie</strong> (które zakładki są otwierane, interakcje z kalkulatorami) – w celu ulepszania funkcjonalności i analizy ruchu (Google Analytics – po uzyskaniu zgody).</li>
+                <li><strong>Pliki cookie</strong> – szczegóły w punkcie 5.</li>
+            </ul>
+            <p>Dane te są przetwarzane w następujących celach:</p>
+            <ul>
+                <li>📌 Zapewnienie działania strony (niezbędne funkcje).</li>
+                <li>📊 Analiza statystyk i poprawa użyteczności (Google Analytics).</li>
+                <li>🎯 Wyświetlanie spersonalizowanych reklam (Google AdSense).</li>
+                <li>🔒 Ochrona przed oszustwami i zapewnienie bezpieczeństwa.</li>
+            </ul>
+
+            <h2>3. Podstawy prawne przetwarzania</h2>
+            <ul>
+                <li><strong>Art. 6 ust. 1 lit. a RODO</strong> – zgoda na pliki cookie i przetwarzanie danych do celów marketingowych / analitycznych.</li>
+                <li><strong>Art. 6 ust. 1 lit. f RODO</strong> – prawnie uzasadniony interes (zapewnienie bezpieczeństwa, prowadzenie statystyk niezbędnych do rozwoju strony).</li>
+                <li><strong>Art. 6 ust. 1 lit. c RODO</strong> – wypełnienie obowiązków prawnych (m.in. dotyczących plików cookie).</li>
+            </ul>
+            <p>Zgoda na pliki cookie i reklamy spersonalizowane jest dobrowolna i może zostać wycofana w dowolnym momencie (patrz punkt 9).</p>
+
+            <h2>4. Odbiorcy danych (w tym przekazywanie do państw trzecich)</h2>
+            <p>Twoje dane mogą być udostępniane następującym podmiotom:</p>
+            <ul>
+                <li><strong>Google Ireland Limited</strong> (Google Analytics, Google AdSense) – dane mogą być przekazywane do USA na podstawie standardowych klauzul umownych (SCC) oraz decyzji wykonawczej Komisji Europejskiej dotyczącej Tarczy Prywatności (Privacy Shield – dawniej, obecnie nowe ramy). Google stosuje środki ochronne.</li>
+                <li><strong>ipapi.co</strong> – usługa geolokalizacji IP (używana w zakładce IP Info). Serwer może znajdować się w USA lub UE. Korzystamy z tej usługi na podstawie uzasadnionego interesu (umożliwienie funkcji geolokalizacji).</li>
+                <li><strong>Cloudflare</strong> – test prędkości internetu (endpoint speed.cloudflare.com) – dane techniczne (IP, rozmiar przesłanych danych) są przetwarzane chwilowo.</li>
+            </ul>
+            <p>Przekazywanie danych do USA odbywa się zgodnie z wymogami RODO, przy zapewnieniu odpowiedniego poziomu ochrony (m.in. standardowe klauzule umowne).</p>
+
+            <h2>5. Pliki cookie (ciasteczka)</h2>
+            <p>Strona korzysta z następujących rodzajów plików cookie:</p>
+            <ul>
+                <li><strong>Niezbędne</strong> – zapewniające działanie strony (np. zapamiętanie wybranej waluty, stanu banera zgód). Nie wymagają zgody.</li>
+                <li><strong>Analityczne</strong> (Google Analytics) – służące do badania ruchu i sposobu korzystania ze strony. Wymagają zgody.</li>
+                <li><strong>Marketingowe</strong> (Google AdSense) – umożliwiające wyświetlanie reklam dopasowanych do zainteresowań. Wymagają zgody.</li>
+            </ul>
+            <p>Pliki cookie mogą być przechowywane na Twoim urządzeniu przez różne okresy – do momentu wyczyszczenia przez przeglądarkę lub do 2 lat w przypadku cookie Google.</p>
+            <p>Więcej informacji o plikach cookie Google znajdziesz pod adresem: <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener noreferrer">https://policies.google.com/technologies/cookies</a></p>
+
+            <h2>6. Google AdSense i Google Analytics</h2>
+            <p>Strona korzysta z programu Google AdSense (wyświetlanie reklam) oraz Google Analytics (badanie ruchu).</p>
+            <ul>
+                <li><strong>Google AdSense</strong> może wykorzystywać pliki cookie do wyświetlania reklam opartych na wcześniejszych odwiedzinach użytkownika na innych stronach. Reklamy mogą być spersonalizowane lub niespersonalizowane w zależności od udzielonej zgody.</li>
+                <li><strong>Google Analytics</strong> zbiera anonimowe statystyki, takie jak liczba odwiedzin, czas spędzony na stronie, użyte urządzenia. Możesz zablokować Google Analytics instalując dodatek do przeglądarki: <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">https://tools.google.com/dlpage/gaoptout</a>.</li>
+            </ul>
+            <p>Więcej o zasadach przetwarzania danych przez Google: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">https://policies.google.com/privacy</a></p>
+
+            <h2>7. Prawa użytkowników</h2>
+            <p>Przysługują Ci następujące prawa związane z przetwarzaniem danych osobowych:</p>
+            <ul>
+                <li>✅ Prawo dostępu do swoich danych (w tym otrzymania kopii).</li>
+                <li>✅ Prawo do sprostowania (poprawienia) nieprawidłowych danych.</li>
+                <li>✅ Prawo do usunięcia danych („prawo do bycia zapomnianym”) – o ile nie zachodzi podstawa do dalszego przetwarzania.</li>
+                <li>✅ Prawo do ograniczenia przetwarzania.</li>
+                <li>✅ Prawo do przenoszenia danych (w strukturze JSON, CSV).</li>
+                <li>✅ Prawo do wniesienia sprzeciwu wobec przetwarzania opartego na uzasadnionym interesie.</li>
+                <li>✅ Prawo do cofnięcia zgody w dowolnym momencie (bez wpływu na zgodność przetwarzania przed jej cofnięciem).</li>
+            </ul>
+            <p>Aby skorzystać z powyższych praw, skontaktuj się z administratorem pod adresem: <strong>myslezelukasz@gmail.com</strong>. Postaramy się odpowiedzieć w ciągu 30 dni.</p>
+            <p>Masz również prawo wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, 00-193 Warszawa), jeśli uznasz, że przetwarzanie narusza przepisy RODO.</p>
+
+            <h2>8. Okres przechowywania danych</h2>
+            <ul>
+                <li>Dane z plików cookie marketingowych i analitycznych – do czasu wygaśnięcia cookie (maks. 2 lata) lub cofnięcia zgody.</li>
+                <li>Adresy IP i logi serwera – przechowywane przez okres 14 dni w celu zapewnienia bezpieczeństwa.</li>
+                <li>Wszelkie inne dane osobowe (jeśli zostaną dostarczone przez formularz kontaktowy) – będą przechowywane nie dłużej niż 1 rok od ostatniego kontaktu, chyba że przepisy wymagają dłuższego okresu.</li>
+            </ul>
+
+            <h2>9. Zarządzanie zgodami i wycofanie zgody</h2>
+            <p>Podczas pierwszej wizyty na stronie wyświetlany jest baner zgody na pliki cookie. Możesz:</p>
+            <ul>
+                <li>✔️ Zaakceptować wszystkie pliki cookie (w tym marketingowe i analityczne).</li>
+                <li>❌ Odrzucić opcjonalne pliki cookie (działają tylko niezbędne).</li>
+                <li>⚙️ W dowolnym momencie zmienić swoje ustawienia, klikając przycisk „Zarządzaj zgodami” w stopce strony lub usuwając pliki cookie z przeglądarki.</li>
+            </ul>
+            <p>Wycofanie zgody nie wpływa na zgodność przetwarzania danych dokonanego przed jej wycofaniem.</p>
+
+            <h2>10. Bezpieczeństwo danych</h2>
+            <p>Stosujemy odpowiednie środki techniczne i organizacyjne (m.in. szyfrowanie TLS, regularne aktualizacje, minimalizacja zbieranych danych) w celu ochrony danych przed nieuprawnionym dostępem, utratą lub zniszczeniem.</p>
+
+            <h2>11. Zmiany polityki prywatności</h2>
+            <p>Zastrzegamy sobie prawo do modyfikacji niniejszej polityki. Wszelkie zmiany będą publikowane na tej stronie z odpowiednią datą aktualizacji. O istotnych zmianach poinformujemy użytkowników za pomocą komunikatu na stronie głównej.</p>
+
+            <div class="last-update">
+                <i class="fas fa-calendar-alt"></i> Ostatnia aktualizacja: 2 maja 2026 r.
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2026 MultiTool Pro | <a href="index.html">Strona główna</a> | <a href="index.html#kontakt">Kontakt</a> | <a href="#" id="manageCookiesBtn">Zarządzaj zgodami na pliki cookie</a>
+        </div>
+    </div>
+
+    <script>
+        // Prosty skrypt do zarządzania zgodami (przekieruje do strony głównej z parametrem, ale można też rozwinąć)
+        document.getElementById('manageCookiesBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Jeśli na stronie głównej jest baner zgód, możemy przekierować i uruchomić go ponownie
+            window.location.href = 'index.html?showCookieConsent=true';
+        });
+    </script>
+</body>
+</html>
