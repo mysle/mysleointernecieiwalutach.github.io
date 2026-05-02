@@ -6,14 +6,26 @@
     <title>MultiTool Pro – Waluty, Konwerter, Kalkulatory, Test Internetu & IP + Czas i strefy</title>
     <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP, a także sprawdź czas na świecie, konwertuj strefy czasowe – wszystko za darmo online.">
 
-    <!-- Google Analytics (podmień na swój identyfikator) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <!-- Google Consent Mode - domyślnie brak zgód -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
+        
+        // Domyślne ustawienia zgód (wszystkie usługi Google są zablokowane)
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'denied',
+            'personalization_storage': 'denied',
+            'security_storage': 'granted'
+        });
+        
+        // Inicjalizacja Google Analytics (podmień identyfikator)
         gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX');
+        gtag('config', 'G-XXXXXXXXXX'); // tu wstaw swój identyfikator GA4
     </script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 
     <!-- Google AdSense (podmień na swój identyfikator) -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
@@ -276,6 +288,64 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             margin-top: 0.5rem;
+        }
+
+        /* Cookie consent banner */
+        .cookie-consent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            z-index: 10000;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+        .cookie-consent p {
+            margin: 0;
+            flex: 2;
+            color: var(--text-muted);
+        }
+        .cookie-buttons {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .cookie-btn {
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 0.85rem;
+        }
+        .cookie-accept {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+        }
+        .cookie-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+        }
+        .cookie-reject {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            border: 1px solid var(--glass-border);
+        }
+        .cookie-reject:hover {
+            background: rgba(239,68,68,0.2);
+            color: #f87171;
+        }
+        @media (max-width: 768px) {
+            .cookie-consent { flex-direction: column; text-align: center; padding: 1rem; }
         }
 
         @media (max-width: 768px) {
@@ -761,6 +831,15 @@
 
     <div class="status-bar"><div class="status-dot"></div><span>Połączenie aktywne</span></div>
 
+    <!-- ============ BANER ZGÓD COOKIE ============ -->
+    <div id="cookieConsent" class="cookie-consent" style="display: none;">
+        <p>🍪 Ta strona używa plików cookie Google Analytics i AdSense. Dalsze korzystanie oznacza zgodę na ich użycie, chyba że je odrzucisz. <a href="polityka.html" style="color: var(--primary);">Dowiedz się więcej</a>.</p>
+        <div class="cookie-buttons">
+            <button id="acceptCookies" class="cookie-btn cookie-accept">Akceptuję wszystkie</button>
+            <button id="rejectCookies" class="cookie-btn cookie-reject">Odrzucam opcjonalne</button>
+        </div>
+    </div>
+
     <script>
         // ======================== ZAKŁADKI GŁÓWNE ========================
         function switchTab(tab, event) {
@@ -1197,7 +1276,7 @@
                 else if (from === 'K') celsius = val - 273.15;
                 const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 };
                 Object.entries(results).forEach(([unit, value]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}<td><td>${value.toFixed(4)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td><tr>`;
                 });
                 return;
             }
@@ -1797,7 +1876,7 @@
                 <tr style="background:rgba(99,102,241,0.2);">
                     <td><strong>Strefa bazowa</strong><br><span style="font-size:0.7rem;">${baseTZ}</span></td>
                     <td>${baseFormatted.time}<br><span style="font-size:0.7rem;">${baseFormatted.date}</span></td>
-                    <td>0h</td>
+                    <td>0h</span></div>
                 </tr>
             `;
         }
@@ -1819,6 +1898,44 @@
                 }
             }, 1000);
         }
+
+        // ======================== BANER ZGÓD COOKIE ========================
+        function setCookieConsent(accepted) {
+            if (accepted) {
+                // Użytkownik zaakceptował wszystkie zgody
+                gtag('consent', 'update', {
+                    'ad_storage': 'granted',
+                    'analytics_storage': 'granted',
+                    'functionality_storage': 'granted',
+                    'personalization_storage': 'granted'
+                });
+                localStorage.setItem('cookieConsent', 'full');
+            } else {
+                // Użytkownik odrzucił opcjonalne – tylko niezbędne
+                gtag('consent', 'update', {
+                    'ad_storage': 'denied',
+                    'analytics_storage': 'denied',
+                    'functionality_storage': 'denied',
+                    'personalization_storage': 'denied'
+                });
+                localStorage.setItem('cookieConsent', 'necessary');
+            }
+            document.getElementById('cookieConsent').style.display = 'none';
+        }
+
+        // Sprawdzenie zapisanego wyboru
+        const savedConsent = localStorage.getItem('cookieConsent');
+        if (!savedConsent) {
+            // Brak zapisanej zgody – pokaż baner
+            document.getElementById('cookieConsent').style.display = 'flex';
+        } else {
+            // Zgoda już udzielona – ukryj baner i ustaw odpowiedni status (ale nie aktualizuj ponownie, chyba że potrzebujesz)
+            // Tu możesz ewentualnie ustawić zgodę na podstawie savedConsent, ale nie jest to konieczne, bo była już ustawiona.
+            document.getElementById('cookieConsent').style.display = 'none';
+        }
+
+        document.getElementById('acceptCookies').onclick = () => setCookieConsent(true);
+        document.getElementById('rejectCookies').onclick = () => setCookieConsent(false);
 
         // ======================== INICJALIZACJA ========================
         fetchRates();
