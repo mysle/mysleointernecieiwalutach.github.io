@@ -345,7 +345,7 @@
             color: #f87171;
         }
         
-        /* Poprawki dla mobilnych w zakładce walut */
+        /* Poprawki dla mobilnych */
         @media (max-width: 768px) {
             .tabs { gap: 0.2rem; }
             .tab-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
@@ -380,6 +380,18 @@
                 height: 50px !important;
                 margin: 0 auto;
             }
+
+            /* Poprawki dla konwertera – lepsze przewijanie i czytelność */
+            .table-wrapper {
+                font-size: 0.8rem;
+            }
+            .table-wrapper td, .table-wrapper th {
+                padding: 0.5rem;
+                white-space: nowrap;
+            }
+            .table-wrapper table {
+                min-width: 400px;
+            }
         }
     </style>
 </head>
@@ -401,7 +413,7 @@
     </nav>
 
     <div class="container">
-        <!-- ============ ZAKŁADKA WALUTY (poprawiona mobilnie) ============ -->
+        <!-- ============ ZAKŁADKA WALUTY ============ -->
         <div id="currency-tab" class="tab-content active">
             <div class="glass-card">
                 <div style="text-align: center; margin-bottom: 2rem;">
@@ -465,7 +477,7 @@
             </div>
         </div>
 
-        <!-- ============ ZAKŁADKA KONWERTER ============ -->
+        <!-- ============ ZAKŁADKA KONWERTER (poprawiona wizualnie) ============ -->
         <div id="converter-tab" class="tab-content">
             <div class="glass-card">
                 <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📏 Konwerter Pro</h2>
@@ -835,7 +847,7 @@
                 </div>
                 <div class="table-wrapper">
                     <table id="timeDiffTable">
-                        <thead></tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th></tr></thead>
+                        <thead><tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th></tr></thead>
                         <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
                     </table>
                 </div>
@@ -986,7 +998,7 @@
             }
         }
 
-        // ======================== MODUŁ WALUTY (poprawiony dla mobilnych) ========================
+        // ======================== MODUŁ WALUTY ========================
         let exchangeRates = {};
         let previousRates = {};
         let lastSuccessfulRates = null;
@@ -1320,7 +1332,7 @@
                 else if (from === 'K') celsius = val - 273.15;
                 const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 };
                 Object.entries(results).forEach(([unit, value]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}<td><td>${value.toFixed(4)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></tr>`;
                 });
                 return;
             }
@@ -1333,14 +1345,14 @@
                 const factor = activeUnits[from] || 1;
                 const baseVal = val * factor;
                 Object.entries(activeUnits).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}<tr></tr>`;
                 });
             } else {
                 const units = unitCategories[cat].units;
                 const factor = units[from] || 1;
                 const baseVal = val * factor;
                 Object.entries(units).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}<td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
                 });
             }
         }
@@ -1357,7 +1369,6 @@
             }
         }
 
-        // Funkcje istniejących kalkulatorów
         function setCreditAmount(val) { document.getElementById('crAmount').value = val; calcCredit(); }
         function clearCredit() { document.getElementById('crAmount').value = 100000; document.getElementById('crRate').value = 7; document.getElementById('crYears').value = 25; document.getElementById('crType').value = 'equal'; calcCredit(); }
         function clearDeposit() { document.getElementById('depAmount').value = 10000; document.getElementById('depRate').value = 5; document.getElementById('depYears').value = 5; document.getElementById('depCap').value = 'monthly'; calcDeposit(); }
@@ -1446,7 +1457,6 @@
             document.getElementById('taxVatVal').textContent = (brutto - netto).toFixed(2);
         }
 
-        // Kalkulator standardowy
         let calcExpression = "0";
         function updateCalcDisplay() { document.getElementById('calcDisplay').innerText = calcExpression; }
         function clearCalculator() { calcExpression = "0"; updateCalcDisplay(); }
@@ -1493,7 +1503,6 @@
             }
         });
 
-        // Kalkulator programisty
         let currentDec = 0;
         function updateFromDecimal() {
             let dec = parseInt(document.getElementById('progDecimal').value, 10);
