@@ -383,14 +383,22 @@
 
             /* Poprawki dla konwertera – lepsze przewijanie i czytelność */
             .table-wrapper {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
             .table-wrapper td, .table-wrapper th {
                 padding: 0.5rem;
-                white-space: nowrap;
+                white-space: normal;
+                word-break: break-word;
             }
             .table-wrapper table {
-                min-width: 500px;
+                min-width: 350px;
+            }
+            .converter-input-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .converter-value-input {
+                width: 100% !important;
             }
         }
     </style>
@@ -477,13 +485,13 @@
             </div>
         </div>
 
-        <!-- ============ ZAKŁADKA KONWERTER (poprawiona dla mobilnych) ============ -->
+        <!-- ============ ZAKŁADKA KONWERTER (poprawiona wizualnie) ============ -->
         <div id="converter-tab" class="tab-content">
             <div class="glass-card">
                 <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📏 Konwerter Pro</h2>
                 <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Wpisz wartość – wszystkie przeliczenia w jednym miejscu.</p>
 
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;" class="converter-input-row">
                     <select id="convCategory" class="modern-select" style="flex:1; min-width: 200px;" onchange="updateConverter()">
                         <option value="length">📐 Długość (Length)</option>
                         <option value="weight">⚖️ Masa (Weight)</option>
@@ -496,7 +504,7 @@
                         <option value="pressure">🧪 Ciśnienie (Pressure)</option>
                         <option value="volume">💧 Objętość (Volume)</option>
                     </select>
-                    <input type="number" id="convValue" class="modern-input" style="flex:2;" placeholder="Wartość" value="1" oninput="convertUnits()">
+                    <input type="number" id="convValue" class="modern-input converter-value-input" style="flex:3;" placeholder="Wartość" value="1" oninput="convertUnits()">
                     <select id="convFrom" class="modern-select" style="flex:1;" onchange="convertUnits()"></select>
                 </div>
                 <div id="dataModeDiv" style="margin-bottom: 1rem; display: none; text-align: center;">
@@ -848,7 +856,7 @@
                 <div class="table-wrapper">
                     <table id="timeDiffTable">
                         <thead><tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th></tr></thead>
-                        <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
+                        <tbody id="timeDiffTableBody"></tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
                     </table>
                 </div>
                 <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Różnice obliczane dla bieżącej daty z uwzględnieniem czasu letniego (DST).</p>
@@ -1332,7 +1340,7 @@
                 else if (from === 'K') celsius = val - 273.15;
                 const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 };
                 Object.entries(results).forEach(([unit, value]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}<td><td>${value.toFixed(4)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></tr>`;
                 });
                 return;
             }
@@ -1345,14 +1353,14 @@
                 const factor = activeUnits[from] || 1;
                 const baseVal = val * factor;
                 Object.entries(activeUnits).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}<tr></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
                 });
             } else {
                 const units = unitCategories[cat].units;
                 const factor = units[from] || 1;
                 const baseVal = val * factor;
                 Object.entries(units).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
                 });
             }
         }
