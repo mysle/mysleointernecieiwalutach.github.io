@@ -193,7 +193,7 @@
             <div class="logo"><i class="fas fa-bolt"></i> MultiTool Pro</div>
             <div class="nav-links">
                 <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Strona główna</a>
-                <a href="index.html#kontakt" class="nav-link"><i class="fas fa-envelope"></i> Kontakt</a>
+                <a href="kontakt.html" class="nav-link"><i class="fas fa-envelope"></i> Kontakt</a>
             </div>
         </div>
     </nav>
@@ -201,7 +201,7 @@
     <div class="container">
         <div class="glass-card">
             <h1>Polityka prywatności i pliki cookie</h1>
-            <p style="margin-bottom: 1.5rem;">Niniejszy dokument określa zasady przetwarzania danych osobowych oraz wykorzystywania plików cookie na stronie <strong>MultiTool Pro</strong> (dostępnej pod adresem: <em>twojadomena.pl</em> – wstaw właściwą domenę).</p>
+            <p style="margin-bottom: 1.5rem;">Niniejszy dokument określa zasady przetwarzania danych osobowych oraz wykorzystywania plików cookie na stronie <strong>MultiTool Pro</strong> (dostępnej pod adresem: <a href="https://mysle.github.io/tools/index.html" target="_blank">https://mysle.github.io/tools/index.html</a>).</p>
 
             <h2>1. Administrator danych</h2>
             <p>Administratorem Twoich danych osobowych jest:</p>
@@ -304,15 +304,13 @@
         </div>
 
         <div class="footer">
-            © 2026 MultiTool Pro | <a href="index.html">Strona główna</a> | <a href="index.html#kontakt">Kontakt</a> | <a href="#" id="manageCookiesBtn">Zarządzaj zgodami na pliki cookie</a>
+            © 2026 MultiTool Pro | <a href="index.html">Strona główna</a> | <a href="kontakt.html">Kontakt</a> | <a href="#" id="manageCookiesBtn">Zarządzaj zgodami na pliki cookie</a>
         </div>
     </div>
 
     <script>
-        // Prosty skrypt do zarządzania zgodami (przekieruje do strony głównej z parametrem, ale można też rozwinąć)
         document.getElementById('manageCookiesBtn').addEventListener('click', function(e) {
             e.preventDefault();
-            // Jeśli na stronie głównej jest baner zgód, możemy przekierować i uruchomić go ponownie
             window.location.href = 'index.html?showCookieConsent=true';
         });
     </script>
