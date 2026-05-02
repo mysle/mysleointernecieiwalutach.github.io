@@ -1,11 +1,3 @@
-Oto kompletny kod strony z dodanymi dwoma nowymi kalkulatorami w zakładce **Kalkulatory**:
-
-- **Kalkulator standardowy** – klasyczny kalkulator z podstawowymi działaniami (+, -, ×, ÷, %, nawiasy, pamięć, wygląd w stylu glassmorphism).
-- **Kalkulator programisty** – zaawansowane narzędzie do konwersji między systemami liczbowymi (DEC, BIN, HEX, OCT), operacje bitowe (AND, OR, XOR, NOT, przesunięcia), obsługa liczb 32-bitowych ze znakiem.
-
-Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – przyciski są duże, czytelne, a wyniki wyświetlane w przejrzysty sposób. Pozostałe funkcje strony (waluty, konwerter jednostek, IP, test prędkości, czas) działają bez zmian.
-
-```html
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -590,7 +582,7 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
             </div>
         </div>
 
-        <!-- ============ ZAKŁADKA IP INFO (ulepszona, usunięto DNS, dodano dodatkowe informacje) ============ -->
+        <!-- ============ ZAKŁADKA IP INFO (ulepszona) ============ -->
         <div id="ip-tab" class="tab-content">
             <div class="glass-card">
                 <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🌐 Twój adres IP i dane sieci</h2>
@@ -631,7 +623,7 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
                     <div id="ipMap"></div>
                     <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Lokalizacja na podstawie IP – dane szacunkowe, mogą różnić się od rzeczywistej pozycji.</p>
 
-                    <!-- Dodatkowe informacje o lokalizacji (nowe) -->
+                    <!-- Dodatkowe informacje o lokalizacji -->
                     <h3 class="section-title"><i class="fas fa-info-circle"></i> Dodatkowe informacje o lokalizacji</h3>
                     <div class="info-grid" id="ipExtraInfo">
                         <div class="info-item"><div class="label">Flaga</div><div class="value" id="extraFlag">—</div></div>
@@ -752,8 +744,8 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
                 </div>
                 <div class="table-wrapper">
                     <table id="timeDiffTable">
-                        <thead><tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th><tr></thead>
-                        <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tr></tbody>
+                        <thead><tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th></tr></thead>
+                        <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
                     </table>
                 </div>
                 <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Różnice obliczane dla bieżącej daty z uwzględnieniem czasu letniego (DST).</p>
@@ -779,7 +771,7 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
             }
         }
 
-        // ======================== MODUŁ IP INFO (bez DNS, z dodatkowymi danymi) ========================
+        // ======================== MODUŁ IP INFO ========================
         let ipData = null;
         window.ipDataLoaded = false;
         let ipMap = null;
@@ -1024,11 +1016,39 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
         function togglePrecision() { showFullPrecision = !showFullPrecision; const btn = document.getElementById('precisionBtn'); btn.innerHTML = showFullPrecision ? '<i class="fas fa-search-minus"></i> Mniej miejsc po przecinku' : '<i class="fas fa-search-plus"></i> Więcej miejsc po przecinku'; convert(); }
 
         // ======================== MODUŁ KONWERTERA ========================
-        const unitNames = { mm:'milimetr', cm:'centymetr', dm:'decymetr', m:'metr', km:'kilometr', in:'cal', ft:'stopa', yd:'jard', mi:'mila', nmi:'mila morska', mg:'miligram', g:'gram', kg:'kilogram', t:'tona', oz:'uncja', lb:'funt', st:'kamień', bit:'bit', byte:'bajt', KB:'kilobajt', MB:'megabajt', GB:'gigabajt', TB:'terabajt', PB:'petabajt', KiB:'kibibajt', MiB:'mebibajt', GiB:'gibibajt', TiB:'tebibajt', PiB:'pebibajt', ms:'milisekunda', s:'sekunda', min:'minuta', h:'godzina', d:'dzień', week:'tydzień', month:'miesiąc', year:'rok', 'm/s':'metr na sekundę', 'km/h':'kilometr na godzinę', mph:'mila na godzinę', knot:'węzeł', J:'dżul', kJ:'kilodżul', kcal:'kilokaloria', Wh:'watogodzina', kWh:'kilowatogodzina', W:'wat', kW:'kilowat', MW:'megawat', HP:'koń mechaniczny', Pa:'paskal', hPa:'hektopaskal', bar:'bar', atm:'atmosfera', mmHg:'milimetr słupa rtęci', ml:'mililitr', l:'litr', 'm³':'metr sześcienny', gal:'galon', pint:'pinta', cup:'szklanka', '°C':'stopień Celsjusza', '°F':'stopień Fahrenheita', 'K':'kelwin' };
-        const unitCategories = { length: { base:'m', units:{ mm:0.001, cm:0.01, dm:0.1, m:1, km:1000, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344, nmi:1852 } }, weight:{ base:'kg', units:{ mg:1e-6, g:0.001, kg:1, t:1000, oz:0.0283495, lb:0.453592, st:6.35029 } }, temperature:{ base:'°C', units:{} }, data:{ base:'byte', units:{ bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 } }, time:{ base:'s', units:{ ms:0.001, s:1, min:60, h:3600, d:86400, week:604800, month:2629800, year:31557600 } }, speed:{ base:'m/s', units:{ 'm/s':1, 'km/h':0.277778, mph:0.44704, knot:0.514444 } }, energy:{ base:'J', units:{ J:1, kJ:1000, kcal:4184, Wh:3600, kWh:3.6e6 } }, power:{ base:'W', units:{ W:1, kW:1000, MW:1e6, HP:745.7 } }, pressure:{ base:'Pa', units:{ Pa:1, hPa:100, bar:1e5, atm:101325, mmHg:133.322 } }, volume:{ base:'l', units:{ ml:0.001, l:1, 'm³':1000, gal:3.78541, pint:0.473176, cup:0.236588 } } };
+        const unitNames = {
+            mm: 'milimetr', cm: 'centymetr', dm: 'decymetr', m: 'metr', km: 'kilometr',
+            in: 'cal', ft: 'stopa', yd: 'jard', mi: 'mila', nmi: 'mila morska',
+            mg: 'miligram', g: 'gram', kg: 'kilogram', t: 'tona',
+            oz: 'uncja', lb: 'funt', st: 'kamień',
+            bit: 'bit', byte: 'bajt', KB: 'kilobajt', MB: 'megabajt', GB: 'gigabajt', TB: 'terabajt', PB: 'petabajt',
+            KiB: 'kibibajt', MiB: 'mebibajt', GiB: 'gibibajt', TiB: 'tebibajt', PiB: 'pebibajt',
+            ms: 'milisekunda', s: 'sekunda', min: 'minuta', h: 'godzina', d: 'dzień',
+            week: 'tydzień', month: 'miesiąc', year: 'rok',
+            'm/s': 'metr na sekundę', 'km/h': 'kilometr na godzinę', mph: 'mila na godzinę', knot: 'węzeł',
+            J: 'dżul', kJ: 'kilodżul', kcal: 'kilokaloria', Wh: 'watogodzina', kWh: 'kilowatogodzina',
+            W: 'wat', kW: 'kilowat', MW: 'megawat', HP: 'koń mechaniczny',
+            Pa: 'paskal', hPa: 'hektopaskal', bar: 'bar', atm: 'atmosfera', mmHg: 'milimetr słupa rtęci',
+            ml: 'mililitr', l: 'litr', 'm³': 'metr sześcienny', gal: 'galon', pint: 'pinta', cup: 'szklanka',
+            '°C': 'stopień Celsjusza', '°F': 'stopień Fahrenheita', 'K': 'kelwin'
+        };
+
+        const unitCategories = {
+            length: { base: 'm', units: { mm:0.001, cm:0.01, dm:0.1, m:1, km:1000, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344, nmi:1852 } },
+            weight: { base: 'kg', units: { mg:1e-6, g:0.001, kg:1, t:1000, oz:0.0283495, lb:0.453592, st:6.35029 } },
+            temperature: { base: '°C', units: {} },
+            data: { base: 'byte', units: { bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 } },
+            time: { base: 's', units: { ms:0.001, s:1, min:60, h:3600, d:86400, week:604800, month:2629800, year:31557600 } },
+            speed: { base: 'm/s', units: { 'm/s':1, 'km/h':0.277778, mph:0.44704, knot:0.514444 } },
+            energy: { base: 'J', units: { J:1, kJ:1000, kcal:4184, Wh:3600, kWh:3.6e6 } },
+            power: { base: 'W', units: { W:1, kW:1000, MW:1e6, HP:745.7 } },
+            pressure: { base: 'Pa', units: { Pa:1, hPa:100, bar:1e5, atm:101325, mmHg:133.322 } },
+            volume: { base: 'l', units: { ml:0.001, l:1, 'm³':1000, gal:3.78541, pint:0.473176, cup:0.236588 } }
+        };
+
         function formatUnit(unit) { const name = unitNames[unit] || ''; return name ? `${unit} (${name})` : unit; }
         function updateConverter() { const cat = document.getElementById('convCategory').value; const select = document.getElementById('convFrom'); select.innerHTML = ''; if (cat === 'temperature') { ['°C','°F','K'].forEach(u => select.add(new Option(formatUnit(u), u))); document.getElementById('dataModeDiv').style.display = 'none'; } else { const units = Object.keys(unitCategories[cat].units); units.forEach(u => select.add(new Option(formatUnit(u), u))); document.getElementById('dataModeDiv').style.display = cat === 'data' ? 'block' : 'none'; } convertUnits(); }
-        function convertUnits() { const cat = document.getElementById('convCategory').value; const val = parseFloat(document.getElementById('convValue').value) || 0; const from = document.getElementById('convFrom').value; const tbody = document.querySelector('#convTable tbody'); tbody.innerHTML = ''; if (cat === 'temperature') { let celsius; if (from === '°C') celsius = val; else if (from === '°F') celsius = (val - 32) * 5/9; else if (from === 'K') celsius = val - 273.15; const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 }; Object.entries(results).forEach(([unit, value]) => { tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></tr>`; }); return; } if (cat === 'data') { const mode = document.querySelector('input[name="dataMode"]:checked').value; const activeUnits = mode === '1000' ? { bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15 } : { bit:0.125, byte:1, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 }; const factor = activeUnits[from] || 1; const baseVal = val * factor; Object.entries(activeUnits).forEach(([unit, factor]) => { tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`; }); } else { const units = unitCategories[cat].units; const factor = units[from] || 1; const baseVal = val * factor; Object.entries(units).forEach(([unit, factor]) => { tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`; }); } }
+        function convertUnits() { const cat = document.getElementById('convCategory').value; const val = parseFloat(document.getElementById('convValue').value) || 0; const from = document.getElementById('convFrom').value; const tbody = document.querySelector('#convTable tbody'); tbody.innerHTML = ''; if (cat === 'temperature') { let celsius; if (from === '°C') celsius = val; else if (from === '°F') celsius = (val - 32) * 5/9; else if (from === 'K') celsius = val - 273.15; const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 }; Object.entries(results).forEach(([unit, value]) => { tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td><tr>`; }); return; } if (cat === 'data') { const mode = document.querySelector('input[name="dataMode"]:checked').value; const activeUnits = mode === '1000' ? { bit:0.125, byte:1, KB:1000, MB:1e6, GB:1e9, TB:1e12, PB:1e15 } : { bit:0.125, byte:1, KiB:1024, MiB:1048576, GiB:1073741824, TiB:1099511627776, PiB:1125899906842624 }; const factor = activeUnits[from] || 1; const baseVal = val * factor; Object.entries(activeUnits).forEach(([unit, factor]) => { tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`; }); } else { const units = unitCategories[cat].units; const factor = units[from] || 1; const baseVal = val * factor; Object.entries(units).forEach(([unit, factor]) => { tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(6)}</td></tr>`; }); } }
 
         // ======================== MODUŁ KALKULATORÓW ========================
         function switchSubTab(sub, event) {
@@ -1042,7 +1062,7 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
             }
         }
 
-        // stare funkcje kalkulatorów (kredyt, lokata, inflacja, procenty, podatki)
+        // stare funkcje kalkulatorów
         function setCreditAmount(val) { document.getElementById('crAmount').value = val; calcCredit(); }
         function clearCredit() { document.getElementById('crAmount').value = 100000; document.getElementById('crRate').value = 7; document.getElementById('crYears').value = 25; document.getElementById('crType').value = 'equal'; calcCredit(); }
         function clearDeposit() { document.getElementById('depAmount').value = 10000; document.getElementById('depRate').value = 5; document.getElementById('depYears').value = 5; document.getElementById('depCap').value = 'monthly'; calcDeposit(); }
@@ -1057,7 +1077,7 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
         function calcDiff() { const a = parseFloat(document.getElementById('diffA').value) || 0; const b = parseFloat(document.getElementById('diffB').value) || 0; if (b === 0) { document.getElementById('diffResult').textContent = '—'; return; } document.getElementById('diffResult').textContent = ((a - b) / b * 100).toFixed(2) + '%'; }
         function calcTax() { const brutto = parseFloat(document.getElementById('taxBrutto').value) || 0; const vat = (parseFloat(document.getElementById('taxVat').value) || 0) / 100; const netto = brutto / (1 + vat); document.getElementById('taxNetto').textContent = netto.toFixed(2); document.getElementById('taxVatVal').textContent = (brutto - netto).toFixed(2); }
 
-        // Nowy kalkulator standardowy
+        // Kalkulator standardowy
         let calcExpression = "0";
         function updateCalcDisplay() { document.getElementById('calcDisplay').innerText = calcExpression; }
         function clearCalculator() { calcExpression = "0"; updateCalcDisplay(); }
@@ -1086,7 +1106,12 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
 
         // Kalkulator programisty
         let currentDec = 0;
-        function updateFromDecimal() { let dec = parseInt(document.getElementById('progDecimal').value, 10); if(isNaN(dec)) dec = 0; currentDec = dec & 0xFFFFFFFF; document.getElementById('progDecimal').value = currentDec; document.getElementById('progBinary').value = '0b' + (currentDec >>> 0).toString(2); document.getElementById('progHex').value = '0x' + (currentDec >>> 0).toString(16).toUpperCase(); document.getElementById('progOctal').value = '0o' + (currentDec >>> 0).toString(8); }
+        function updateFromDecimal() { let dec = parseInt(document.getElementById('progDecimal').value, 10); if(isNaN(dec)) dec = 0; currentDec = dec & 0xFFFFFFFF; // 32-bit unsigned, ale potem jako signed? Użyjemy signed dla wyświetlania
+            document.getElementById('progDecimal').value = currentDec;
+            document.getElementById('progBinary').value = '0b' + (currentDec >>> 0).toString(2);
+            document.getElementById('progHex').value = '0x' + (currentDec >>> 0).toString(16).toUpperCase();
+            document.getElementById('progOctal').value = '0o' + (currentDec >>> 0).toString(8);
+        }
         function updateFromBinary() { let bin = document.getElementById('progBinary').value.replace(/^0b/, ''); let dec = parseInt(bin, 2); if(isNaN(dec)) dec = 0; currentDec = dec & 0xFFFFFFFF; updateFromDecimal(); }
         function updateFromHex() { let hex = document.getElementById('progHex').value.replace(/^0x/, ''); let dec = parseInt(hex, 16); if(isNaN(dec)) dec = 0; currentDec = dec & 0xFFFFFFFF; updateFromDecimal(); }
         function updateFromOctal() { let oct = document.getElementById('progOctal').value.replace(/^0o/, ''); let dec = parseInt(oct, 8); if(isNaN(dec)) dec = 0; currentDec = dec & 0xFFFFFFFF; updateFromDecimal(); }
@@ -1109,7 +1134,7 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
         }
         function clearProgrammer() { document.getElementById('progDecimal').value = 0; document.getElementById('progBinary').value = '0b0'; document.getElementById('progHex').value = '0x0'; document.getElementById('progOctal').value = '0o0'; document.getElementById('progSecond').value = 0; document.getElementById('progBitwiseResult').value = ''; currentDec = 0; updateFromDecimal(); }
 
-        // ======================== MODUŁ SPEED TESTU ========================
+        // ======================== MODUŁ SPEED TEST ========================
         let speedChart = null; let isTesting = false;
         function updateGauge(value, max, label) { const circle = document.getElementById('gaugeProgress'); const circumference = 2 * Math.PI * 120; const offset = circumference - (Math.min(value, max) / max) * circumference; circle.style.strokeDashoffset = offset; document.getElementById('gaugeValue').textContent = value.toFixed(1); document.getElementById('gaugeLabel').textContent = label; }
         async function measurePing() { const measurements = []; const url = 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'; for (let i = 0; i < 10; i++) { const start = performance.now(); await new Promise(resolve => { const img = new Image(); img.src = url + '?cache=' + Date.now(); img.onload = resolve; img.onerror = resolve; }); const end = performance.now(); measurements.push(end - start); updateGauge(i + 1, 10, 'Mierzenie pingu...'); } const avg = measurements.reduce((a,b) => a+b, 0) / measurements.length; const jitter = Math.sqrt(measurements.map(p => (p-avg)**2).reduce((a,b) => a+b, 0) / measurements.length); return { ping: avg, jitter }; }
@@ -1117,7 +1142,7 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
         async function measureUpload() { const parallelUploads = 2; const sizePerUpload = 2 * 1024 * 1024; let totalSent = 0; const start = performance.now(); const promises = []; const updateProgress = (sentInChunk) => { totalSent += sentInChunk; const progress = Math.min(100, (totalSent / (sizePerUpload * parallelUploads)) * 100); document.getElementById('ulProgress').style.width = progress + '%'; document.getElementById('ulProgressText').textContent = Math.round(progress) + '%'; }; for (let i = 0; i < parallelUploads; i++) { promises.push((async () => { try { const data = new Uint8Array(sizePerUpload).fill(0); const controller = new AbortController(); const timeout = setTimeout(() => controller.abort(), 15000); const res = await fetch('https://httpbin.org/post', { method: 'POST', body: data, headers: { 'Content-Type': 'application/octet-stream' }, signal: controller.signal }); clearTimeout(timeout); if (res.ok) { updateProgress(sizePerUpload); } else { throw new Error('Upload failed'); } } catch (e) { console.warn('Błąd wysyłania:', e.message); updateProgress(sizePerUpload); } })()); } await Promise.all(promises); const end = performance.now(); const duration = (end - start) / 1000; if (duration === 0 || totalSent === 0) return 0; const mbps = (totalSent * 8) / duration / 1e6; updateGauge(mbps, 500, 'Wysyłanie zakończone'); return mbps; }
         async function startSpeedTest() { if (isTesting) return; isTesting = true; const btn = document.getElementById('startBtn'); btn.classList.add('running'); btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testowanie...'; document.getElementById('progressSection').style.display = 'block'; document.getElementById('resultsGrid').style.display = 'none'; document.getElementById('chartContainer').style.display = 'none'; updateGauge(0, 100, 'Inicjalizacja...'); document.getElementById('dlProgress').style.width = '0%'; document.getElementById('ulProgress').style.width = '0%'; document.getElementById('pingProgress').style.width = '0%'; const results = {}; try { const pingData = await measurePing(); results.ping = pingData.ping.toFixed(1); results.jitter = pingData.jitter.toFixed(1); document.getElementById('pingText').textContent = results.ping + ' ms'; document.getElementById('pingProgress').style.width = '100%'; updateGauge(pingData.ping, 200, 'Ping zakończony'); } catch (e) { results.ping = '--'; results.jitter = '--'; } try { results.download = await measureDownload(); } catch (e) { results.download = 0; } try { results.upload = await measureUpload(); } catch (e) { results.upload = 0; } updateGauge(results.download || 0, 1000, 'Test ukończony!'); document.getElementById('dlResult').textContent = (results.download || 0).toFixed(2); document.getElementById('ulResult').textContent = (results.upload || 0).toFixed(2); document.getElementById('pingResult').textContent = (results.ping || '--') + ' ms'; document.getElementById('jitterResult').textContent = (results.jitter || '--') + ' ms'; document.getElementById('resultsGrid').style.display = 'grid'; if (results.download || results.upload) { document.getElementById('chartContainer').style.display = 'block'; const ctx = document.getElementById('speedChart').getContext('2d'); if (speedChart) speedChart.destroy(); speedChart = new Chart(ctx, { type: 'bar', data: { labels: ['Pobieranie', 'Wysyłanie', 'Ping (÷10)', 'Stabilność (÷10)'], datasets: [{ data: [results.download||0, results.upload||0, (parseFloat(results.ping)||0)/10, (parseFloat(results.jitter)||0)/10], backgroundColor: ['rgba(99,102,241,0.8)','rgba(139,92,246,0.8)','rgba(16,185,129,0.8)','rgba(245,158,11,0.8)'], borderColor: ['rgba(99,102,241,1)','rgba(139,92,246,1)','rgba(16,185,129,1)','rgba(245,158,11,1)'], borderWidth: 2, borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } }); } btn.classList.remove('running'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-redo"></i> Powtórz test'; isTesting = false; }
 
-        // ======================== MODUŁ CZASU I STREF (bez zmian) ========================
+        // ======================== MODUŁ CZASU I STREF ========================
         let timezoneCards = [];
         const defaultCards = [{ name: "Warszawa", tz: "Europe/Warsaw" },{ name: "Londyn", tz: "Europe/London" },{ name: "Nowy Jork", tz: "America/New_York" },{ name: "Tokio", tz: "Asia/Tokyo" },{ name: "Sydney", tz: "Australia/Sydney" },{ name: "Los Angeles", tz: "America/Los_Angeles" },{ name: "Dubaj", tz: "Asia/Dubai" }];
         function initTimezoneCards() { timezoneCards = [...defaultCards]; }
@@ -1146,9 +1171,6 @@ Oba kalkulatory zostały zaprojektowane z myślą o wygodzie użytkownika – pr
         if (diffBaseSelect) diffBaseSelect.addEventListener('change', updateTimeDifferences);
         setTimeout(() => { if (diffBaseSelect && diffBaseSelect.value) updateTimeDifferences(); }, 500);
         clearProgrammer(); // inicjalizacja kalkulatora programisty
-        // domyślnie aktywny kredyt
-        switchSubTab('credit', null);
     </script>
 </body>
 </html>
-```
