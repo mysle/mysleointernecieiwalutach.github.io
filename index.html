@@ -390,7 +390,7 @@
                 white-space: nowrap;
             }
             .table-wrapper table {
-                min-width: 400px;
+                min-width: 500px;
             }
         }
     </style>
@@ -477,7 +477,7 @@
             </div>
         </div>
 
-        <!-- ============ ZAKŁADKA KONWERTER (poprawiona wizualnie) ============ -->
+        <!-- ============ ZAKŁADKA KONWERTER (poprawiona dla mobilnych) ============ -->
         <div id="converter-tab" class="tab-content">
             <div class="glass-card">
                 <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📏 Konwerter Pro</h2>
@@ -1332,7 +1332,7 @@
                 else if (from === 'K') celsius = val - 273.15;
                 const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 };
                 Object.entries(results).forEach(([unit, value]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}<td><td>${value.toFixed(4)}</td></tr>`;
                 });
                 return;
             }
