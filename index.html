@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>MultiTool Pro – Waluty, Konwerter, Kalkulatory, Czas, IP, Szybkość i Horoskop</title>
-    <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP, strefy czasowe, korzystaj z kalkulatorów finansowych i poznaj swój horoskop – motywujący i pomocny.">
+    <title>MultiTool Pro – Waluty, Konwerter, Kalkulatory, Czas, IP, Szybkość + Horoskop</title>
+    <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP, strefy czasowe, korzystaj z kalkulatorów finansowych i odkryj swój osobisty horoskop – motywujący i niezwykle trafny.">
 
     <!-- Google Consent Mode - domyślnie brak zgód -->
     <script>
@@ -223,35 +223,43 @@
         .utc-offset { font-size: 0.75rem; background: rgba(0,0,0,0.4); display: inline-block; padding: 0.2rem 0.5rem; border-radius: 1rem; }
 
         /* Horoskop styles */
-        .horoscope-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: flex-end;
-            margin-bottom: 2rem;
+        .horoscope-container {
+            text-align: center;
+            padding: 1rem;
         }
-        .horoscope-info {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
+        .zodiac-select {
+            max-width: 300px;
+            margin: 0 auto 1rem auto;
+        }
+        .horoscope-card {
             background: rgba(15,23,42,0.6);
-            border-radius: 1rem;
-            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            text-align: left;
+            border-left: 4px solid var(--primary);
         }
-        .horoscope-text {
-            font-size: 1.1rem;
+        .horoscope-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed var(--glass-border);
+        }
+        .horoscope-section h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        .horoscope-section p {
             line-height: 1.5;
-            margin-top: 1rem;
-            white-space: pre-line;
+            color: var(--text);
         }
-        .horoscope-category-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
+        .quote {
+            font-style: italic;
+            background: rgba(99,102,241,0.2);
+            padding: 1rem;
+            border-radius: 1rem;
             margin-top: 1rem;
-        }
-        .zodiac-symbol {
-            font-size: 2rem;
-            margin-right: 0.5rem;
+            text-align: center;
         }
 
         /* Calculator specific - improved layout */
@@ -435,7 +443,9 @@
             .converter-value-input {
                 width: 100% !important;
             }
-            .horoscope-selector { flex-direction: column; align-items: stretch; }
+            .horoscope-card {
+                padding: 1.2rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -479,7 +489,7 @@
             <button class="tab-btn" onclick="switchTab('ip', event)"><i class="fas fa-globe"></i> IP Info</button>
             <button class="tab-btn" onclick="switchTab('speed', event)"><i class="fas fa-tachometer-alt"></i> Test szybkości</button>
             <button class="tab-btn" onclick="switchTab('time', event)"><i class="fas fa-clock"></i> 📅 Czas i strefy</button>
-            <button class="tab-btn" onclick="switchTab('horoscope', event)"><i class="fas fa-moon"></i> 🔮 Horoskop</button>
+            <button class="tab-btn" onclick="switchTab('horoscope', event)"><i class="fas fa-star-of-life"></i> ✨ Horoskop</button>
         </div>
     </div>
 </nav>
@@ -920,23 +930,22 @@
             <div class="table-wrapper">
                 <table id="timeDiffTable">
                     <thead><tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th></tr></thead>
-                    <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk. Side</tbody>
+                    <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
                 </table>
             </div>
             <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Różnice obliczane dla bieżącej daty z uwzględnieniem czasu letniego (DST).</p>
         </div>
     </div>
 
-    <!-- ============ ZAKŁADKA HOROSKOP ============ -->
+    <!-- ============ NOWA ZAKŁADKA HOROSKOP ============ -->
     <div id="horoscope-tab" class="tab-content">
         <div class="glass-card">
-            <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🔮 Horoskop – Twój duchowy drogowskaz</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 1.5rem;">Wybierz swój znak zodiaku, a odkryjesz dzisiejsze przesłanie od wszechświata – prawdziwe, motywujące i pełne mądrości.</p>
-
-            <div class="horoscope-selector">
-                <div style="flex: 2; min-width: 200px;">
-                    <label style="font-size: 0.9rem; color: var(--text-muted);">Twój znak zodiaku</label>
-                    <select id="zodiacSign" class="modern-select">
+            <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✨ Twój osobisty horoskop</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 1rem;">Poznaj ukryte wskazówki wszechświata – horoskop motywujący, uczący i niezwykle trafny.</p>
+            <div class="horoscope-container">
+                <div class="zodiac-select">
+                    <label>Wybierz swój znak zodiaku:</label>
+                    <select id="zodiacSign" class="modern-select" style="margin-top: 0.5rem;">
                         <option value="baran">♈ Baran (21.03 – 19.04)</option>
                         <option value="byk">♉ Byk (20.04 – 20.05)</option>
                         <option value="bliznieta">♊ Bliźnięta (21.05 – 20.06)</option>
@@ -951,28 +960,8 @@
                         <option value="ryby">♓ Ryby (19.02 – 20.03)</option>
                     </select>
                 </div>
-                <div style="flex: 1;">
-                    <button class="btn" id="showHoroscopeBtn" onclick="showHoroscope()"><i class="fas fa-star"></i> Pokaż horoskop</button>
-                </div>
-            </div>
-
-            <div id="horoscopeResult" class="horoscope-info" style="display: none;">
-                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                    <span id="zodiacSymbol" class="zodiac-symbol"></span>
-                    <h3 id="zodiacName" style="margin:0;"></h3>
-                </div>
-                <div id="horoscopeText" class="horoscope-text"></div>
-                <div class="horoscope-category-buttons">
-                    <button class="quick-btn" onclick="changeCategory('general')">🌞 Ogólny</button>
-                    <button class="quick-btn" onclick="changeCategory('love')">❤️ Miłosny</button>
-                    <button class="quick-btn" onclick="changeCategory('career')">💼 Kariera</button>
-                    <button class="quick-btn" onclick="changeCategory('health')">🍏 Zdrowie</button>
-                </div>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">⭐ Horoskop zmienia się codziennie – każdego dnia otrzymujesz nową, unikalną wróżbę.</p>
-            </div>
-            <div id="horoscopePlaceholder" class="horoscope-info" style="text-align: center;">
-                <i class="fas fa-moon" style="font-size: 3rem; color: var(--primary);"></i>
-                <p style="margin-top: 0.5rem;">Wybierz znak i kliknij „Pokaż horoskop”, aby poznać swoją dzienną przepowiednię.</p>
+                <button class="btn" id="horoscopeBtn" onclick="generateHoroscope()"><i class="fas fa-moon"></i> Odkryj przepowiednię</button>
+                <div id="horoscopeResult" class="horoscope-card" style="display: none;"></div>
             </div>
         </div>
     </div>
@@ -1014,10 +1003,6 @@
         }
         if (tab === 'time') {
             refreshAllTimes();
-        }
-        if (tab === 'horoscope' && window.currentHoroscopeSign) {
-            // przy przejściu do horoskopu odśwież (jeśli był już wybrany)
-            showHoroscope(false);
         }
     }
 
@@ -2038,7 +2023,7 @@
                 <tr>
                     <td><strong>${card.name}</strong><br><span style="font-size:0.7rem;">${card.tz}</span></td>
                     <td>${time}<br><span style="font-size:0.7rem;">${date}</span></td>
-                    <td>${diffStr}</span></div>
+                    <td>${diffStr}</td>
                 </tr>
             `;
         });
@@ -2046,7 +2031,7 @@
             <tr style="background:rgba(99,102,241,0.2);">
                 <td><strong>Strefa bazowa</strong><br><span style="font-size:0.7rem;">${baseTZ}</span></td>
                 <td>${baseFormatted.time}<br><span style="font-size:0.7rem;">${baseFormatted.date}</span></td>
-                <td>0h</span></div>
+                <td>0h</td>
             </tr>
         `;
     }
@@ -2069,172 +2054,198 @@
         }, 1000);
     }
 
-    // ======================== NOWY MODUŁ: HOROSKOP (lokalny, bez API) ========================
-    let currentHoroscopeSign = null;
-    let currentCategory = 'general';
-    let horoscopesData = null;
-
-    // Generuje zestaw horoskopów dla każdego znaku i kategorii (7 wersji na każdy dzień tygodnia)
-    function generateHoroscopes() {
-        if (horoscopesData) return;
-        // Zdefiniujemy bogate, motywujące treści dla każdego znaku (12 znaków) i 4 kategorii.
-        // Dla uproszczenia przygotujemy po 12 różnych wersji na każdą kategorię (pseudo-losowość na podstawie daty).
-        // Ponieważ to dużo danych, zrobimy to dynamicznie w JavaScript – używając szablonów i modyfikatorów.
-        // Utworzymy funkcję, która dla danego znaku i kategorii zwraca tablicę 12 różnych horoskopów (dla różnych dni).
-        // Będzie to wyglądać autentycznie.
-        const signs = ["baran", "byk", "bliznieta", "rak", "lew", "panna", "waga", "skorpion", "strzelec", "koziorozec", "wodnik", "ryby"];
-        const categories = ["general", "love", "career", "health"];
+    // ======================== MODUŁ HOROSKOP ========================
+    function generateHoroscope() {
+        const sign = document.getElementById('zodiacSign').value;
+        const signNames = {
+            baran: "Baran", byk: "Byk", bliznieta: "Bliźnięta", rak: "Rak",
+            lew: "Lew", panna: "Panna", waga: "Waga", skorpion: "Skorpion",
+            strzelec: "Strzelec", koziorozec: "Koziorożec", wodnik: "Wodnik", ryby: "Ryby"
+        };
+        const signName = signNames[sign];
         
-        // Przygotowujemy bazowe szablony dla każdej kategorii (wypełniane potem dynamicznie cechami znaku)
-        // Dla każdego znaku inne akcenty.
-        const traits = {
-            baran: { symbol: "♈", name: "Baran", element: "Ogień", planet: "Mars", positive: "odwaga, inicjatywa", negative: "impulsywność" },
-            byk: { symbol: "♉", name: "Byk", element: "Ziemia", planet: "Wenus", positive: "cierpliwość, zmysłowość", negative: "upór" },
-            bliznieta: { symbol: "♊", name: "Bliźnięta", element: "Powietrze", planet: "Merkury", positive: "komunikatywność, elastyczność", negative: "rozdwojenie" },
-            rak: { symbol: "♋", name: "Rak", element: "Woda", planet: "Księżyc", positive: "empatia, intuicja", negative: "nadwrażliwość" },
-            lew: { symbol: "♌", name: "Lew", element: "Ogień", planet: "Słońce", positive: "charyzma, hojność", negative: "próżność" },
-            panna: { symbol: "♍", name: "Panna", element: "Ziemia", planet: "Merkury", positive: "analityczność, pracowitość", negative: "perfekcjonizm" },
-            waga: { symbol: "♎", name: "Waga", element: "Powietrze", planet: "Wenus", positive: "dyplomacja, sprawiedliwość", negative: "niezdecydowanie" },
-            skorpion: { symbol: "♏", name: "Skorpion", element: "Woda", planet: "Pluton", positive: "determinacja, tajemniczość", negative: "zazdrość" },
-            strzelec: { symbol: "♐", name: "Strzelec", element: "Ogień", planet: "Jowisz", positive: "optymizm, niezależność", negative: "lekkomyślność" },
-            koziorozec: { symbol: "♑", name: "Koziorożec", element: "Ziemia", planet: "Saturn", positive: "ambicja, cierpliwość", negative: "pesymizm" },
-            wodnik: { symbol: "♒", name: "Wodnik", element: "Powietrze", planet: "Uran", positive: "oryginalność, humanitaryzm", negative: "ekscentryczność" },
-            ryby: { symbol: "♓", name: "Ryby", element: "Woda", planet: "Neptun", positive: "współczucie, kreatywność", negative: "naiwność" }
-        };
-
-        // Wzorce wiadomości (uniwersalne, później personalizowane)
-        const generalPatterns = [
-            `Dziś {cechy_pozytywne} będą Twoimi sprzymierzeńcami. Wszechświat sprzyja nowym początkom – nie bój się zrobić pierwszego kroku w sprawach, które odkładasz od tygodni. Zauważysz, że ludzie wokół ciebie docenią Twoją szczerość. Pamiętaj jednak, by nie dać się ponieść {cechy_negatywne} – zachowaj równowagę. Wieczorem czeka Cię miła niespodzianka.`,
-            `Energia {element} i wpływ {planeta} wzmacniają dziś Twoją intuicję. To dobry moment, by zająć się rzeczami, które wymagają odwagi. Twoja naturalna {cecha_pozytywna} może być kluczem do rozwiązania sporu. Unikaj jednak {cecha_negatywna}, która mogłaby popsuć atmosferę. Otocz się ludźmi, którzy Cię inspirują.`,
-            `Gwiazdy radzą: wykorzystaj moc {cech_pozytywnych} do realizacji celów. Dziś możesz poczuć przypływ motywacji. Zadbaj o detale, ale nie trać z oczu wielkiego obrazu. Ktoś z przeszłości może dać znak życia – nie zamykaj się na nowe znajomości, ale kieruj się rozsądkiem. Twoja {cecha_pozytywna} zaowocuje w przyszłym tygodniu.`,
-            `Dziś {element} wylewa się z Ciebie – możesz być bardziej ekspresyjny. To świetny dzień na wyrażenie swoich uczuć i potrzeb. Praca przyniesie satysfakcję, jeśli skupisz się na jednym wyzwaniu. Uważaj na {cechę_negatywną} – może Cię zniechęcić na starcie. Po południu los uśmiechnie się do Ciebie w drobnym, ale miłym geście.`,
-            `Pod wpływem {planeta} masz dziś większą jasność umysłu. Wykorzystaj ją do uporządkowania spraw finansowych lub domowych. W relacjach postaw na {cechę_pozytywną} – ona otworzy zamknięte drzwi. Jeśli poczujesz {cechę_negatywną}, weź głęboki oddech i odłóż decyzję o kilka godzin.`,
-            `Dziś Twoja siła leży w {cechach_pozytywnych}. Nie pozwól, by drobne niepowodzenia popsuły Ci humor. Kosmiczna energia sprzyja rozmowom o przyszłości – możesz otrzymać ciekawą propozycję. Pamiętaj, że nawet {cecha_negatywna} może być Twoją bronią, jeśli odpowiednio ją wykorzystasz. Bądź otwarty na pomoc.`,
-            `Ten dzień obfituje w okazje do pokazania Twojego {cecha_pozytywna}. Przyjaciele docenią Twoją lojalność. W pracy unikaj pośpiechu – {cecha_negatywna} może być pułapką. Wieczorem poświęć czas na relaks i medytację. Twoja podświadomość podpowie Ci rozwiązanie nurtującego problemu.`
-        ];
-
-        const lovePatterns = [
-            `W miłości dziś rządzi {planeta}. Jeśli jesteś w związku, wykorzystaj {cechę_pozytywną} do zaskoczenia partnera niespodzianką. Osoby samotne mogą spotkać kogoś, kto podziela ich pasje – nie bądź zbyt nieśmiały. Uwaga na {cechę_negatywną} – nie wywołuj konfliktu bez potrzeby. Romantyczny gest może odmienić wiele.`,
-            `Twoje serce jest dziś otwarte dzięki wpływowi {elementu}. To dobry moment, by powiedzieć komuś ważnemu o swoich uczuciach. Pamiętaj, że autentyczność działa lepiej niż gra. Jeśli odczuwasz {cechę_negatywną}, zastanów się, czy to nie wynika dawnych ran. Wieczór sprzyja intymnym rozmowom.`,
-            `Dziś w związku ceniona będzie Twoja {cecha_pozytywna}. Partner doceni, że jesteś uważny. Osoby poszukujące miłości – nie szukajcie na siłę, los sam postawi na Waszej drodze kogoś ciekawego. Gwiazdy mówią, byście unikali {cechy_negatywnej} – nie zrażajcie do siebie potencjalnych adoratorów.`,
-            `Księżyc w znaku wodnym wzmacnia emocje. To czas na szczere rozmowy. Jeśli masz żal do bliskiej osoby, dziś jest dobry moment, by to wyjaśnić. Użyj swojej {cechy_pozytywnej}, by złagodzić spór. Unikaj jednak {cechy_negatywnej} – ona może pogłębić podziały. Wieczorem romantyczny film lub kolacja przy świecach zdziała cuda.`,
-            `Planeta miłości Wenus sprzyja harmonii. Zadbaj o drobne przyjemności dla siebie i partnera. Ktoś może wyznać Ci skrycie skrywane uczucie – przyjmij to z wdzięcznością. W relacjach z przyjaciółmi postaw na {cechę_pozytywną}. Uwaga na {cechę_negatywną} – nie testuj cierpliwości innych.`,
-            `Dziś możesz poczuć wewnętrzny niepokój, ale to tylko dlatego, że {element} chce Cię obudzić. W miłości kluczowa jest komunikacja. Jeśli masz problem, napisz list lub wiadomość – słowa same popłyną. Twoja {cecha_pozytywna} sprawi, że druga strona zrozumie Twoją rację. Unikaj tylko {cechy_negatywnej} w tonie.`,
-            `Dziś w związku wydarzy się coś, co od dawna było ledwo wyczuwalne. Daj się ponieść pozytywnej energii. Jeżeli jesteś singlem, rozważ wyjście na wydarzenie towarzyskie – gwiazdy przepowiadają intrygujące spotkanie. Pamiętaj, by nie dać się zwieść pozorom – zachowaj {cechę_pozytywną} na pierwszym miejscu.`
-        ];
-
-        const careerPatterns = [
-            `W pracy dziś liczy się Twoja {cecha_pozytywna}. Szef lub klient dostrzeże Twoje starania. Możesz otrzymać pochwałę lub dodatkowe zadanie, które okaże się szansą. Uważaj na {cechę_negatywną} – nie podejmuj decyzji pod wpływem chwili. Rozmowa o podwyżce lub awansie może wrócić za kilka dni.`,
-            `{planeta} wspiera innowacje. To świetny czas na przedstawienie własnego pomysłu. Twoja naturalna {cecha_pozytywna} przekona innych. Jeśli odczuwasz {cechę_negatywną}, odłóż trudne rozmowy na później. Dziś unikaj konfliktów, ale też nie ulegaj presji. Jutro przyniesie jaśniejszy obraz sytuacji.`,
-            `Dziś możesz poczuć potrzebę zmiany. To dobry dzień na aktualizację CV lub rozmowę z mentorem. Energia {elementu} doda Ci odwagi. Nie bój się wyjść ze swojej strefy komfortu – wykorzystaj {cechę_pozytywną}. Uważaj, by {cecha_negatywna} nie zniszczyła Twojego entuzjazmu. Mały sukces na horyzoncie.`,
-            `W pracy czeka Cię zadanie wymagające kreatywności. Twoja {cecha_pozytywna} będzie strzałem w dziesiątkę. Zespół doceni Twoje pomysły. Jeśli poczujesz zniechęcenie (cecha negatywna), weź krótką przerwę. Wieczorem możesz mieć wgląd w to, jak rozwinąć swoją karierę.`,
-            `Dziś Twój wpływ {element} jest wyczuwalny dla współpracowników. Jesteś liderem, nawet jeśli nie mówisz wprost. Używaj {cechy_pozytywnej} do budowania mostów. Unikaj nadmiernego krytycyzmu ({cecha_negatywna}). Rozmowa o finansach może przynieść pozytywne wieści.`,
-            `Jeśli szukasz nowej pracy, dziś wysyłaj aplikacje – efekty zobaczysz w ciągu tygodnia. Twoja {cecha_pozytywna} zostanie zauważona. W obecnej pracy postaw na organizację – unikaj chaosu ({cecha_negatywna}). Spotkanie po południu może przechylić szalę na Twoją korzyść.`,
-            `Dziś w biznesie liczy się Twoja determinacja. Nie poddawaj się przy pierwszej przeszkodzie. Gwiazdy radzą: wykorzystaj {cechę_pozytywną} do negocjacji. Uwaga na {cechę_negatywną} – nie spalaj mostów. Perspektywa współpracy z nowym partnerem rysuje się pozytywnie.`
-        ];
-
-        const healthPatterns = [
-            `Dziś Twoja witalność jest na wysokim poziomie dzięki wpływowi {planeta}. Wykorzystaj to na aktywność fizyczną. Uważaj na {cechę_negatywną} – może prowadzić do przepracowania. Zadbaj o nawodnienie i sen. Twoja {cecha_pozytywna} pomoże Ci utrzymać zdrowe nawyki.`,
-            `Energia {elementu} sprawia, że czujesz potrzebę ruchu. Wybierz coś, co sprawia Ci przyjemność – taniec, spacery, joga. Unikaj używek. Dziś dobry dzień na rozpoczęcie diety lub detoksu. Twoja {cecha_pozytywna} wesprze samodyscyplinę. Nie daj się zwieść {cecha_negatywna} – zmęczenie minie po regeneracji.`,
-            `Zadbaj o zdrowie psychiczne – medytacja lub rozmowa z bliską osobą przyniesie ulgę. Dziś {planeta} wspiera regenerację. Jeśli odczuwasz ból głowy, odpocznij. Twoja naturalna {cecha_pozytywna} uchroni Cię przed stresem. Uważaj na {cechę_negatywną} – nie zamartwiaj się na zapas. Szybki spacer załatwi sprawę.`,
-            `Dziś równowaga między pracą a odpoczynkiem jest kluczowa. {Element} dodaje Ci energii, ale pamiętaj o umiarze. Zrób badania profilaktyczne, jeśli odkładałeś to od miesięcy. Twoja {cecha_pozytywna} pomoże Ci utrzymać motywację do ćwiczeń. Jeśli pojawi się {cecha_negatywna}, zrób sobie dzień wolny od treningu.`,
-            `Dziś Twoje ciało wysyła sygnały – nie ignoruj ich. Ból pleców? Zmień krzesło. Zmęczenie? Zjedz wartościowy posiłek. {planeta} wzmacnia odporność, ale też skłania do lenistwa. Użyj {cechy_pozytywnej}, by wprowadzić zdrowe rutyny. Unikaj {cechy_negatywnej} – nie przesadzaj z kawą.`,
-            `Jesteś dziś bardziej wrażliwy na stres. Ćwiczenia oddechowe pomogą. Twoja {cecha_pozytywna} sprawi, że łatwiej będzie Ci się zrelaksować. Uważaj na {cechę_negatywną} – może wywołać napięcie. Wieczorem gorąca kąpiel lub czytanie książki zdziała cuda. Gwiazdy mówią: dbaj o regularny sen.`,
-            `Dziś energia {element} sprzyja aktywnościom na świeżym powietrzu. Spacer w lesie lub nad wodą naładuje baterie. Jeśli masz problemy trawienne, zjedz lekkostrawny posiłek. Twoja {cecha_pozytywna} pomoże Ci wytrwać w zdrowych postanowieniach. Uwaga na {cechę_negatywną} – nie rezygnuj z ruchu.`
-        ];
-
-        // Dla każdego znaku tworzymy tablice 12 wiadomości dla każdej kategorii.
-        horoscopesData = {};
-        for (let sign of signs) {
-            const t = traits[sign];
-            horoscopesData[sign] = {
-                general: [],
-                love: [],
-                career: [],
-                health: []
-            };
-            // Dla uproszczenia, dla każdej kategorii tworzymy 12 unikalnych tekstów (opartych na wzorcach i cechach znaku)
-            // Wystarczy dla każdego dnia inny indeks.
-            const patternsMap = {
-                general: generalPatterns,
-                love: lovePatterns,
-                career: careerPatterns,
-                health: healthPatterns
-            };
-            for (let cat of categories) {
-                const patterns = patternsMap[cat];
-                for (let i = 0; i < 12; i++) {
-                    let pattern = patterns[i % patterns.length];
-                    let text = pattern
-                        .replace(/{cecha_pozytywna}/g, t.positive.split(',')[0])
-                        .replace(/{cecha_negatywna}/g, t.negative.split(',')[0])
-                        .replace(/{cechy_pozytywne}/g, t.positive)
-                        .replace(/{cechy_negatywne}/g, t.negative)
-                        .replace(/{element}/g, t.element)
-                        .replace(/{planeta}/g, t.planet);
-                    horoscopesData[sign][cat].push(text);
-                }
+        // Rozbudowane bazy horoskopów – każdy znak ma unikalne cechy i wiele możliwych wariantów (losowany)
+        const data = {
+            baran: {
+                desc: "Płoniesz energią i odwagą. Twoja siła przebicia może dziś zdziałać cuda, ale pamiętaj – impet to nie wszystko.",
+                love: "Miłość potrzebuje dziś Twojej łagodności. Zamiast dominować, posłuchaj. Zaskocz partnera czułością – odwdzięczy się stokrotnie.",
+                career: "Profesjonalnie – czas na przełom! Nie bój się podejmować ryzyka. Twoja intuicja jest wyjątkowo silna.",
+                health: "Dużo adrenaliny – zadbaj o regenerację. Krótka medytacja lub spacer będą lepsze niż kolejny napój energetyczny.",
+                advice: "Zrób jeden krok w stronę celu, który odkładasz od miesięcy. Dziś masz sprzyjające fale.",
+                quote: "Odwaga nie polega na braku strachu, ale na działaniu mimo niego.",
+                strength: "Determinacja, odwaga, naturalny przywódca"
+            },
+            byk: {
+                desc: "Jesteś jak skała – stabilny, wytrwały, ale dziś wszechświat prosi Cię o odrobinę giętkości.",
+                love: "Relacje wymagają świeżości. Zaskocz ukochaną osobę nieoczekiwanym gestem – nawet małym.",
+                career: "Praca przynosi owoce cierpliwości. Możesz liczyć na docenienie. Nie spiesz się – twoja metoda działa.",
+                health: "Uważaj na przeciążenie szyi i karku. Ciepłe okłady i joga pomogą.",
+                advice: "Pozwól sobie na chwilę przyjemności bez wyrzutów sumienia. Zasługujesz na odpoczynek.",
+                quote: "Prawdziwa siła to umiejętność cieszenia się chwilą bez ciągłego działania.",
+                strength: "Cierpliwość, lojalność, zmysł praktyczny"
+            },
+            bliznieta: {
+                desc: "Twój umysł pracuje dziś na najwyższych obrotach. Uważaj, by nie rozproszyć się w stu kierunkach.",
+                love: "Twoja elokwencja oczaruje każdego, ale nie graj z uczuciami. Szczerość otworzy drzwi do głębszej więzi.",
+                career: "Genialne pomysły i łatwość komunikacji – idealny dzień na negocjacje i prezentacje.",
+                health: "Stres dla Ciebie to codzienność, ale dziś zwolnij. Głęboki oddech i chwila ciszy.",
+                advice: "Zapisz jedno ważne postanowienie i zrealizuj je – nawet małymi krokami.",
+                quote: "Mnogość ścieżek nie świadczy o wartości celu, a o sile wyboru.",
+                strength: "Kreatywność, inteligencja, adaptacyjność"
+            },
+            rak: {
+                desc: "Twoja wrażliwość to dar, ale też wyzwanie. Nie pozwól, by przeszłość przyćmiła dzisiejsze radości.",
+                love: "Rodzinne ciepło i troska są dziś Twoją największą bronią. Otocz bliskich opieką.",
+                career: "Zadania wymagające empatii i wyczucia – to Twoja nisza. Unikaj konfliktów.",
+                health: "Dbaj o swój żołądek i emocje. Łagodne ćwiczenia i gotowanie potrafią zdziałać cuda.",
+                advice: "Codziennie znajdź 10 minut tylko dla siebie, by naładować akumulatory.",
+                quote: "Kto pielęgnuje swoje wnętrze, ten promieniuje na zewnątrz.",
+                strength: "Empatia, intuicja, oddanie"
+            },
+            lew: {
+                desc: "Jesteś w centrum uwagi. Otoczenie potrzebuje Twojego blasku – dziel się nim hojnie.",
+                love: "Bądź hojny w komplementach, ale nie oczekuj natychmiastowej nagrody. Prawdziwa miłość nie jest transakcją.",
+                career: "Twoja charyzma może dziś przesunąć góry. Lideruj, ale słuchaj też innych.",
+                health: "Serce – w przenośni i dosłownie – potrzebuje umiaru. Unikaj nadmiaru używek.",
+                advice: "Zrób coś bezinteresownego dla kogoś, kto nie może się odwdzięczyć.",
+                quote: "Nie liczy się aplauz, lecz wpływ, jaki masz na innych, gdy schodzisz ze sceny.",
+                strength: "Charyzma, odwaga, hojność"
+            },
+            panna: {
+                desc: "Perfekcjonizm służy Ci, ale czasem bywa pułapką. Dziś doceniaj małe sukcesy.",
+                love: "Analityczny umysł nie zawsze sprawdza się w miłości. Zaufaj sercu, a nie checklistom.",
+                career: "Szczegóły są Twoją mocną stroną. Lekceważenie ich przez innych da Ci przewagę.",
+                health: "Jelita i układ trawienny – postaw na lekkostrawne posiłki i probiotyki.",
+                advice: "Pozwól sobie na niedoskonałość. Świat się nie zawali, a Ty zyskasz spokój.",
+                quote: "Doskonałość jest kierunkiem, nie celem.",
+                strength: "Analityczność, skromność, systematyczność"
+            },
+            waga: {
+                desc: "Harmonia to Twoje drugie imię. Dziś jednak musisz opowiedzieć się po którejś stronie.",
+                love: "Dyplomacja pomoże rozładować napięcie. Szukaj kompromisu, ale nie za wszelką cenę.",
+                career: "Współpraca i partnerstwo przyniosą sukces. Wspólny projekt wypali znakomicie.",
+                health: "Równowaga hormonalna i nerki – pij więcej wody i wyśpij się.",
+                advice: "Zadaj sobie pytanie, czego tak naprawdę chcesz, a nie czego oczekują inni.",
+                quote: "Piękno istnieje w równowadze, ale także w odważnych decyzjach.",
+                strength: "Dyplomacja, wdzięk, sprawiedliwość"
+            },
+            skorpion: {
+                desc: "Twoja pasja i intensywność mogą dziś przytłoczyć innych. Używaj ich z rozwagą.",
+                love: "Zazdrość czy podejrzliwość – odpuść. Głębokie uczucie nie boi się pytań, ale potrzebuje zaufania.",
+                career: "Tajemnice i transformacja – doskonały dzień na restrukturyzację lub nowy start.",
+                health: "Układ moczowo-płciowy i hormony – zadbaj o relaks i unikaj toksyn.",
+                advice: "Pozbądź się jednego balastu emocjonalnego, który ciągnie Cię w dół.",
+                quote: "Największą siłą nie jest władza nad innymi, lecz kontrola nad własnymi demonami.",
+                strength: "Determinacja, intuicja, odporność psychiczna"
+            },
+            strzelec: {
+                desc: "Niespokojna natura ciągnie Cię w świat. Zaplanuj podróż – nawet w myślach.",
+                love: "Wolność potrzebna Ci jak powietrze. Powiedz o tym partnerowi – unikniesz nieporozumień.",
+                career: "Szkolenia, delegacje, kontakty z zagranicą – teraz lub nigdy. Ruszaj śmiało.",
+                health: "Wątroba i nogi – ruch na świeżym powietrzu będzie najlepszym lekarstwem.",
+                advice: "Zrób listę 5 rzeczy, które chciałbyś przeżyć, i zacznij realizować pierwszą.",
+                quote: "Optymista widzi wiatr, pesymista burzę, ale tylko żeglarz podnosi żagle.",
+                strength: "Optymizm, ciekawość świata, szczerość"
+            },
+            koziorozec: {
+                desc: "Ambicja pcha Cię do przodu, ale dziś odpoczynek jest ważniejszy niż kolejny sukces.",
+                love: "Stabilność i lojalność – to cenisz. Pokaż partnerowi, że możesz być też spontaniczny.",
+                career: "Długoterminowe cele są w zasięgu ręki. Cierpliwość popłaca, miej plan.",
+                health: "Kości i stawy – nie przeciążaj się. Suplementacja magnezu pomoże.",
+                advice: "Odmów jednej rzeczy, na którą nie masz ochoty – naucz się mówić 'nie'.",
+                quote: "Najtrwalsze budowle wznosi się dzień po dniu, a nie w jednym porywie.",
+                strength: "Odpowiedzialność, samodyscyplina, wytrwałość"
+            },
+            wodnik: {
+                desc: "Jesteś wizjonerem. Dziś wszyscy patrzą na Ciebie przez pryzmat oryginalności.",
+                love: "Nie bój się zaskakiwać – oryginalność jest Twoją supermocą. Pokaż uczucia w nietypowy sposób.",
+                career: "Pomysły, które wydają się nierealne, mogą właśnie jutro zmienić świat. Dziel się nimi.",
+                health: "Krew, układ krążenia – nawadniaj się i ruszaj się regularnie.",
+                advice: "Wyjdź ze swojej bańki informacyjnej. Porozmawiaj z kimś o całkowicie innych poglądach.",
+                quote: "To, co dziś szalone, jutro może być normą. Bądź na wyrost.",
+                strength: "Oryginalność, humanitaryzm, niezależność"
+            },
+            ryby: {
+                desc: "Twoja intuicja jest dziś na najwyższym poziomie. Ufaj wewnętrznemu głosowi.",
+                love: "Marzycielska natura może odrealniać relacje. Partner potrzebuje widzieć Cię w realu – nie tylko w snach.",
+                career: "Sztuka, muzyka, pomoc innym – tutaj możesz zabłysnąć. Unikaj toksycznego otoczenia.",
+                health: "Stopy i układ limfatyczny – odpoczynek w wodzie i ćwiczenia relaksacyjne.",
+                advice: "Poświęć wieczór na słuchanie swojej ulubionej muzyki i analizę swoich marzeń.",
+                quote: "Wyobraźnia to skrzydła, ale stąpaj też twardo po ziemi.",
+                strength: "Empatia, kreatywność, duchowość"
             }
-        }
-    }
-
-    function getHoroscope(sign, category, dayOffset = 0) {
-        generateHoroscopes();
-        // Używamy daty jako seed   + dayOffset (na co dzień inny horoskop)
-        const today = new Date();
-        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-        const idx = (dayOfYear + dayOffset) % 12;
-        return horoscopesData[sign][category][idx];
-    }
-
-    function showHoroscope(updatePlaceholder = true) {
-        const signSelect = document.getElementById('zodiacSign');
-        const sign = signSelect.value;
-        if (!sign) return;
-        currentHoroscopeSign = sign;
-        const category = currentCategory;
-        const horoscopeText = getHoroscope(sign, category, 0);
-        const traits = {
-            baran: "♈ Baran", byk: "♉ Byk", bliznieta: "♊ Bliźnięta", rak: "♋ Rak", lew: "♌ Lew",
-            panna: "♍ Panna", waga: "♎ Waga", skorpion: "♏ Skorpion", strzelec: "♐ Strzelec",
-            koziorozec: "♑ Koziorożec", wodnik: "♒ Wodnik", ryby: "♓ Ryby"
         };
-        const symbolSpan = document.getElementById('zodiacSymbol');
-        const nameEl = document.getElementById('zodiacName');
-        symbolSpan.textContent = traits[sign].split(' ')[0];
-        nameEl.textContent = traits[sign];
-        document.getElementById('horoscopeText').innerHTML = horoscopeText.replace(/\n/g, '<br>');
+        
+        const zodiac = data[sign];
+        // Warianty losowe dla większej różnorodności, ale trzymające się charakteru znaku
+        const randomVariants = [
+            { loveAdd: " Możesz spotkać kogoś, kto odmieni Twój świat.", careerAdd: " Ktoś z autorytetem zwróci na Ciebie uwagę." },
+            { loveAdd: " Nie bój się okazywać emocji – to Twoja siła.", careerAdd: " Nowe wyzwanie pojawi się niespodziewanie – przyjmij je." },
+            { loveAdd: " Pojednanie po kłótni będzie łatwiejsze niż myślisz.", careerAdd: " Docenisz dziś wartość współpracy zespołowej." }
+        ];
+        const rand = Math.floor(Math.random() * randomVariants.length);
+        const variant = randomVariants[rand];
+        
+        const desc = zodiac.desc;
+        const loveBase = zodiac.love;
+        const careerBase = zodiac.career;
+        const health = zodiac.health;
+        const advice = zodiac.advice;
+        const quote = zodiac.quote;
+        const strength = zodiac.strength;
+        
+        const finalLove = loveBase + variant.loveAdd;
+        const finalCareer = careerBase + variant.careerAdd;
+        
+        // Mała personalizacja – dodajemy unikalne znaczniki astrologiczne (dom, planeta)
+        let bonus = "";
+        if (Math.random() > 0.7) {
+            bonus = "<p><strong>🌙 Wskazówka astrologiczna:</strong> Faza Księżyca w sprzyja refleksji. Zrób rachunek sumienia.</p>";
+        }
+        
+        const html = `
+            <div class="horoscope-section">
+                <h4><i class="fas fa-user-astronaut"></i> Twój znak: ${signName}</h4>
+                <p>${desc}</p>
+            </div>
+            <div class="horoscope-section">
+                <h4><i class="fas fa-heart"></i> Miłość</h4>
+                <p>${finalLove}</p>
+            </div>
+            <div class="horoscope-section">
+                <h4><i class="fas fa-briefcase"></i> Kariera i finanse</h4>
+                <p>${finalCareer}</p>
+            </div>
+            <div class="horoscope-section">
+                <h4><i class="fas fa-leaf"></i> Zdrowie i samopoczucie</h4>
+                <p>${health}</p>
+            </div>
+            <div class="horoscope-section">
+                <h4><i class="fas fa-gem"></i> Twoje mocne strony</h4>
+                <p>${strength}</p>
+            </div>
+            <div class="horoscope-section">
+                <h4><i class="fas fa-lightbulb"></i> Rada na dziś</h4>
+                <p>${advice}</p>
+            </div>
+            <div class="quote">
+                <i class="fas fa-quote-left"></i> ${quote} <i class="fas fa-quote-right"></i>
+            </div>
+            ${bonus}
+            <div style="margin-top: 0.8rem; font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+                🌟 Horoskop generowany na podstawie astrologii motywacyjnej – trafność potwierdzona przez internautów.
+            </div>
+        `;
         
         const resultDiv = document.getElementById('horoscopeResult');
-        const placeholderDiv = document.getElementById('horoscopePlaceholder');
-        if (updatePlaceholder) {
-            resultDiv.style.display = 'block';
-            placeholderDiv.style.display = 'none';
-        } else {
-            if (resultDiv && resultDiv.style.display !== 'none') {
-                // już widoczny, tylko odśwież treść
-                resultDiv.style.display = 'block';
-                placeholderDiv.style.display = 'none';
-            } else {
-                resultDiv.style.display = 'block';
-                placeholderDiv.style.display = 'none';
-            }
-        }
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = html;
+        // Płynne przewinięcie do wyników
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-
-    function changeCategory(cat) {
-        currentCategory = cat;
-        if (currentHoroscopeSign) {
-            showHoroscope(true);
-        } else {
-            // jeśli nie wybrano znaku, wybierz domyślnie pierwszy
-            const signSelect = document.getElementById('zodiacSign');
-            if (signSelect) {
-                currentHoroscopeSign = signSelect.value;
-                showHoroscope(true);
-            }
-        }
-    }
+    
+    // Inicjalizacja horoskopu – od razu wygeneruj dla bieżącego znaku?
+    // Niech użytkownik sam kliknie przycisk.
 
     // ======================== BANER ZGÓD COOKIE ========================
     function setCookieConsent(accepted) {
@@ -2283,11 +2294,6 @@
     }, 500);
     clearProgrammer();
     switchSubTab('credit', null);
-    
-    // Inicjalizacja horoskopu (nie pokazuje od razu)
-    generateHoroscopes();
-    // event dla przycisku
-    document.getElementById('showHoroscopeBtn').addEventListener('click', () => showHoroscope(true));
 </script>
 </body>
 </html>
