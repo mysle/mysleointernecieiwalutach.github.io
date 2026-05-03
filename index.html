@@ -353,32 +353,45 @@
             .calc-btn { padding: 0.6rem 0; font-size: 1rem; }
             .cookie-consent { flex-direction: column; text-align: center; padding: 1rem; }
             
-            /* Poprawki dla walut */
+            /* Poprawki dla walut – równe karty i lepsze odstępy */
             .currency-converter-grid {
-                grid-template-columns: 1fr !important;
-                gap: 1.5rem !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1rem !important;
+                align-items: center;
             }
             .currency-card {
+                width: 100%;
                 padding: 1rem !important;
+                margin: 0;
             }
             .currency-input-row {
-                flex-direction: column !important;
+                flex-direction: row !important;
+                flex-wrap: wrap;
                 gap: 0.5rem !important;
             }
             .currency-select {
-                width: 100% !important;
-                min-width: unset !important;
+                width: auto !important;
+                min-width: 100px !important;
+                flex: 1;
             }
             .currency-amount-input {
-                width: 100% !important;
+                flex: 2 !important;
+                min-width: 120px;
+            }
+            .swap-button {
+                width: 48px !important;
+                height: 48px !important;
+                margin: 0.5rem auto;
+                font-size: 1.2rem;
             }
             .quick-buttons {
                 justify-content: center;
+                gap: 0.3rem;
             }
-            .swap-button {
-                width: 50px !important;
-                height: 50px !important;
-                margin: 0 auto;
+            .quick-btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
             }
 
             /* Poprawki dla konwertera – lepsze przewijanie i czytelność */
@@ -429,30 +442,30 @@
                     <p style="color: var(--text-muted);">Kursy pobierane są raz, przy ładowaniu strony – zawsze aktualne na ten moment.</p>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center; margin: 2rem 0;" class="currency-converter-grid">
+                <div class="currency-converter-grid">
                     <div style="background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem;" class="currency-card">
                         <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">Mam taką kwotę 👇</div>
                         <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;" class="currency-input-row">
-                            <input list="currencyListFrom" class="modern-select currency-select" id="fromCurrencyInput" onchange="onBaseCurrencyChange()" autocomplete="off" value="USD" style="width: auto; min-width: 100px;">
+                            <input list="currencyListFrom" class="modern-select currency-select" id="fromCurrencyInput" onchange="onBaseCurrencyChange()" autocomplete="off" value="USD">
                             <datalist id="currencyListFrom"></datalist>
-                            <input type="text" inputmode="decimal" class="modern-input currency-amount-input" id="amount" value="100" oninput="validateAmountInput(); updateSliderFromAmount(); convert();" onblur="validateAmountInput(); convert();" style="flex:1;">
+                            <input type="text" inputmode="decimal" class="modern-input currency-amount-input" id="amount" value="100" oninput="validateAmountInput(); updateSliderFromAmount(); convert();" onblur="validateAmountInput(); convert();">
                         </div>
                         <div style="margin-top: 1.5rem;">
                             <input type="range" id="amountSlider" min="0" max="2000" value="100" step="1" oninput="updateAmountFromSlider(); convert();" style="width: 100%; height: 20px; cursor: pointer; background: linear-gradient(90deg, #6366f1, #ec4899); border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); -webkit-appearance: none;">
                         </div>
                     </div>
-                    <button style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; color: white; font-size: 1.5rem; cursor: pointer;" class="swap-button" onclick="swapCurrencies()" title="Zamień waluty"><i class="fas fa-exchange-alt"></i></button>
+                    <button class="swap-button" onclick="swapCurrencies()" title="Zamień waluty"><i class="fas fa-exchange-alt"></i></button>
                     <div style="background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem;" class="currency-card">
                         <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">Chcę dostać 👉</div>
-                        <div style="display: flex; gap: 1rem; align-items: center;" class="currency-input-row">
-                            <input list="currencyListTo" class="modern-select" id="toCurrencyInput" onchange="convert()" autocomplete="off" value="PLN" style="width: auto; min-width: 100px;">
+                        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;" class="currency-input-row">
+                            <input list="currencyListTo" class="modern-select" id="toCurrencyInput" onchange="convert()" autocomplete="off" value="PLN">
                             <datalist id="currencyListTo"></datalist>
-                            <input type="text" class="modern-input" id="result" readonly placeholder="0.00" style="flex:1;">
+                            <input type="text" class="modern-input" id="result" readonly placeholder="0.00">
                         </div>
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin: 1rem 0;" class="quick-buttons">
+                <div class="quick-buttons" style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin: 1rem 0;">
                     <span style="color: var(--text-muted); font-size: 0.8rem; margin-right: 0.25rem;">Szybka kwota:</span>
                     <button class="quick-btn" onclick="setAmount(5)">5</button>
                     <button class="quick-btn" onclick="setAmount(10)">10</button>
@@ -485,7 +498,7 @@
             </div>
         </div>
 
-        <!-- ============ ZAKŁADKA KONWERTER (poprawiona wizualnie) ============ -->
+        <!-- ============ ZAKŁADKA KONWERTER ============ -->
         <div id="converter-tab" class="tab-content">
             <div class="glass-card">
                 <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📏 Konwerter Pro</h2>
@@ -856,7 +869,7 @@
                 <div class="table-wrapper">
                     <table id="timeDiffTable">
                         <thead><tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th></tr></thead>
-                        <tbody id="timeDiffTableBody"></tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
+                        <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
                     </table>
                 </div>
                 <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Różnice obliczane dla bieżącej daty z uwzględnieniem czasu letniego (DST).</p>
@@ -1340,7 +1353,7 @@
                 else if (from === 'K') celsius = val - 273.15;
                 const results = { '°C': celsius, '°F': celsius * 9/5 + 32, 'K': celsius + 273.15 };
                 Object.entries(results).forEach(([unit, value]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${value.toFixed(4)}</td></td>`;
                 });
                 return;
             }
@@ -1353,7 +1366,7 @@
                 const factor = activeUnits[from] || 1;
                 const baseVal = val * factor;
                 Object.entries(activeUnits).forEach(([unit, factor]) => {
-                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${formatUnit(unit)}<td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
                 });
             } else {
                 const units = unitCategories[cat].units;
@@ -1935,7 +1948,7 @@
             });
             tbody.innerHTML += `
                 <tr style="background:rgba(99,102,241,0.2);">
-                    <td><strong>Strefa bazowa</strong><br><span style="font-size:0.7rem;">${baseTZ}</span></td>
+                    <td><strong>Strefa bazowa</strong><br><span style="font-size:0.7rem;">${baseTZ}</span><td>
                     <td>${baseFormatted.time}<br><span style="font-size:0.7rem;">${baseFormatted.date}</span></td>
                     <td>0h</span></div>
                 </tr>
