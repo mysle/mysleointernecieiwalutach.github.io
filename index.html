@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>MultiTool Pro – Waluty, Konwerter, Kalkulatory, Czas, IP, Szybkość + Horoskop</title>
-    <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP, strefy czasowe, korzystaj z kalkulatorów finansowych i sprawdź swój horoskop na dziś.">
+    <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP, strefy czasowe, korzystaj z kalkulatorów finansowych i odkryj swój osobisty horoskop – wiarygodne dane z API i tłumaczenie na polski.">
 
     <!-- Google Consent Mode - domyślnie brak zgód -->
     <script>
@@ -222,73 +222,58 @@
         .time-date { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; }
         .utc-offset { font-size: 0.75rem; background: rgba(0,0,0,0.4); display: inline-block; padding: 0.2rem 0.5rem; border-radius: 1rem; }
 
-        /* Horoscope styles */
-        .zodiac-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 0.8rem;
-            margin: 1.5rem 0;
-        }
-        .zodiac-card {
-            background: rgba(15,23,42,0.6);
-            border: 1px solid var(--glass-border);
-            border-radius: 1rem;
-            padding: 0.8rem;
+        /* Horoskop styles */
+        .horoscope-container {
             text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
+            padding: 1rem;
         }
-        .zodiac-card:hover, .zodiac-card.active {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            transform: translateY(-3px);
-            border-color: transparent;
+        .zodiac-select {
+            max-width: 300px;
+            margin: 0 auto 1rem auto;
         }
-        .zodiac-icon { font-size: 2rem; margin-bottom: 0.2rem; }
-        .zodiac-name { font-weight: 600; font-size: 0.9rem; }
-        .horoscope-result {
+        .horoscope-card {
             background: rgba(15,23,42,0.6);
-            border-radius: 1rem;
-            padding: 1.5rem;
+            border-radius: 1.5rem;
+            padding: 2rem;
             margin-top: 1.5rem;
-            border: 1px solid var(--glass-border);
+            text-align: left;
+            border-left: 4px solid var(--primary);
         }
-        .horoscope-text {
-            font-size: 1.1rem;
+        .horoscope-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed var(--glass-border);
+        }
+        .horoscope-section h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        .horoscope-section p {
             line-height: 1.5;
-            margin: 1rem 0;
+            color: var(--text);
         }
-        .horoscope-detail {
+        .horoscope-details {
             display: flex;
-            gap: 1.5rem;
             flex-wrap: wrap;
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            gap: 0.8rem;
+            margin-bottom: 1rem;
         }
         .detail-item {
-            flex: 1;
-            min-width: 120px;
+            background: rgba(0,0,0,0.4);
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+        }
+        .quote {
+            font-style: italic;
+            background: rgba(99,102,241,0.2);
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
             text-align: center;
         }
-        .detail-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-        .detail-value {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-        .quote-text {
-            font-style: italic;
-            font-size: 0.95rem;
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(0,0,0,0.3);
-            border-radius: 1rem;
-            color: #cbd5e1;
-        }
+
         /* Calculator specific - improved layout */
         .calc-buttons {
             display: grid;
@@ -470,8 +455,8 @@
             .converter-value-input {
                 width: 100% !important;
             }
-            .zodiac-selector {
-                grid-template-columns: repeat(3, 1fr);
+            .horoscope-card {
+                padding: 1.2rem;
             }
         }
 
@@ -500,9 +485,6 @@
                 height: 24px !important;
                 width: 24px !important;
             }
-            .zodiac-selector {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
     </style>
 </head>
@@ -519,7 +501,7 @@
             <button class="tab-btn" onclick="switchTab('ip', event)"><i class="fas fa-globe"></i> IP Info</button>
             <button class="tab-btn" onclick="switchTab('speed', event)"><i class="fas fa-tachometer-alt"></i> Test szybkości</button>
             <button class="tab-btn" onclick="switchTab('time', event)"><i class="fas fa-clock"></i> 📅 Czas i strefy</button>
-            <button class="tab-btn" onclick="switchTab('horoscope', event)"><i class="fas fa-star"></i> ✨ Horoskop</button>
+            <button class="tab-btn" onclick="switchTab('horoscope', event)"><i class="fas fa-star-of-life"></i> ✨ Horoskop</button>
         </div>
     </div>
 </nav>
@@ -527,7 +509,6 @@
 <div class="container">
     <!-- ============ ZAKŁADKA WALUTY ============ -->
     <div id="currency-tab" class="tab-content active">
-        <!-- (Zawartość walut pozostała bez zmian – taka sama jak w oryginalnym kodzie) -->
         <div class="glass-card">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <h1 style="font-size: 2.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">💰 Przeliczanie walut</h1>
@@ -809,12 +790,14 @@
             </div>
 
             <div id="ipContent" style="display: none;">
+                <!-- Hero IP -->
                 <div class="ip-hero">
                     <div class="label" style="font-size: 1rem;">Twój adres IP</div>
                     <div class="ip-display" id="ipAddress">0.0.0.0</div>
                     <button class="btn btn-sm" onclick="copyIP()" style="margin-top: 0.5rem;"><i class="fas fa-copy"></i> Kopiuj IP</button>
                 </div>
 
+                <!-- Podstawowe info -->
                 <div class="info-grid" id="ipInfoGrid">
                     <div class="info-item"><div class="label">Typ IP</div><div class="value" id="ipType">—</div></div>
                     <div class="info-item"><div class="label">Dostawca (ISP)</div><div class="value" id="ipIsp">—</div></div>
@@ -824,6 +807,7 @@
                     <div class="info-item"><div class="label">Strefa czasowa</div><div class="value" id="ipTimezone">—</div></div>
                 </div>
 
+                <!-- Szczegóły sieci -->
                 <h3 class="section-title"><i class="fas fa-network-wired"></i> Szczegóły sieci</h3>
                 <div class="info-grid">
                     <div class="info-item"><div class="label">ASN</div><div class="value" id="ipAsn">—</div></div>
@@ -831,10 +815,12 @@
                     <div class="info-item"><div class="label">Host</div><div class="value" id="ipHost">—</div></div>
                 </div>
 
+                <!-- Mapa -->
                 <h3 class="section-title"><i class="fas fa-map-marked-alt"></i> Geolokalizacja IP (najdokładniejsza możliwa)</h3>
                 <div id="ipMap"></div>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Lokalizacja na podstawie IP – maksymalna dokładność dostępna z bazy IP. Współrzędne uzyskane z ipapi.co.</p>
 
+                <!-- Dodatkowe informacje o lokalizacji -->
                 <h3 class="section-title"><i class="fas fa-info-circle"></i> Dodatkowe informacje o lokalizacji</h3>
                 <div class="info-grid" id="ipExtraInfo">
                     <div class="info-item"><div class="label">Flaga</div><div class="value" id="extraFlag">—</div></div>
@@ -844,6 +830,7 @@
                     <div class="info-item"><div class="label">Kod kierunkowy</div><div class="value" id="extraCallingCode">—</div></div>
                 </div>
 
+                <!-- Urządzenie -->
                 <h3 class="section-title" style="margin-top: 2rem;"><i class="fas fa-laptop"></i> Informacje o urządzeniu</h3>
                 <div class="info-grid">
                     <div class="info-item"><div class="label">Przeglądarka</div><div class="value" id="devBrowser">—</div></div>
@@ -852,6 +839,7 @@
                     <div class="info-item"><div class="label">Język</div><div class="value" id="devLang">—</div></div>
                 </div>
 
+                <!-- Akcje -->
                 <div class="ip-actions">
                     <button class="btn" onclick="copyIP()"><i class="fas fa-copy"></i> Kopiuj IP</button>
                     <button class="btn" onclick="checkCustomIP()" style="background: rgba(255,255,255,0.1);"><i class="fas fa-search"></i> Sprawdź inne IP</button>
@@ -954,42 +942,46 @@
             <div class="table-wrapper">
                 <table id="timeDiffTable">
                     <thead><tr><th>Strefa czasowa</th><th>Aktualny czas</th><th>Różnica względem wybranej</th></tr></thead>
-                    <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk.</td></tbody>
+                    <tbody id="timeDiffTableBody"><tr><td colspan="3">Wybierz strefę bazową i kliknij przycisk. Side</tbody>
                 </table>
             </div>
             <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Różnice obliczane dla bieżącej daty z uwzględnieniem czasu letniego (DST).</p>
         </div>
     </div>
 
-    <!-- ============ ZAKŁADKA HOROSKOP ============ -->
+    <!-- ============ ZAKŁADKA HOROSKOP (z API i tłumaczeniem) ============ -->
     <div id="horoscope-tab" class="tab-content">
         <div class="glass-card">
-            <div style="text-align: center;">
-                <h2 style="font-size: 2rem; background: linear-gradient(135deg, #fff, #f9a8d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✨ Horoskop dzienny ✨</h2>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Wybierz swój znak, a otrzymasz wróżbę skrojoną specjalnie dla Ciebie – motywującą, prawdziwą i pełną energii. 🌟</p>
-            </div>
-
-            <div class="zodiac-selector" id="zodiacSelector"></div>
-
-            <div id="horoscopeResult" class="horoscope-result" style="display: none;">
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <span id="zodiacIcon" style="font-size: 2.5rem;"></span>
-                    <h3 id="zodiacName" style="font-size: 1.5rem; margin:0;"></h3>
+            <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✨ Horoskop – wróżba z internetu</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 1rem;">Pobieramy aktualną przepowiednię dla Twojego znaku z darmowego API i tłumaczymy na polski.</p>
+            <div class="horoscope-container">
+                <div class="zodiac-select">
+                    <label>Twój znak zodiaku:</label>
+                    <select id="zodiacSign" class="modern-select" style="margin-top: 0.5rem;">
+                        <option value="aries">♈ Baran</option>
+                        <option value="taurus">♉ Byk</option>
+                        <option value="gemini">♊ Bliźnięta</option>
+                        <option value="cancer">♋ Rak</option>
+                        <option value="leo">♌ Lew</option>
+                        <option value="virgo">♍ Panna</option>
+                        <option value="libra">♎ Waga</option>
+                        <option value="scorpio">♏ Skorpion</option>
+                        <option value="sagittarius">♐ Strzelec</option>
+                        <option value="capricorn">♑ Koziorożec</option>
+                        <option value="aquarius">♒ Wodnik</option>
+                        <option value="pisces">♓ Ryby</option>
+                    </select>
                 </div>
-                <div id="horoscopeText" class="horoscope-text"></div>
-                <div class="horoscope-detail">
-                    <div class="detail-item"><div class="detail-label">🍀 Szczęśliwa liczba</div><div id="luckyNumber" class="detail-value">—</div></div>
-                    <div class="detail-item"><div class="detail-label">🎨 Szczęśliwy kolor</div><div id="luckyColor" class="detail-value">—</div></div>
-                    <div class="detail-item"><div class="detail-label">🧭 Rada na dziś</div><div id="advice" class="detail-value">—</div></div>
+                <button class="btn" id="horoscopeBtn"><i class="fas fa-moon"></i> Odkryj przepowiednię</button>
+                <div id="horoscopeResult" class="horoscope-card" style="display: none;">
+                    <div class="horoscope-section">
+                        <h4><i class="fas fa-star"></i> Twoja wróżba</h4>
+                        <p id="horoscopeText">Ładowanie...</p>
+                    </div>
+                    <div class="horoscope-details" id="horoscopeDetails"></div>
+                    <div class="quote" id="horoscopeQuote"></div>
                 </div>
-                <div id="quote" class="quote-text"></div>
             </div>
-
-            <div style="text-align: center; margin-top: 2rem;">
-                <button class="btn" onclick="randomHoroscope()"><i class="fas fa-dice-d6"></i> Losuj znak</button>
-                <button class="btn btn-sm" onclick="resetHoroscope()" style="margin-left: 0.5rem; background: rgba(255,255,255,0.1);"><i class="fas fa-undo-alt"></i> Zresetuj</button>
-            </div>
-            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1.5rem;">⭐ Horoskop generowany jest lokalnie – każdy dzień przynosi nową, unikalną przepowiednię, która zmienia się każdego dnia!</p>
         </div>
     </div>
 </div>
@@ -1001,12 +993,14 @@
     <p><a href="kontakt.html" style="color: var(--primary); font-size: 1.2rem;">✉️ Przejdź do formularza kontaktowego</a></p>
 </div>
 
+<!-- STOPKA -->
 <footer style="text-align: center; padding: 1.5rem; border-top: 1px solid var(--glass-border); margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">
     <p>© 2026 MultiTool Pro | <a href="polityka.html" style="color: var(--primary);">Polityka prywatności</a> | <a href="kontakt.html" style="color: var(--primary);">Kontakt</a></p>
 </footer>
 
 <div class="status-bar"><div class="status-dot"></div><span>Połączenie aktywne</span></div>
 
+<!-- BANER ZGÓD COOKIE -->
 <div id="cookieConsent" class="cookie-consent" style="display: none;">
     <p>🍪 Ta strona używa plików cookie Google Analytics i AdSense. Dalsze korzystanie oznacza zgodę na ich użycie, chyba że je odrzucisz. <a href="polityka.html" style="color: var(--primary);">Dowiedz się więcej</a>.</p>
     <div class="cookie-buttons">
@@ -1028,10 +1022,6 @@
         }
         if (tab === 'time') {
             refreshAllTimes();
-        }
-        if (tab === 'horoscope' && !window.horoscopeInitialized) {
-            initHoroscope();
-            window.horoscopeInitialized = true;
         }
     }
 
@@ -1482,7 +1472,7 @@
             const factor = activeUnits[from] || 1;
             const baseVal = val * factor;
             Object.entries(activeUnits).forEach(([unit, factor]) => {
-                tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
+                tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td><tr>`;
             });
         } else {
             const units = unitCategories[cat].units;
@@ -2060,7 +2050,7 @@
             <tr style="background:rgba(99,102,241,0.2);">
                 <td><strong>Strefa bazowa</strong><br><span style="font-size:0.7rem;">${baseTZ}</span></td>
                 <td>${baseFormatted.time}<br><span style="font-size:0.7rem;">${baseFormatted.date}</span></td>
-                <td>0h</td>
+                <td>0h</span></div>
             </tr>
         `;
     }
@@ -2083,169 +2073,89 @@
         }, 1000);
     }
 
-    // ======================== NOWY MODUŁ: HOROSKOP ========================
-    const zodiacSigns = [
-        { name: "Baran", dateStart: "03-21", dateEnd: "04-19", icon: "♈️", element: "ogień", planet:"Mars" },
-        { name: "Byk", dateStart: "04-20", dateEnd: "05-20", icon: "♉️", element: "ziemia", planet:"Wenus" },
-        { name: "Bliźnięta", dateStart: "05-21", dateEnd: "06-20", icon: "♊️", element: "powietrze", planet:"Merkury" },
-        { name: "Rak", dateStart: "06-21", dateEnd: "07-22", icon: "♋️", element: "woda", planet:"Księżyc" },
-        { name: "Lew", dateStart: "07-23", dateEnd: "08-22", icon: "♌️", element: "ogień", planet:"Słońce" },
-        { name: "Panna", dateStart: "08-23", dateEnd: "09-22", icon: "♍️", element: "ziemia", planet:"Merkury" },
-        { name: "Waga", dateStart: "09-23", dateEnd: "10-22", icon: "♎️", element: "powietrze", planet:"Wenus" },
-        { name: "Skorpion", dateStart: "10-23", dateEnd: "11-21", icon: "♏️", element: "woda", planet:"Pluton" },
-        { name: "Strzelec", dateStart: "11-22", dateEnd: "12-21", icon: "♐️", element: "ogień", planet:"Jowisz" },
-        { name: "Koziorożec", dateStart: "12-22", dateEnd: "01-19", icon: "♑️", element: "ziemia", planet:"Saturn" },
-        { name: "Wodnik", dateStart: "01-20", dateEnd: "02-18", icon: "♒️", element: "powietrze", planet:"Uran" },
-        { name: "Ryby", dateStart: "02-19", dateEnd: "03-20", icon: "♓️", element: "woda", planet:"Neptun" }
-    ];
-
-    const horoscopesBySign = {};
-
-    // Ponad 500 unikalnych, życiowych przepowiedni – każda zmienia się w zależności od dnia
-    const horoscopeTemplates = [
-        "Dziś los będzie chciał Ci coś przekazać – wystarczy, że otworzysz oczy i serce. {name}, twoja intuicja działa jak radar – zaufaj jej, szczególnie w sprawach zawodowych.",
-        "Planety sprzyjają nowym początkom. Jeśli od dawna coś odkładasz na później – teraz jest moment, by ruszyć do przodu. {name}, energia {element} dodaje Ci odwagi!",
-        "Uważaj na słowa – dziś mogą mieć większą moc niż zwykle. Powiedz to, co czujesz, ale z taktem. {name}, gwiazdy mówią, że możesz kogoś uratować jednym zdaniem.",
-        "Twoja kreatywność jest na najwyższym poziomie – wykorzystaj ją do rozwiązania starego problemu. {name}, {planet} daje Ci iskrę, której potrzebujesz.",
-        "Pieniądze to nie wszystko, ale dziś możesz otrzymać niespodziewany zastrzyk gotówki lub wartościową wskazówkę finansową. Otwórz się na możliwości.",
-        "W relacjach z bliskimi pojawi się szansa na pogłębienie więzi. {name}, nie bój się mówić o uczuciach – szczerość popłaca.",
-        "Twój urok osobisty będzie dziś magnetyczny – wykorzystaj to w negocjacjach. {name}, Twój znak {znak} ma naturalną charyzmę.",
-        "Ktoś z przeszłości może dać znak życia – zanim zareagujesz, zastanów się, czy to spotkanie ma sens. Energia {element} sugeruje, że warto dać szansę nowym ludziom.",
-        "Dziś wieczorem możesz przeżyć małe olśnienie – zapisz swoje myśli, bo mogą okazać się prorocze. {name}, twój umysł jest dziś wyjątkowo bystry.",
-        "Nie wszystko złoto, co się świeci – ale to, co dziś zobaczysz, może być prawdziwym skarbem. Zaufaj swojemu wewnętrznemu głosowi.",
-        "W pracy docenią Twoje zaangażowanie – możesz otrzymać pochwałę lub nawet podwyżkę. {name}, {planet} sprzyja awansom.",
-        "Dziś energia {element} sprawi, że poczujesz przypływ sił – zacznij coś, co odkładałeś latami. Nie czekaj na idealny moment.",
-        "W miłości możesz poczuć, że to już to – ale nie spiesz się. {name}, cierpliwość popłaci. Czas pracuje na Twoją korzyść.",
-        "Uważaj na detale – w natłoku obowiązków łatwo o pomyłkę. Sprawdź dwukrotnie każdą ważną rzecz. Gwiazdy mówią: spokój i dokładność.",
-        "Twój znak {znak} ma dziś szczególną ochronę – cokolwiek się stanie, wyjdziesz z tego obronną ręką. Zachowaj jednak pokorę.",
-        "Ktoś potrzebuje Twojej pomocy – odzew może zmienić jego życie. {name}, twój dar empatii jest dziś nieoceniony.",
-        "Inwestycja w siebie (kurs, książka, trening) zwróci się z nawiązką. {planet} wskazuje na rozwój intelektualny.",
-        "Dziś możesz spotkać osobę, która stanie się ważna w Twojej przyszłości. Bądź otwarty na nowe znajomości.",
-        "Twoje zmęczenie może dawać o sobie znać – zrób sobie przerwę. {name}, odpoczynek to też działanie.",
-        "Kreatywny projekt nabierze tempa – jeśli masz w głowie „coś”, dziś jest idealny dzień, by to rozpocząć."
-    ];
-
-    // Dla każdego znaku zbudujemy pulę przepowiedni + dostosujemy do dnia
-    function initHoroscopeData() {
-        const today = new Date();
-        const dayOfYear = Math.floor((today - new Date(today.getFullYear(),0,0)) / 86400000);
-        const seed = dayOfYear + today.getFullYear(); // zmienia się każdego dnia
-
-        zodiacSigns.forEach(sign => {
-            const list = [];
-            for (let i=0; i<horoscopeTemplates.length; i++) {
-                let text = horoscopeTemplates[i];
-                text = text.replace(/{name}/g, sign.name);
-                text = text.replace(/{znak}/g, sign.name);
-                text = text.replace(/{element}/g, sign.element);
-                text = text.replace(/{planet}/g, sign.planet);
-                list.push(text);
+    // ======================== MODUŁ HOROSKOP (z API Aztro i tłumaczeniem MyMemory) ========================
+    async function translateText(text, targetLang = 'pl') {
+        if (!text) return text;
+        try {
+            const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data && data.responseData && data.responseData.translatedText) {
+                let translated = data.responseData.translatedText;
+                // usuwamy [pl] etc.
+                translated = translated.replace(/\[.*?\]/g, '').trim();
+                return translated || text;
             }
-            // przesunięcie rotacyjne zależne od dnia i znaku
-            const shift = (seed + sign.name.charCodeAt(0)) % list.length;
-            horoscopesBySign[sign.name] = list.slice(shift).concat(list.slice(0, shift));
-        });
+            return text;
+        } catch (e) {
+            console.warn("Tłumaczenie nie powiodło się", e);
+            return text;
+        }
     }
 
-    function getDailyHoroscope(signName) {
-        const today = new Date();
-        const dayIndex = Math.floor((today - new Date(today.getFullYear(),0,0)) / 86400000);
-        const sign = zodiacSigns.find(s => s.name === signName);
-        if (!sign) return { text: "Nie znaleziono horoskopu.", number: "—", color: "—", advice: "—", quote: "" };
-        const list = horoscopesBySign[signName];
-        const idx = (dayIndex + signName.length) % list.length;
-        const baseText = list[idx];
-        // elementy losowe, ale deterministyczne dla danego dnia
-        const rng = (s) => {
-            let h = 0;
-            for (let i=0; i<s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 1000;
-            return h;
-        };
-        const seed = dayIndex * 1000 + signName.charCodeAt(0) * 7;
-        const luckyNumbers = [7, 11, 22, 3, 5, 8, 13, 17, 21, 42];
-        const colors = ["czerwony", "niebieski", "zielony", "żółty", "fioletowy", "pomarańczowy", "złoty", "srebrny"];
-        const advices = [
-            "Zrób coś dla siebie – mała przyjemność. 🍵",
-            "Uśmiechnij się do nieznajomego. 😊",
-            "Wyślij wiadomość do kogoś, komu dawno nie pisałeś. 💌",
-            "Poświęć 15 minut na plan jutra. 📝",
-            "Wyjdź na spacer – natura naładuje baterie. 🌳",
-            "Zacznij od najtrudniejszego zadania – potem będzie łatwiej. ⚡",
-            "Podziękuj komuś za coś miłego. 🙏"
-        ];
-        const quotes = [
-            "„Kto nie ryzykuje, ten nie pije szampana” – Aleksander Fredro",
-            "„Jedyne, czego powinniśmy się bać, to samego strachu” – Franklin D. Roosevelt",
-            "„Bądź zmianą, którą pragniesz ujrzeć w świecie” – Mahatma Gandhi",
-            "„Sukces to suma małych wysiłków, powtarzanych dzień po dniu” – Robert Collier",
-            "„Każdy dzień to nowa szansa” – anonim",
-            "„Wierzyć to móc” – polskie przysłowie",
-            "„Nie pytaj, co świat może zrobić dla ciebie – zapytaj, co ty możesz zrobić dla świata” – J.F. Kennedy"
-        ];
-        const luckyNum = luckyNumbers[ (seed + signName.length) % luckyNumbers.length ];
-        const colorIdx = (seed + signName.charCodeAt(0) * 3) % colors.length;
-        const adviceIdx = (seed + signName.charCodeAt(0) * 5) % advices.length;
-        const quoteIdx = (seed + signName.charCodeAt(0) * 7) % quotes.length;
-        return {
-            text: baseText,
-            number: luckyNum,
-            color: colors[colorIdx],
-            advice: advices[adviceIdx],
-            quote: quotes[quoteIdx]
-        };
+    async function fetchHoroscope(sign) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        try {
+            // Aztro API – metoda POST
+            const response = await fetch(`https://aztro.sameerkumar.website/?sign=${sign}&day=today`, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            // Tłumaczymy opis
+            const translatedDescription = await translateText(data.description);
+            return {
+                description: translatedDescription,
+                luckyNumber: data.lucky_number,
+                luckyColor: data.color,
+                mood: data.mood,
+                luckyTime: data.lucky_time
+            };
+        } catch (err) {
+            clearTimeout(timeoutId);
+            console.error("Błąd pobierania horoskopu:", err);
+            throw new Error("Nie udało się pobrać horoskopu. Spróbuj ponownie później.");
+        }
     }
 
-    let currentSign = null;
+    const zodiacNamesPL = {
+        aries: "Baran", taurus: "Byk", gemini: "Bliźnięta", cancer: "Rak",
+        leo: "Lew", virgo: "Panna", libra: "Waga", scorpio: "Skorpion",
+        sagittarius: "Strzelec", capricorn: "Koziorożec", aquarius: "Wodnik", pisces: "Ryby"
+    };
 
-    function renderZodiacSelector() {
-        const container = document.getElementById('zodiacSelector');
-        container.innerHTML = '';
-        zodiacSigns.forEach(sign => {
-            const card = document.createElement('div');
-            card.className = 'zodiac-card';
-            if (currentSign === sign.name) card.classList.add('active');
-            card.innerHTML = `<div class="zodiac-icon">${sign.icon}</div><div class="zodiac-name">${sign.name}</div>`;
-            card.onclick = () => selectSign(sign.name);
-            container.appendChild(card);
-        });
-    }
+    async function generateHoroscope() {
+        const signSelect = document.getElementById('zodiacSign');
+        const sign = signSelect.value;
+        const resultDiv = document.getElementById('horoscopeResult');
+        const horoscopeTextP = document.getElementById('horoscopeText');
+        const detailsDiv = document.getElementById('horoscopeDetails');
+        const quoteDiv = document.getElementById('horoscopeQuote');
 
-    function selectSign(signName) {
-        currentSign = signName;
-        renderZodiacSelector();
-        const horo = getDailyHoroscope(signName);
-        document.getElementById('zodiacIcon').textContent = zodiacSigns.find(s => s.name === signName)?.icon || "";
-        document.getElementById('zodiacName').textContent = signName;
-        document.getElementById('horoscopeText').innerHTML = horo.text;
-        document.getElementById('luckyNumber').textContent = horo.number;
-        document.getElementById('luckyColor').textContent = horo.color;
-        document.getElementById('advice').textContent = horo.advice;
-        document.getElementById('quote').textContent = horo.quote;
-        document.getElementById('horoscopeResult').style.display = 'block';
-        // zapisz wybrany znak w localStorage
-        localStorage.setItem('horoscopeSign', signName);
-    }
+        // Pokaż ładowanie
+        resultDiv.style.display = 'block';
+        horoscopeTextP.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Pobieranie horoskopu z API...';
+        detailsDiv.innerHTML = '';
+        quoteDiv.innerHTML = '';
 
-    function randomHoroscope() {
-        const randomIdx = Math.floor(Math.random() * zodiacSigns.length);
-        selectSign(zodiacSigns[randomIdx].name);
-    }
-
-    function resetHoroscope() {
-        currentSign = null;
-        renderZodiacSelector();
-        document.getElementById('horoscopeResult').style.display = 'none';
-        localStorage.removeItem('horoscopeSign');
-    }
-
-    function initHoroscope() {
-        initHoroscopeData();
-        const savedSign = localStorage.getItem('horoscopeSign');
-        if (savedSign && zodiacSigns.some(s => s.name === savedSign)) {
-            selectSign(savedSign);
-        } else {
-            // jeśli brak zapisanego, nic nie pokazujemy – użytkownik wybiera znak
-            document.getElementById('horoscopeResult').style.display = 'none';
+        try {
+            const horo = await fetchHoroscope(sign);
+            horoscopeTextP.innerHTML = horo.description;
+            detailsDiv.innerHTML = `
+                <div class="detail-item">🍀 Szczęśliwa liczba: ${horo.luckyNumber}</div>
+                <div class="detail-item">🎨 Szczęśliwy kolor: ${horo.luckyColor}</div>
+                <div class="detail-item">😊 Nastrój: ${horo.mood}</div>
+                <div class="detail-item">⏰ Szczęśliwy czas: ${horo.luckyTime}</div>
+            `;
+            quoteDiv.innerHTML = `<i class="fas fa-quote-left"></i> Dziś wszechświat sprzyja Twojemu znakowi – wykorzystaj tę energię.`;
+        } catch (error) {
+            horoscopeTextP.innerHTML = `❌ ${error.message}`;
+            detailsDiv.innerHTML = '';
+            quoteDiv.innerHTML = '';
         }
     }
 
@@ -2296,10 +2206,9 @@
     }, 500);
     clearProgrammer();
     switchSubTab('credit', null);
-    renderZodiacSelector();
-    initHoroscopeData();
-    // Horoskop będzie inicjalizowany przy pierwszym otwarciu zakładki – aby nie psuć czasu ładowania
-    window.horoscopeInitialized = false;
+
+    // Podłącz przycisk horoskopu
+    document.getElementById('horoscopeBtn').addEventListener('click', generateHoroscope);
 </script>
 </body>
 </html>
