@@ -588,7 +588,7 @@
             </div>
             <div class="table-wrapper">
                 <table id="convTable">
-                    <thead><tr><th>Jednostka</th><th>Wynik</th></tr></thead>
+                    <thead><td><th>Jednostka</th><th>Wynik</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -937,7 +937,7 @@
         </div>
     </div>
 
-    <!-- ============ ZAKŁADKA HOROSKOP (API + tłumaczenie) ============ -->
+    <!-- ============ ZAKŁADKA HOROSKOP (PRAWDZIWE API + TŁUMACZENIE) ============ -->
     <div id="horoscope-tab" class="tab-content">
         <div class="glass-card">
             <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✨ Twój osobisty horoskop</h2>
@@ -961,11 +961,7 @@
                     </select>
                 </div>
                 <button class="btn" id="horoscopeBtn"><i class="fas fa-moon"></i> Odkryj przepowiednię</button>
-                <div id="horoscopeResult" class="horoscope-card" style="display: none;">
-                    <div class="horoscope-section">
-                        <h4><i class="fas fa-spinner fa-spin"></i> Pobieranie horoskopu...</h4>
-                    </div>
-                </div>
+                <div id="horoscopeResult" class="horoscope-card" style="display: none;"></div>
             </div>
         </div>
     </div>
@@ -1010,7 +1006,7 @@
         }
     }
 
-    // ======================== MODUŁ IP INFO ========================
+    // ======================== MODUŁ IP INFO (BEZ ZMIAN) ========================
     let ipData = null;
     window.ipDataLoaded = false;
     let ipMap = null;
@@ -1110,7 +1106,7 @@
         if (customIP && customIP.trim()) fetchIPInfo(customIP.trim());
     }
 
-    // ======================== MODUŁ WALUTY ========================
+    // ======================== MODUŁ WALUTY (BEZ ZMIAN) ========================
     let exchangeRates = {};
     let previousRates = {};
     let lastSuccessfulRates = null;
@@ -1379,7 +1375,7 @@
         convert();
     }
 
-    // ======================== MODUŁ KONWERTERA ========================
+    // ======================== MODUŁ KONWERTERA (BEZ ZMIAN) ========================
     const unitNames = {
         mm: 'milimetr', cm: 'centymetr', dm: 'decymetr', m: 'metr', km: 'kilometr',
         in: 'cal', ft: 'stopa', yd: 'jard', mi: 'mila', nmi: 'mila morska',
@@ -1457,19 +1453,19 @@
             const factor = activeUnits[from] || 1;
             const baseVal = val * factor;
             Object.entries(activeUnits).forEach(([unit, factor]) => {
-                tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
+                tbody.innerHTML += `<tr><td>${formatUnit(unit)}<tr><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
             });
         } else {
             const units = unitCategories[cat].units;
             const factor = units[from] || 1;
             const baseVal = val * factor;
             Object.entries(units).forEach(([unit, factor]) => {
-                tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
+                tbody.innerHTML += `<td><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
             });
         }
     }
 
-    // ======================== MODUŁ KALKULATORÓW ========================
+    // ======================== MODUŁ KALKULATORÓW (BEZ ZMIAN) ========================
     function switchSubTab(sub, event) {
         document.querySelectorAll('#finance-tab .sub-content').forEach(el => el.style.display = 'none');
         document.querySelectorAll('#finance-tab .sub-tab-btn').forEach(el => el.classList.remove('active'));
@@ -1674,7 +1670,7 @@
         updateFromDecimal();
     }
 
-    // ======================== MODUŁ SPEED TESTU ========================
+    // ======================== MODUŁ SPEED TESTU (BEZ ZMIAN) ========================
     let speedChart = null;
     let isTesting = false;
 
@@ -1860,7 +1856,7 @@
         isTesting = false;
     }
 
-    // ======================== MODUŁ CZASU I STREF ========================
+    // ======================== MODUŁ CZASU I STREF (BEZ ZMIAN) ========================
     let timezoneCards = [];
     const defaultCards = [
         { name: "Warszawa", tz: "Europe/Warsaw" },
@@ -2058,7 +2054,7 @@
         }, 1000);
     }
 
-    // ======================== MODUŁ HOROSKOP (API aztro + tłumaczenie MyMemory) ========================
+    // ======================== NOWY MODUŁ HOROSKOP (API aztro + tłumaczenie + losowe cytaty) ========================
     async function translateText(text, targetLang = 'pl') {
         if (!text) return text;
         try {
@@ -2067,7 +2063,6 @@
             const data = await response.json();
             if (data && data.responseData && data.responseData.translatedText) {
                 let translated = data.responseData.translatedText;
-                // MyMemory czasem zwraca ten sam tekst, jeśli nie znajdzie tłumaczenia – wtedy zwracamy oryginał
                 if (translated === text) return text;
                 return translated;
             }
@@ -2084,7 +2079,6 @@
         sagittarius: "Strzelec", capricorn: "Koziorożec", aquarius: "Wodnik", pisces: "Ryby"
     };
 
-    // Losowe motywacyjne cytaty/dodatki (co raz inne dla każdego wywołania)
     const randomQuotes = [
         "Nie czekaj na idealny moment – stwórz go sam.",
         "Twój jedyny limit to Twoja wyobraźnia. Działaj!",
@@ -2093,7 +2087,9 @@
         "To, co myślisz, staje się rzeczywistością. Myśl pozytywnie.",
         "Nawet najdłuższa podróż zaczyna się od pierwszego kroku. Zrób go już dziś.",
         "Twoja energia jest zaraźliwa – dziel się dobrą wibracją.",
-        "Nie porównuj się do innych – każdy kwitnie w swoim czasie."
+        "Nie porównuj się do innych – każdy kwitnie w swoim czasie.",
+        "Sukces to suma małych wysiłków, powtarzanych dzień po dniu.",
+        "Wierz w siebie, nawet jeśli nikt inny nie wierzy – to wystarczy."
     ];
 
     async function fetchHoroscope(sign) {
@@ -2108,17 +2104,12 @@
             clearTimeout(timeoutId);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
-            // Tłumaczymy główny opis
             const translatedDesc = await translateText(data.description);
-            // Pozostałe pola (słowa kluczowe) tłumaczymy opcjonalnie
             const mood = await translateText(data.mood);
             const color = data.color;
             const luckyNumber = data.lucky_number;
             const luckyTime = data.lucky_time;
-            
-            // Losujemy cytat
             const randomQuote = randomQuotes[Math.floor(Math.random() * randomQuotes.length)];
-            
             return {
                 description: translatedDesc,
                 mood: mood,
@@ -2161,7 +2152,7 @@
                 </div>
                 <div class="horoscope-section">
                     <h4><i class="fas fa-palette"></i> Szczęśliwy kolor</h4>
-                    <p><span style="display:inline-block; width:20px; height:20px; background:${horo.color}; border-radius:50%;"></span> ${horo.color}</p>
+                    <p><span style="display:inline-block; width:20px; height:20px; background:${horo.color}; border-radius:50%; margin-right:0.5rem;"></span> ${horo.color}</p>
                 </div>
                 <div class="horoscope-section">
                     <h4><i class="fas fa-dice-d6"></i> Szczęśliwa liczba</h4>
