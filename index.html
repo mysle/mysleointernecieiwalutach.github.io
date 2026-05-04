@@ -937,7 +937,7 @@
         </div>
     </div>
 
-    <!-- ============ ZAKŁADKA HOROSKOP (z API i tłumaczeniem) ============ -->
+    <!-- ============ ZAKŁADKA HOROSKOP (API + tłumaczenie) ============ -->
     <div id="horoscope-tab" class="tab-content">
         <div class="glass-card">
             <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✨ Twój osobisty horoskop</h2>
@@ -961,7 +961,11 @@
                     </select>
                 </div>
                 <button class="btn" id="horoscopeBtn"><i class="fas fa-moon"></i> Odkryj przepowiednię</button>
-                <div id="horoscopeResult" class="horoscope-card" style="display: none;"></div>
+                <div id="horoscopeResult" class="horoscope-card" style="display: none;">
+                    <div class="horoscope-section">
+                        <h4><i class="fas fa-spinner fa-spin"></i> Pobieranie horoskopu...</h4>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1453,7 +1457,7 @@
             const factor = activeUnits[from] || 1;
             const baseVal = val * factor;
             Object.entries(activeUnits).forEach(([unit, factor]) => {
-                tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td><tr>`;
+                tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
             });
         } else {
             const units = unitCategories[cat].units;
@@ -2054,7 +2058,7 @@
         }, 1000);
     }
 
-    // ======================== NOWY MODUŁ HOROSKOP (API aztro + tłumaczenie) ========================
+    // ======================== MODUŁ HOROSKOP (API aztro + tłumaczenie MyMemory) ========================
     async function translateText(text, targetLang = 'pl') {
         if (!text) return text;
         try {
@@ -2079,7 +2083,8 @@
         sagittarius: "Strzelec", capricorn: "Koziorożec", aquarius: "Wodnik", pisces: "Ryby"
     };
 
-    const randomMotivationalQuotes = [
+    // Losowe motywacyjne cytaty (co raz inne dla każdego wywołania)
+    const randomQuotes = [
         "Nie czekaj na idealny moment – stwórz go sam.",
         "Twój jedyny limit to Twoja wyobraźnia. Działaj!",
         "Małe kroki każdego dnia prowadzą do wielkich zmian.",
@@ -2088,8 +2093,8 @@
         "Nawet najdłuższa podróż zaczyna się od pierwszego kroku. Zrób go już dziś.",
         "Twoja energia jest zaraźliwa – dziel się dobrą wibracją.",
         "Nie porównuj się do innych – każdy kwitnie w swoim czasie.",
-        "Sukces nie jest dziełem przypadku, ale sumą małych wysiłków powtarzanych dzień po dniu.",
-        "Wiara w siebie jest pierwszym sekretem sukcesu."
+        "Dziś jest ten dzień – zrób coś, czego pragniesz od dawna.",
+        "Uśmiech to najkrótsza droga do dobrego samopoczucia."
     ];
 
     async function fetchHoroscope(sign) {
@@ -2104,16 +2109,21 @@
             clearTimeout(timeoutId);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
-            // Tłumaczymy główny opis
+            
             const translatedDesc = await translateText(data.description);
             const mood = await translateText(data.mood);
-            // Pozostałe pola pozostają w oryginale (ale są proste)
+            const color = data.color;
+            const luckyNumber = data.lucky_number;
+            const luckyTime = data.lucky_time;
+            const randomQuote = randomQuotes[Math.floor(Math.random() * randomQuotes.length)];
+            
             return {
                 description: translatedDesc,
                 mood: mood,
-                color: data.color,
-                luckyNumber: data.lucky_number,
-                luckyTime: data.lucky_time
+                color: color,
+                luckyNumber: luckyNumber,
+                luckyTime: luckyTime,
+                quote: randomQuote
             };
         } catch (err) {
             clearTimeout(timeoutId);
@@ -2138,8 +2148,6 @@
         try {
             const horo = await fetchHoroscope(sign);
             const signName = zodiacNamesPL[sign];
-            const randomQuote = randomMotivationalQuotes[Math.floor(Math.random() * randomMotivationalQuotes.length)];
-            
             const html = `
                 <div class="horoscope-section">
                     <h4><i class="fas fa-user-astronaut"></i> Twój znak: ${signName}</h4>
@@ -2151,7 +2159,7 @@
                 </div>
                 <div class="horoscope-section">
                     <h4><i class="fas fa-palette"></i> Szczęśliwy kolor</h4>
-                    <p><span style="display:inline-block; width:20px; height:20px; background:${horo.color}; border-radius:50%; vertical-align:middle;"></span> ${horo.color}</p>
+                    <p><span style="display:inline-block; width:20px; height:20px; background:${horo.color}; border-radius:50%;"></span> ${horo.color}</p>
                 </div>
                 <div class="horoscope-section">
                     <h4><i class="fas fa-dice-d6"></i> Szczęśliwa liczba</h4>
@@ -2162,7 +2170,7 @@
                     <p>${horo.luckyTime}</p>
                 </div>
                 <div class="quote">
-                    <i class="fas fa-quote-left"></i> ${randomQuote} <i class="fas fa-quote-right"></i>
+                    <i class="fas fa-quote-left"></i> ${horo.quote} <i class="fas fa-quote-right"></i>
                 </div>
                 <div style="margin-top: 0.8rem; font-size: 0.8rem; color: var(--text-muted); text-align: center;">
                     🌟 Horoskop pochodzi z api aztro (dane astrologiczne) i został przetłumaczony na język polski.
@@ -2228,7 +2236,7 @@
     clearProgrammer();
     switchSubTab('credit', null);
     
-    // Podłączamy przycisk horoskopu
+    // Przypisz event do przycisku horoskopu
     document.getElementById('horoscopeBtn').addEventListener('click', generateHoroscope);
 </script>
 </body>
