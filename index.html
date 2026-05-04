@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>MultiTool Pro – Waluty, Konwerter, Kalkulatory, Czas, IP, Szybkość + Horoskop</title>
-    <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP, strefy czasowe, korzystaj z kalkulatorów finansowych i odkryj swój osobisty horoskop – wiarygodne dane z API i tłumaczenie na polski.">
+    <meta name="description" content="Przeliczaj waluty, jednostki, sprawdź prędkość internetu, swoje IP, strefy czasowe, korzystaj z kalkulatorów finansowych i odkryj swój osobisty horoskop – motywujący i niezwykle trafny.">
 
     <!-- Google Consent Mode - domyślnie brak zgód -->
     <script>
@@ -252,18 +252,6 @@
         .horoscope-section p {
             line-height: 1.5;
             color: var(--text);
-        }
-        .horoscope-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
-        }
-        .detail-item {
-            background: rgba(0,0,0,0.4);
-            padding: 0.3rem 0.8rem;
-            border-radius: 2rem;
-            font-size: 0.9rem;
         }
         .quote {
             font-style: italic;
@@ -949,38 +937,31 @@
         </div>
     </div>
 
-    <!-- ============ ZAKŁADKA HOROSKOP (z API i tłumaczeniem) ============ -->
+    <!-- ============ NOWA ZAKŁADKA HOROSKOP (z API i tłumaczeniem) ============ -->
     <div id="horoscope-tab" class="tab-content">
         <div class="glass-card">
-            <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✨ Horoskop – wróżba z internetu</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 1rem;">Pobieramy aktualną przepowiednię dla Twojego znaku z darmowego API i tłumaczymy na polski.</p>
+            <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✨ Twój osobisty horoskop</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 1rem;">Poznaj ukryte wskazówki wszechświata – horoskop motywujący, uczący i niezwykle trafny.</p>
             <div class="horoscope-container">
                 <div class="zodiac-select">
-                    <label>Twój znak zodiaku:</label>
+                    <label>Wybierz swój znak zodiaku:</label>
                     <select id="zodiacSign" class="modern-select" style="margin-top: 0.5rem;">
-                        <option value="aries">♈ Baran</option>
-                        <option value="taurus">♉ Byk</option>
-                        <option value="gemini">♊ Bliźnięta</option>
-                        <option value="cancer">♋ Rak</option>
-                        <option value="leo">♌ Lew</option>
-                        <option value="virgo">♍ Panna</option>
-                        <option value="libra">♎ Waga</option>
-                        <option value="scorpio">♏ Skorpion</option>
-                        <option value="sagittarius">♐ Strzelec</option>
-                        <option value="capricorn">♑ Koziorożec</option>
-                        <option value="aquarius">♒ Wodnik</option>
-                        <option value="pisces">♓ Ryby</option>
+                        <option value="aries">♈ Baran (21.03 – 19.04)</option>
+                        <option value="taurus">♉ Byk (20.04 – 20.05)</option>
+                        <option value="gemini">♊ Bliźnięta (21.05 – 20.06)</option>
+                        <option value="cancer">♋ Rak (21.06 – 22.07)</option>
+                        <option value="leo">♌ Lew (23.07 – 22.08)</option>
+                        <option value="virgo">♍ Panna (23.08 – 22.09)</option>
+                        <option value="libra">♎ Waga (23.09 – 22.10)</option>
+                        <option value="scorpio">♏ Skorpion (23.10 – 21.11)</option>
+                        <option value="sagittarius">♐ Strzelec (22.11 – 21.12)</option>
+                        <option value="capricorn">♑ Koziorożec (22.12 – 19.01)</option>
+                        <option value="aquarius">♒ Wodnik (20.01 – 18.02)</option>
+                        <option value="pisces">♓ Ryby (19.02 – 20.03)</option>
                     </select>
                 </div>
                 <button class="btn" id="horoscopeBtn"><i class="fas fa-moon"></i> Odkryj przepowiednię</button>
-                <div id="horoscopeResult" class="horoscope-card" style="display: none;">
-                    <div class="horoscope-section">
-                        <h4><i class="fas fa-star"></i> Twoja wróżba</h4>
-                        <p id="horoscopeText">Ładowanie...</p>
-                    </div>
-                    <div class="horoscope-details" id="horoscopeDetails"></div>
-                    <div class="quote" id="horoscopeQuote"></div>
-                </div>
+                <div id="horoscopeResult" class="horoscope-card" style="display: none;"></div>
             </div>
         </div>
     </div>
@@ -1472,7 +1453,7 @@
             const factor = activeUnits[from] || 1;
             const baseVal = val * factor;
             Object.entries(activeUnits).forEach(([unit, factor]) => {
-                tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td><tr>`;
+                tbody.innerHTML += `<tr><td>${formatUnit(unit)}</td><td>${(baseVal / factor).toFixed(4)}</td></tr>`;
             });
         } else {
             const units = unitCategories[cat].units;
@@ -2073,7 +2054,15 @@
         }, 1000);
     }
 
-    // ======================== MODUŁ HOROSKOP (z API Aztro i tłumaczeniem MyMemory) ========================
+    // ======================== NOWY MODUŁ: HOROSKOP Z API ========================
+    // Mapowanie polskich nazw (używanych w select) na angielskie dla API
+    const signMap = {
+        aries: "Baran", taurus: "Byk", gemini: "Bliźnięta", cancer: "Rak",
+        leo: "Lew", virgo: "Panna", libra: "Waga", scorpio: "Skorpion",
+        sagittarius: "Strzelec", capricorn: "Koziorożec", aquarius: "Wodnik", pisces: "Ryby"
+    };
+
+    // Tłumaczenie przez MyMemory Translate
     async function translateText(text, targetLang = 'pl') {
         if (!text) return text;
         try {
@@ -2081,24 +2070,21 @@
             const response = await fetch(url);
             const data = await response.json();
             if (data && data.responseData && data.responseData.translatedText) {
-                let translated = data.responseData.translatedText;
-                // usuwamy [pl] etc.
-                translated = translated.replace(/\[.*?\]/g, '').trim();
-                return translated || text;
+                return data.responseData.translatedText;
             }
             return text;
         } catch (e) {
-            console.warn("Tłumaczenie nie powiodło się", e);
+            console.warn("Błąd tłumaczenia:", e);
             return text;
         }
     }
 
+    // Funkcja do pobierania horoskopu z API aztro
     async function fetchHoroscope(sign) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000);
         try {
-            // Aztro API – metoda POST
-            const response = await fetch(`https://aztro.sameerkumar.website/?sign=${sign}&day=today`, {
+            const response = await fetch('https://aztro.sameerkumar.website/?sign=' + sign + '&day=today', {
                 method: 'POST',
                 headers: { 'Accept': 'application/json' },
                 signal: controller.signal
@@ -2117,47 +2103,65 @@
             };
         } catch (err) {
             clearTimeout(timeoutId);
-            console.error("Błąd pobierania horoskopu:", err);
+            console.error("Błąd API horoskopu:", err);
             throw new Error("Nie udało się pobrać horoskopu. Spróbuj ponownie później.");
         }
     }
 
-    const zodiacNamesPL = {
-        aries: "Baran", taurus: "Byk", gemini: "Bliźnięta", cancer: "Rak",
-        leo: "Lew", virgo: "Panna", libra: "Waga", scorpio: "Skorpion",
-        sagittarius: "Strzelec", capricorn: "Koziorożec", aquarius: "Wodnik", pisces: "Ryby"
-    };
+    // Lista motywujących cytatów do wyświetlenia dodatkowo (losowe)
+    const randomQuotes = [
+        "✨ Gwiazdy sprzyjają Twojej determinacji. Dziś możesz osiągnąć więcej, niż myślisz.",
+        "💪 Pamiętaj, że każda podróż zaczyna się od pierwszego kroku. Zrób go już teraz.",
+        "🌞 Twoja wewnętrzna siła jest dziś wyjątkowo silna. Wykorzystaj ją do przełamania barier.",
+        "🍀 Szczęście sprzyja odważnym. Nie bój się podejmować ryzyka.",
+        "📖 Dziś bądź jak woda – płynny, elastyczny i nie do zatrzymania.",
+        "🔥 Twoja pasja może poruszyć góry. Niech ogień w Tobie nie gaśnie.",
+        "🧘 Daj sobie przestrzeń na oddech. Czasem spokój daje więcej niż działanie.",
+        "💎 Jesteś wyjątkowy. Nie porównuj się z innymi – idź własną drogą."
+    ];
 
     async function generateHoroscope() {
         const signSelect = document.getElementById('zodiacSign');
         const sign = signSelect.value;
-        const resultDiv = document.getElementById('horoscopeResult');
-        const horoscopeTextP = document.getElementById('horoscopeText');
-        const detailsDiv = document.getElementById('horoscopeDetails');
-        const quoteDiv = document.getElementById('horoscopeQuote');
+        if (!sign) return;
 
-        // Pokaż ładowanie
+        const resultDiv = document.getElementById('horoscopeResult');
         resultDiv.style.display = 'block';
-        horoscopeTextP.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Pobieranie horoskopu z API...';
-        detailsDiv.innerHTML = '';
-        quoteDiv.innerHTML = '';
+        resultDiv.innerHTML = '<div class="horoscope-section"><p><i class="fas fa-spinner fa-spin"></i> Ładowanie horoskopu...</p></div>';
 
         try {
-            const horo = await fetchHoroscope(sign);
-            horoscopeTextP.innerHTML = horo.description;
-            detailsDiv.innerHTML = `
-                <div class="detail-item">🍀 Szczęśliwa liczba: ${horo.luckyNumber}</div>
-                <div class="detail-item">🎨 Szczęśliwy kolor: ${horo.luckyColor}</div>
-                <div class="detail-item">😊 Nastrój: ${horo.mood}</div>
-                <div class="detail-item">⏰ Szczęśliwy czas: ${horo.luckyTime}</div>
+            const data = await fetchHoroscope(sign);
+            const signName = signMap[sign];
+            // Losowy cytat
+            const randomQuote = randomQuotes[Math.floor(Math.random() * randomQuotes.length)];
+            // Dodatkowe pola
+            const html = `
+                <div class="horoscope-section">
+                    <h4><i class="fas fa-user-astronaut"></i> Twój znak: ${signName}</h4>
+                    <p>${data.description}</p>
+                </div>
+                <div class="horoscope-section">
+                    <h4><i class="fas fa-gift"></i> Dodatkowe wskazówki</h4>
+                    <p>🍀 Szczęśliwa liczba: <strong>${data.luckyNumber}</strong><br>
+                    🎨 Szczęśliwy kolor: <strong>${data.luckyColor}</strong><br>
+                    😊 Nastrój: <strong>${data.mood}</strong><br>
+                    ⏰ Szczęśliwy czas: <strong>${data.luckyTime}</strong></p>
+                </div>
+                <div class="quote">
+                    <i class="fas fa-quote-left"></i> ${randomQuote} <i class="fas fa-quote-right"></i>
+                </div>
+                <div style="margin-top: 0.8rem; font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+                    🌟 Horoskop pochodzi z darmowego API (aztro.sameerkumar.website) i został przetłumaczony na język polski.
+                </div>
             `;
-            quoteDiv.innerHTML = `<i class="fas fa-quote-left"></i> Dziś wszechświat sprzyja Twojemu znakowi – wykorzystaj tę energię.`;
+            resultDiv.innerHTML = html;
         } catch (error) {
-            horoscopeTextP.innerHTML = `❌ ${error.message}`;
-            detailsDiv.innerHTML = '';
-            quoteDiv.innerHTML = '';
+            resultDiv.innerHTML = `<div class="horoscope-section"><p style="color: var(--danger);">❌ ${error.message}</p></div>`;
         }
     }
+
+    // Inicjalizacja przycisku horoskopu
+    document.getElementById('horoscopeBtn').addEventListener('click', generateHoroscope);
 
     // ======================== BANER ZGÓD COOKIE ========================
     function setCookieConsent(accepted) {
@@ -2206,9 +2210,6 @@
     }, 500);
     clearProgrammer();
     switchSubTab('credit', null);
-
-    // Podłącz przycisk horoskopu
-    document.getElementById('horoscopeBtn').addEventListener('click', generateHoroscope);
 </script>
 </body>
 </html>
